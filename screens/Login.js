@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
-import {Image, KeyboardAvoidingView, Dimensions} from 'react-native';
-
+import {Image, KeyboardAvoidingView, Dimensions, Alert} from 'react-native';
+import firebase from 'react-native-firebase';
 import {Button, Block, Text, Input} from '../components';
 
 const {height} = Dimensions.get('window');
 
 class Login extends Component {
   render() {
-    const { navigation } = this.props;
-
+    const {navigation} = this.props;
     return (
       <KeyboardAvoidingView
         enabled
@@ -18,13 +17,13 @@ class Login extends Component {
         <Block center middle>
           <Block middle>
             <Image
-              source={require('../assets/images/Base/Logo.png')}
+              source={require('../assets/images/Base/Logobig.png')}
               style={{height: 28, width: 102}}
             />
           </Block>
           <Block flex={2.5} center>
             <Text h3 style={{marginBottom: 6}}>
-              Sign in to Velocity
+              Sign in to Serena
             </Text>
             <Text paragraph color="black3">
               Please enter your credentials to proceed.
@@ -35,12 +34,14 @@ class Login extends Component {
                 email
                 label="Email address"
                 style={{marginBottom: 25}}
+                onChangeTextHandler={this.emailAddressTextHandler}
               />
               <Input
                 full
                 password
                 label="Password"
                 style={{marginBottom: 25}}
+                onChangeTextHandler={this.passwordTextHandler}
                 rightLabel={
                   <Text
                     paragraph
@@ -54,7 +55,7 @@ class Login extends Component {
               <Button
                 full
                 style={{marginBottom: 12}}
-                onPress={() => navigation.navigate('Overview')}>
+                onPress={() => this.onLoginPress()}>
                 <Text button>Sign in</Text>
               </Button>
               <Text paragraph color="gray">
@@ -72,6 +73,42 @@ class Login extends Component {
       </KeyboardAvoidingView>
     );
   }
+
+  emailAddressTextHandler = e => {
+    this.setState({
+      emailAddress: e,
+    });
+  };
+  passwordTextHandler = e => {
+    this.setState({
+      password: e,
+    });
+  };
+
+
+  onLoginPress() {
+    this.setState({loading: true});
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
+      .then(this.onLoginSuccess.bind(this))
+      .catch((err) => {
+        this.onLoginFail(err);
+      });
+  }
+
+  onLoginFail(err) {
+    this.setState({err, loading: false});
+    Alert.alert(err, 'Try again!', [{text: 'OK'}], {
+      cancelable: false,
+    });
+  }
+
+  onLoginSuccess() {
+    navigation.navigate('Overview');
+  }
+
+
 }
 
 export default Login;

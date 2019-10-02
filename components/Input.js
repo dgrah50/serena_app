@@ -1,23 +1,32 @@
-import React, { Component } from 'react'
-import { StyleSheet, View, TextInput, Dimensions } from 'react-native'
+import React, {Component} from 'react';
+import {StyleSheet, View, TextInput, Dimensions} from 'react-native';
 import Text from './Text';
 import * as theme from '../constants/theme';
 
-const { width } = Dimensions.get("window");
+const {width} = Dimensions.get('window');
 
 export default class Input extends Component {
   render() {
-    const { label, rightLabel, full, email, phone, number, password, style, ...props } = this.props;
-    const inputStyles = [
-      styles.input,
-      full && styles.full,
+    const {
+      label,
+      rightLabel,
+      full,
+      email,
+      phone,
+      number,
+      password,
       style,
-    ];
+      ...props
+    } = this.props;
+    const inputStyles = [styles.input, full && styles.full, style];
 
     const inputType = email
-      ? 'email-address' : number
-      ? 'numeric' : phone
-      ? 'phone-pad' : 'default';
+      ? 'email-address'
+      : number
+      ? 'numeric'
+      : phone
+      ? 'phone-pad'
+      : 'default';
 
     return (
       <View>
@@ -33,10 +42,13 @@ export default class Input extends Component {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={inputType}
+          onChangeText={(value) => {
+            this.props.onChangeTextHandler(value);
+          }}
           {...props}
         />
       </View>
-    )
+    );
   }
 }
 
@@ -62,5 +74,5 @@ const styles = StyleSheet.create({
   },
   full: {
     width: width - 50,
-  }
+  },
 });

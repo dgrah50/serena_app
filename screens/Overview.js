@@ -1,194 +1,257 @@
-import React, { Component } from 'react';
-import { TouchableOpacity, Image, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-import { Block, Card, Text, Icon, Label } from '../components';
-import * as theme from '../constants/theme';
+import rgba from 'hex-to-rgba';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import LinearGradient from 'react-native-linear-gradient';
+import Carousel from 'react-native-snap-carousel';
+import {Block, Badge, Card, Text} from '../components';
+import {styles as blockStyles} from '../components/Block';
+import {styles as cardStyles} from '../components/Card';
+import {theme, mocks, time} from '../constants';
 
-const styles = StyleSheet.create({
-  overview: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: theme.colors.white,
+const {width} = Dimensions.get('window');
+let ENTRIES1 = [
+  {
+    title: 'Favourites',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
+    // illustration: require('../../assets/piusLBG.png')
   },
-  margin: {
-    marginHorizontal: 25,
+  {
+    title: 'Love',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
   },
-  driver: {
-    marginBottom: 11,
+  {
+    title: 'Strength',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
   },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-  }
-});
-
-class Overview extends Component {
+  {
+    title: 'Fear',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/2154354/elephant.jpg',
+  },
+  {
+    title: 'Anxiety',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
+  },
+  {
+    title: 'Faith',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
+  },
+  {
+    title: 'Healing',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
+  },
+  {
+    title: 'Hope',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
+  },
+  {
+    title: 'Marriage',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
+  },
+  {
+    title: 'More Soon...',
+    illustration:
+      'https://cdn.dribbble.com/users/288987/screenshots/3342177/fox-tale.jpg',
+  },
+];
+export default class Overview extends Component {
   static navigationOptions = {
-    headerLeftContainerStyle: {
-      paddingLeft: 24
-    },
-    headerRightContainerStyle: {
-      paddingRight: 24
-    },
     headerLeft: (
-      <TouchableOpacity><Icon menu /></TouchableOpacity>
+      <Block left style={{paddingLeft: 10}}>
+        <Text gray style={theme.fonts.title}>
+          {time.DateNow.weekday}
+          {', '}
+          <Text style={theme.fonts.title}>
+            {time.DateNow.month} {time.DateNow.date}
+          </Text>
+        </Text>
+      </Block>
     ),
     headerRight: (
-      <TouchableOpacity><Icon notification /></TouchableOpacity>
+      <TouchableOpacity>
+        <Block flex={false}>
+          <Image
+            resizeMode="contain"
+            source={require('../assets/images/Icon/Menu.png')}
+            style={{width: 45, height: 18, paddingRight: 40}}
+          />
+        </Block>
+      </TouchableOpacity>
     ),
-    headerTitle: (
-      <Block row middle><Text h4>Overview</Text></Block>
-    )
+  };
+
+  renderVerseCard() {
+    return (
+      <Card shadow>
+        <Block>
+          <Block center>
+            <Text h3 style={{marginVertical: 8}}>
+              Good morning, Dayan. How are you feeling today?
+            </Text>
+          </Block>
+          <Block row right>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate('Welcome')}>
+              <Icon name="quote-right" size={42} color="black" />
+            </TouchableOpacity>
+          </Block>
+        </Block>
+      </Card>
+    );
+  }
+
+  _renderItem({item, index}) {
+    return (
+      <Card shadow style={{margin: 10}}>
+        <Image
+          source={{
+            uri:
+              'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg',
+          }}
+        />
+      </Card>
+    );
+  }
+
+  renderRecommendations() {
+    return (
+      <Block>
+        <Text h3 spacing={1} style={{marginVertical: 8}}>
+          Recommendations
+        </Text>
+        <Block style={{height: 180}}>
+          <Carousel
+            data={ENTRIES1}
+            renderItem={this._renderItem.bind(this)}
+            sliderWidth={width * 0.9}
+            itemWidth={width * 0.4}
+            inactiveSlideScale={1}
+            inactiveSlideOpacity={1}
+            enableMomentum={true}
+            activeSlideAlignment={'start'}
+            activeAnimationType={'spring'}
+            activeAnimationOptions={{
+              friction: 4,
+              tension: 40,
+            }}
+          />
+        </Block>
+      </Block>
+    );
+  }
+
+  renderVODHistory() {
+    return (
+      <Block>
+        <Text h3 spacing={1} style={{marginVertical: 8}}>
+          Your Verses of The Day
+        </Text>
+        <Block style={{height: 180}}>
+          <Carousel
+            data={ENTRIES1}
+            renderItem={this._renderItem.bind(this)}
+            sliderWidth={width * 0.9}
+            itemWidth={width * 0.4}
+            inactiveSlideScale={1}
+            inactiveSlideOpacity={1}
+            enableMomentum={true}
+            activeSlideAlignment={'start'}
+            activeAnimationType={'spring'}
+            activeAnimationOptions={{
+              friction: 4,
+              tension: 40,
+            }}
+          />
+        </Block>
+      </Block>
+    );
+  }
+
+  renderNavBar() {
+    const {navigation} = this.props;
+
+    return (
+      <Block center middle style={styles.endTrip}>
+        <Card
+          shadow
+          row
+          style={{
+            width: '90%',
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('OneVerse')}>
+            <Icon name="square" size={62 / 2.5} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('Streak')}>
+            <Icon name="square" size={62 / 2.5} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('Fetch')}>
+            <Icon name="square" size={62 / 2.5} color="black" />
+          </TouchableOpacity>
+        </Card>
+      </Block>
+    );
   }
 
   render() {
     return (
-      <SafeAreaView style={styles.overview}>
-        <ScrollView contentContainerStyle={{ paddingVertical: 25 }}>
-          <Card row middle style={styles.margin}>
-            <Block flex={1.2} center middle style={{ marginRight: 20 }}>
-              <Text light height={43} size={36} spacing={-0.45}>86</Text>
-              <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
-                OPERATING SCORE
-              </Text>
-            </Block>
-            <Block>
-              <Text paragraph color="black3">
-                All cars are operating well.
-                There were 1,233 trips since your last login.
-              </Text>
-            </Block>
-          </Card>
-
-          <Block row style={[styles.margin, { marginTop: 18 }]}>
-            <Card middle style={{ marginRight: 7 }}>
-              <Icon vehicle />
-              <Text h2 style={{ marginTop: 17 }}>1,428</Text>
-              <Text paragraph color="gray">Vehicles on track</Text>
-            </Card>
-            
-            <Card middle style={{ marginLeft: 7 }}>
-              <Icon distance />
-              <Text h2 style={{ marginTop: 17 }}>158.3</Text>
-              <Text paragraph color="gray">Distance driven</Text>
-            </Card>
-          </Block>
-
-          <Card
-            title="TODAY'S TRIPS"
-            style={[styles.margin, { marginTop: 18 }]}
-          >
-            <Block row right>
-              <Block flex={2} row center right>
-                <Label blue />
-                <Text paragraph color="gray">Today</Text>
-              </Block>
-              <Block row center right>
-                <Label purple />
-                <Text paragraph color="gray">Yesterday</Text>
-              </Block>
-            </Block>
-            <Block>
-              <Text>Chart</Text>
-            </Block>
-          </Card>
-
-          <Card
-            title="TOP DRIVERS"
-            style={[styles.margin, { marginTop: 18 }]}
-          >
-            <Block style={styles.driver}>
-              <TouchableOpacity activeOpacity={0.8}>
-                <Block row center>
-                  <Block>
-                    <Image
-                      style={styles.avatar}
-                      source={{ uri: 'https://images.unsplash.com/photo-1506244856291-8910ea843e81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' }}
-                    />
-                  </Block>
-                  <Block flex={2}>
-                    <Text h4>Grand Tesoro</Text>
-                    <Text paragraph color="gray">Chevrolet Bolt</Text>
-                  </Block>
-                  <Block>
-                    <Text paragraph right color="black">$6,432</Text>
-                    <Text paragraph right color="gray">1,232 miles</Text>
-                  </Block>
-                </Block>
-              </TouchableOpacity>
-            </Block>
-            <Block style={styles.driver}>
-              <TouchableOpacity activeOpacity={0.8}>
-                <Block row center>
-                  <Block>
-                    <Image
-                      style={styles.avatar}
-                      source={{ uri: 'https://images.unsplash.com/photo-1521657249896-063c0c611fe5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' }}
-                    />
-                  </Block>
-                  <Block flex={2}>
-                    <Text h4>Invision App</Text>
-                    <Text paragraph color="gray">Tesla Model X</Text>
-                  </Block>
-                  <Block>
-                    <Text paragraph right color="black">$6,432</Text>
-                    <Text paragraph right color="gray">1,232 miles</Text>
-                  </Block>
-                </Block>
-              </TouchableOpacity>
-            </Block>
-            <Block style={styles.driver}>
-              <TouchableOpacity activeOpacity={0.8}>
-                <Block row center>
-                  <Block>
-                    <Image
-                      style={styles.avatar}
-                      source={{ uri: 'https://images.unsplash.com/photo-1536700503339-1e4b06520771?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' }}
-                    />
-                  </Block>
-                  <Block flex={2}>
-                    <Text h4>React UI Kit</Text>
-                    <Text paragraph color="gray">Volvo Intellisafe</Text>
-                  </Block>
-                  <Block>
-                    <Text paragraph right color="black">$6,432</Text>
-                    <Text paragraph right color="gray">1,232 miles</Text>
-                  </Block>
-                </Block>
-              </TouchableOpacity>
-            </Block>
-          </Card>
-
-
-          <Card
-            title="TRIPS BY TYPE"
-            style={[styles.margin, { marginTop: 18 }]}
-          >
-            <Block>
-              <Text>Chart</Text>
-            </Block>
-            <Block row space="between" style={{ marginTop: 25 }}>
-              <Block>
-                <Text h2 light>1,744</Text>
-                <Block row center>
-                  <Label blue />
-                  <Text paragraph color="gray">Confort</Text>
-                </Block>
-              </Block>
-              <Block>
-                <Text h2 light>2,312</Text>
-                <Block row center>
-                  <Label purple />
-                  <Text paragraph color="gray">Premium</Text>
-                </Block>
-              </Block>
-            </Block>
-          </Card>
+      <React.Fragment>
+        <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
+          {this.renderVerseCard()}
+          <Block color="gray3" style={styles.hLine} />
+          {this.renderRecommendations()}
+          {this.renderVODHistory()}
         </ScrollView>
-      </SafeAreaView>
-    )
+        {this.renderNavBar()}
+      </React.Fragment>
+    );
   }
 }
 
-export default Overview;
+const styles = StyleSheet.create({
+  welcome: {
+    paddingVertical: theme.sizes.padding,
+    paddingHorizontal: theme.sizes.padding,
+    backgroundColor: theme.colors.gray4,
+  },
+  // horizontal line
+  hLine: {
+    marginVertical: theme.sizes.base * 2,
+    marginHorizontal: theme.sizes.base * 2,
+    height: 1,
+  },
+  // vertical line
+  vLine: {
+    marginVertical: theme.sizes.base / 2,
+    width: 1,
+  },
+  endTrip: {
+    position: 'absolute',
+    width: width,
+    bottom: 0,
+  },
+});

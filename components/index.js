@@ -1,17 +1,8 @@
-import Block from './Block';
-import Text from './Text';
-import Input from './Input';
-import Button from './Button';
-import Card from './Card';
-import Icon from './Icon';
-import Label from './Label';
+import Block from "./Block";
+import Badge from "./Badge";
+import Card from "./Card";
+import Text from "./Text";
+import Progress from "./Progress";
+import AnimatedCircularProgress from './AnimatedCircularProgress';
 
-export {
-  Block,
-  Text,
-  Input,
-  Button,
-  Card,
-  Icon,
-  Label,
-}
+export {Block, Badge, Card, Text, Progress, AnimatedCircularProgress};

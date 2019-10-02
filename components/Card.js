@@ -1,68 +1,35 @@
-import React, { Component } from 'react'
-import { TouchableOpacity, StyleSheet } from 'react-native'
+import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
 
 import Block from './Block';
-import Text from './Text';
-import Icon from './Icon';
-import * as theme from '../constants/theme';
+import { theme } from '../constants';
 
 export default class Card extends Component {
-  static defaultProps = {
-    shadow: true,
-    border: true,
-    title: null,
-  }
-
-  renderHeader = () => {
-    const { title } = this.props;
-    if (!title) return null;
-
-    return (
-      <Block row space="between" style={styles.header}>
-        <Text caption>{title}</Text>
-        <TouchableOpacity>
-          <Icon options />
-        </TouchableOpacity>
-      </Block>
-    )
-  }
-
   render() {
-    const { shadow, border, style, children, ...props } = this.props;
+    const { color, style, children, ...props } = this.props;
     const cardStyles = [
       styles.card,
-      shadow && styles.shadow,
-      border && styles.border,
       style,
     ];
 
     return (
-      <Block style={cardStyles} {...props}>
-        {this.renderHeader()}
+      <Block color={color || theme.colors.white} style={cardStyles} {...props}>
         {children}
       </Block>
     )
   }
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   card: {
-    flex: 1,
-    padding: 25,
-    backgroundColor: theme.colors.white,
-  },
-  header: {
-    paddingBottom: 24,
-  },
-  border: {
-    borderColor: theme.colors.card,
-    borderWidth: 1,
+    borderRadius: theme.sizes.border,
+    padding: theme.sizes.base + 4,
+    marginBottom: theme.sizes.base,
   },
   shadow: {
-    shadowColor: theme.colors.shadow,
-    shadowOpacity: 1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 2,
+    shadowColor: theme.colors.black,
+    shadowOpacity: 0.11,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 13,
   }
-});
+})
