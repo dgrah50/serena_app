@@ -16,61 +16,10 @@ import {Block, Badge, Card, Text} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
+import axios from 'axios';
 
 const {width} = Dimensions.get('window');
-let ENTRIES1 = [
-  {
-    title: 'Favourites',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
-    // illustration: require('../../assets/piusLBG.png')
-  },
-  {
-    title: 'Love',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
-  },
-  {
-    title: 'Strength',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
-  },
-  {
-    title: 'Fear',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2154354/elephant.jpg',
-  },
-  {
-    title: 'Anxiety',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
-  },
-  {
-    title: 'Faith',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
-  },
-  {
-    title: 'Healing',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
-  },
-  {
-    title: 'Hope',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
-  },
-  {
-    title: 'Marriage',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
-  },
-  {
-    title: 'More Soon...',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/3342177/fox-tale.jpg',
-  },
-];
+
 export default class OneVerse extends Component {
   static navigationOptions = {
     headerLeft: (
@@ -97,20 +46,47 @@ export default class OneVerse extends Component {
     ),
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      sermons: undefined,
+    };
+  }
+
+  componentDidMount() {
+    let query = this.props.navigation.getParam('response').keyword;
+    const options = {
+      headers: {'x-api-key': '9A6AF52A-CB55-47C1-9082-296BBF6BED1E'},
+    };
+    axios
+      .get(
+        'https://api.sermonaudio.com/v2/node/sermons?sortBy=downloads&searchKeyword=' +
+          query,
+        options,
+      )
+      .then(response => {
+        this.setState({
+          sermons: response.data.results,
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   renderVerseCard() {
+    let verses = this.props.navigation.getParam('response').verses;
     return (
       <Card shadow>
         <Block>
           <Block center>
             <Text h2 style={{marginVertical: 8}}>
-              For God so loved the world, that he gave his only begotten Son,
-              that whosoever believed in him should not perish, but have
-              everlasting life{' '}
+              {verses[0].verse}
             </Text>
           </Block>
           <Block center>
             <Text h3 style={{marginVertical: 8}}>
-              Isaiah 54:17
+              {verses[0].bookname}
             </Text>
           </Block>
         </Block>
@@ -118,75 +94,66 @@ export default class OneVerse extends Component {
     );
   }
 
-  _renderItem({item, index}) {
+  _renderItem(item) {
+    let uri = undefined;
+    let speakerName = undefined;
+    let duration = item.media.audio[0].duration;
+    var measuredTime = new Date(null);
+    measuredTime.setSeconds(duration); // specify value of SECONDS
+    var MHSTime = measuredTime.toISOString().substr(11, 8);
+
+    if (item.speaker) {
+      uri = item.speaker.albumArtURL
+        .replace('{size}', 80)
+        .replace('{size}', 80);
+      speakerName = item.speaker.displayName;
+    } else {
+      uri = 'https://via.placeholder.com/50';
+    }
+
+    console.log(item);
+
     return (
-      <Card shadow style={{margin: 10}}>
-        <Image
-          source={{
-            uri:
-              'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg',
-          }}
-        />
-      </Card>
+      <TouchableOpacity key={item.sermonID}>
+        <Card
+          shadow
+          center
+          middle
+          style={{margin: 10, width: '100%', height: 100}}>
+          <Block middle center row>
+            <Image
+              style={{width: 80, height: 80, borderRadius: 10, marginRight: 10}}
+              source={{
+                uri: uri,
+              }}
+            />
+            <Block middle>
+              <Text title numberOfLines={1}>
+                {item.fullTitle}
+              </Text>
+              <Text caption secondary>
+                {speakerName}
+              </Text>
+              <Text right h3 light>
+                {MHSTime}
+              </Text>
+            </Block>
+          </Block>
+        </Card>
+      </TouchableOpacity>
     );
   }
 
-  renderPodcasts() {
+  renderSermons() {
+    console.log(this.state.sermons);
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>
-          Recommendations
+          Related Sermons
         </Text>
-        <Block style={{height: 180}}>
-          <Carousel
-            data={ENTRIES1}
-            renderItem={this._renderItem.bind(this)}
-            sliderWidth={width * 0.9}
-            itemWidth={width * 0.4}
-            inactiveSlideScale={1}
-            inactiveSlideOpacity={1}
-            enableMomentum={true}
-            activeSlideAlignment={'start'}
-            activeAnimationType={'spring'}
-            activeAnimationOptions={{
-              friction: 4,
-              tension: 40,
-            }}
-          />
-        </Block>
-      </Block>
-    );
-  }
-
-
-  renderNavBar() {
-    const {navigation} = this.props;
-
-    return (
-      <Block center middle style={styles.endTrip}>
-        <Card
-          shadow
-          row
-          style={{
-            width: '90%',
-            justifyContent: 'space-between',
-          }}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Welcome')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Welcome')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Welcome')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-        </Card>
+        {this.state.sermons.map(sermon => {
+          return this._renderItem(sermon);
+        })}
       </Block>
     );
   }
@@ -197,9 +164,8 @@ export default class OneVerse extends Component {
         <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
           {this.renderVerseCard()}
           <Block color="gray3" style={styles.hLine} />
-          {this.renderPodcasts()}
+          {this.state.sermons && this.renderSermons()}
         </ScrollView>
-        {this.renderNavBar()}
       </React.Fragment>
     );
   }
@@ -216,15 +182,5 @@ const styles = StyleSheet.create({
     marginVertical: theme.sizes.base * 2,
     marginHorizontal: theme.sizes.base * 2,
     height: 1,
-  },
-  // vertical line
-  vLine: {
-    marginVertical: theme.sizes.base / 2,
-    width: 1,
-  },
-  endTrip: {
-    position: 'absolute',
-    width: width,
-    bottom: 0,
   },
 });

@@ -136,7 +136,7 @@ export default class Overview extends Component {
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>
-          Recommendations
+          Recommended Sermons
         </Text>
         <Block style={{height: 180}}>
           <Carousel
@@ -200,7 +200,7 @@ export default class Overview extends Component {
           }}>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => navigation.navigate('Podcast')}>
+            onPress={() => navigation.navigate('Player')}>
             <Icon name="square" size={62 / 2.5} color="black" />
           </TouchableOpacity>
           <TouchableOpacity

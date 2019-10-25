@@ -58,9 +58,9 @@ export default class Streak extends Component {
         <Card shadow>
           <Calendar
             // Initially visible month. Default = Date()
-            current={Date()-7}
+            current={Date() - 7}
             // // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-            minDate={Date()-14}
+            minDate={Date() - 14}
             // // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
             maxDate={Date()}
             // Handler which gets executed on day press. Default = undefined
@@ -76,7 +76,9 @@ export default class Streak extends Component {
             // Hide month navigation arrows. Default = false
             hideArrows={false}
             // Replace default arrows with custom ones (direction can be 'left' or 'right')
-            renderArrow={direction => <Text>arrow</Text>}
+            renderArrow={direction =>
+              direction == 'left' ? <Text h1>⟵</Text> : <Text h1>⟶</Text>
+            }
             // Do not show days of other months in month page. Default = false
             hideExtraDays={true}
             // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
@@ -108,37 +110,6 @@ export default class Streak extends Component {
       </TouchableOpacity>
     );
   }
-  renderNavBar() {
-    const {navigation} = this.props;
-
-    return (
-      <Block center middle style={styles.endTrip}>
-        <Card
-          shadow
-          row
-          style={{
-            width: '90%',
-            justifyContent: 'space-between',
-          }}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Welcome')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Welcome')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Welcome')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-        </Card>
-      </Block>
-    );
-  }
 
   render() {
     return (
@@ -150,7 +121,6 @@ export default class Streak extends Component {
           <Block color="gray3" style={styles.hLine} />
           {this.renderSettings()}
         </ScrollView>
-        {this.renderNavBar()}
       </React.Fragment>
     );
   }

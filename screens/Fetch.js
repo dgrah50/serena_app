@@ -13,6 +13,7 @@ import rgba from 'hex-to-rgba';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import qs from 'qs';
+import Voice from 'react-native-voice';
 import {
   Block,
   Badge,
@@ -37,6 +38,9 @@ export default class Fetch extends Component {
       toggleText: false,
       results: [],
     };
+    Voice.onSpeechStart = this.onSpeechStart;
+    Voice.onSpeechResults = this.onSpeechResults.bind(this);
+    Voice.onSpeechPartialResults = this.onSpeechPartialResults.bind(this);
   }
   static navigationOptions = {
     headerLeft: (
@@ -62,6 +66,22 @@ export default class Fetch extends Component {
       </TouchableOpacity>
     ),
   };
+  onSpeechPartialResults = e => {
+    // eslint-disable-next-line
+    console.log('onSpeechPartialResults: ', e);
+    this.setState({
+      partialResults: e.value,
+    });
+  };
+
+  onSpeechResults(e) {
+    console.log(e.value);
+    console.log('hello');
+    this.setState({
+      results: e.value,
+      typedText: Platform.OS === 'ios' ? e.value.join() : e.value[0],
+    });
+  }
 
   renderMicRing() {
     return (
@@ -78,6 +98,7 @@ export default class Fetch extends Component {
             tintColor={this.state.ringVisible ? 'red' : 'rgba(0,0,0,0)'}>
             {fill => this.micButton()}
           </AnimatedCircularProgress>
+          <Text>{this.state.typedText}</Text>
         </Block>
       </Card>
     );
@@ -102,9 +123,13 @@ export default class Fetch extends Component {
 
   stopListen() {
     try {
+      Voice.cancel();
       this.circularProgress.stopAnimate();
     } catch (e) {
       console.log(e);
+    }
+    if (this.state.typedText != '') {
+      this.apiCall(this.state.typedText);
     }
     this.setState({
       typedText: '',
@@ -112,10 +137,23 @@ export default class Fetch extends Component {
       ringVisible: false,
     });
   }
+
   setRingOn() {
-    this.setState({ringVisible: true}, () =>
-      this.circularProgress.reAnimate(0, 100, 8000, Easing.quad),
-    );
+    this.setState({ringVisible: true}, () => this.startListen());
+  }
+
+  async startListen(e) {
+    this.circularProgress.reAnimate(0, 100, 8000, Easing.quad);
+    this.setState({
+      results: [],
+      typedText: '',
+      listening: true,
+    });
+    try {
+      await Voice.start('en-US');
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   renderTopicChips() {
@@ -126,8 +164,14 @@ export default class Fetch extends Component {
           <ScrollView horizontal={true}>
             {emotions.topicList.map(topic => {
               return (
-                <Block style={{padding: 5}}>
-                  <RNChipView onPress={()=>{this.apiCall(topic)}} title={topic} avatar={false} />
+                <Block style={{padding: 5}} key={topic}>
+                  <RNChipView
+                    onPress={() => {
+                      this.apiCall(topic);
+                    }}
+                    title={topic}
+                    avatar={false}
+                  />
                 </Block>
               );
             })}
@@ -137,6 +181,8 @@ export default class Fetch extends Component {
     );
   }
 
+  //To be implemented. Each emoji needs to map to a sub emotion
+  //List of sub emotions is given in emotions.emotions
   renderEmotionChips() {
     return (
       <Card shadow>
@@ -145,8 +191,14 @@ export default class Fetch extends Component {
           <ScrollView horizontal={true}>
             {['😀', '😡', '😔', '😨'].map(topic => {
               return (
-                <Block style={{padding: 5}}>
-                  <RNChipView title={topic} avatar={false} />
+                <Block style={{padding: 5}} key={topic}>
+                  <RNChipView
+                    onPress={() => {
+                      this.apiCall(topic);
+                    }}
+                    title={topic}
+                    avatar={false}
+                  />
                 </Block>
               );
             })}
@@ -156,47 +208,17 @@ export default class Fetch extends Component {
     );
   }
 
-  renderNavBar() {
-    const {navigation} = this.props;
-
-    return (
-      <Block center middle style={styles.endTrip}>
-        <Card
-          shadow
-          row
-          style={{
-            width: '90%',
-            justifyContent: 'space-between',
-          }}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Welcome')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Welcome')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Welcome')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-        </Card>
-      </Block>
-    );
-  }
-
   apiCall(query) {
     this.setState({fetched: false});
-    console.log("called")
     axios
       .post('http://localhost:8000', qs.stringify({prayer: query}))
       .then(response => {
         console.log(response.data);
         this.setState({
           fetched: true,
+        });
+        this.props.navigation.navigate('OneVerse', {
+          response: response.data,
         });
       })
       .catch(error => {
@@ -220,7 +242,6 @@ export default class Fetch extends Component {
           {this.renderTopicChips()}
           {this.renderEmotionChips()}
         </ScrollView>
-        {this.renderNavBar()}
       </React.Fragment>
     );
   }
