@@ -114,7 +114,13 @@ export default class OneVerse extends Component {
     console.log(item);
 
     return (
-      <TouchableOpacity key={item.sermonID}>
+      <TouchableOpacity
+        key={item.sermonID}
+        onPress={() => {
+          this.props.navigation.navigate('Player', {
+            sermon: item,
+          });
+        }}>
         <Card
           shadow
           center

@@ -12,10 +12,11 @@ import rgba from 'hex-to-rgba';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import qs from 'qs';
-import {Block, Badge, Card, Text} from '../components';
+import {Block, Badge, Card, Text, Controls} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time, emotions} from '../constants';
+import SoundPlayer from 'react-native-sound-player';
 var Slider = require('react-native-slider');
 
 const {width} = Dimensions.get('window');
@@ -24,13 +25,9 @@ export default class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      typedText: '',
-      showMicButton: true,
-      listening: false,
-      ringVisible: false,
-      toggleText: false,
-      results: [],
+      isPaused: false,
     };
+    // SoundPlayer.playUrl(enclosures[0].getAttribute('url'));
   }
   static navigationOptions = {
     headerLeft: (
@@ -58,15 +55,29 @@ export default class Player extends Component {
   };
 
   renderAlbumArt(url) {
+    url = url.replace('{size}', 500).replace('{size}', 500);
     return (
-      <Card shadow center middle style={{width: width, height: width}}>
+      <Card
+        shadow
+        center
+        middle
+        style={{
+          width: width * 0.6,
+          height: width * 0.6,
+          marginHorizontal: width * 0.2,
+        }}>
         <Image style={{width: width, height: width}} source={{uri: url}} />
       </Card>
     );
   }
-  
-  renderTrackDetails() {
-    return <Block></Block>;
+
+  renderTrackDetails(title, speaker) {
+    return (
+      <Block center middle>
+        <Text title>{title}</Text>
+        <Text capto>{speaker}</Text>
+      </Block>
+    );
   }
   pad(n, width, z = 0) {
     n = n + '';
@@ -102,18 +113,49 @@ export default class Player extends Component {
       </Block>
     );
   }
-  renderPlayBackControls() {
-    return <Block></Block>;
+  renderPlayBackControls(audioURL) {
+    SoundPlayer.playUrl(audioURL);
+    SoundPlayer.onFinishedLoading(() => {
+      console.log('finished loading track');
+      this.setState({
+        playing: true,
+      });
+    });
+    return (
+      <Block
+        row
+        center
+        space={'between'}
+        style={{width: '80%', height: '15%', marginHorizontal: '10%'}}>
+        <TouchableOpacity>
+          <Icon name="backward" size={30} />
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Icon name={this.state.playing ? 'play' : 'pause'} size={60} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Icon name="forward" size={30} />
+        </TouchableOpacity>
+      </Block>
+    );
   }
 
   render() {
+    const sermon = this.props.navigation.getParam('sermon');
+    const albumArtURL = sermon.speaker.albumArtURL;
+    const title = sermon.fullTitle;
+    const speaker = sermon.speaker.displayName;
+    const audioURL = sermon.media.audio[0].streamURL;
+    console.log(sermon);
+    console.log(audioURL);
     return (
       <React.Fragment>
         <Block>
-          {this.renderAlbumArt()}
-          {this.renderTrackDetails()}
-          {this.renderSeekBar()}
-          {this.renderPlayBackControls()}
+          {this.renderAlbumArt(albumArtURL)}
+          {this.renderTrackDetails(title, speaker)}
+          {/* {this.renderSeekBar()} */}
+          {this.renderPlayBackControls(audioURL)}
         </Block>
       </React.Fragment>
     );
