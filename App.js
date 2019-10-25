@@ -11,7 +11,7 @@ export default class App extends React.Component {
     // await firebase.analytics().logEvent('foo', { bar: '123'});
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log('user is logged');
+        console.log('user is logged in');
       } else {
         console.log('user in not logged in ');
       }

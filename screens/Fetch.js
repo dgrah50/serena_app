@@ -11,6 +11,8 @@ import {
 import {RNChipView} from 'react-native-chip-view';
 import rgba from 'hex-to-rgba';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
+import qs from 'qs';
 import {
   Block,
   Badge,
@@ -20,76 +22,9 @@ import {
 } from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
-import {theme, mocks, time} from '../constants';
+import {theme, mocks, time, emotions} from '../constants';
 
 const {width} = Dimensions.get('window');
-
-let topicList = [
-  'Love',
-  'Peace',
-  'Faith',
-  'Healing',
-  'Marriage',
-  'Resurrection',
-  'Fear',
-  'Strength',
-  'Prayer',
-  'Grace',
-  'Wisdom',
-  'Worry',
-  'Anger',
-  'Holy Spirit',
-];
-
-let emotions = {
-  happy: [
-    'Amazed',
-    'Content',
-    'Faithful',
-    'Happy',
-    'Hopeful',
-    'Joyful',
-    'Loved',
-    'Optimistic',
-    'Peaceful',
-    'Thankful',
-  ],
-  angry: [
-    'Angry',
-    'Annoyed',
-    'Disrespected',
-    'Frustrated',
-    'Hateful',
-    'Hostile',
-    'Irrational',
-    'Jealous',
-    'Rage',
-  ],
-  sad: [
-    'Ashamed',
-    'Depressed',
-    'Discouraged',
-    'Forgotten',
-    'Hopeless',
-    'Hurt',
-    'Lonely',
-    'Sad',
-    'Sick',
-    'Tired',
-  ],
-  shocked: [
-    'Abandoned',
-    'Afraid',
-    'Anxious',
-    'Confused',
-    'Lost',
-    'Nervous',
-    'Overwhelmed',
-    'Stressed',
-    'Uncomfortable',
-    'Worried',
-  ],
-};
 
 export default class Fetch extends Component {
   constructor(props) {
@@ -187,12 +122,12 @@ export default class Fetch extends Component {
     return (
       <Card shadow>
         <Block center middle>
-          <Text h3> What does the Bible say about... </Text> 
+          <Text h3> What does the Bible say about... </Text>
           <ScrollView horizontal={true}>
-            {topicList.map(topic => {
+            {emotions.topicList.map(topic => {
               return (
-                <Block style={{padding:5}}>
-                  <RNChipView title={topic} avatar={false} />
+                <Block style={{padding: 5}}>
+                  <RNChipView onPress={()=>{this.apiCall(topic)}} title={topic} avatar={false} />
                 </Block>
               );
             })}
@@ -201,15 +136,16 @@ export default class Fetch extends Component {
       </Card>
     );
   }
+
   renderEmotionChips() {
     return (
       <Card shadow>
         <Block center middle>
-          <Text h3> How are you feeling? </Text> 
+          <Text h3> How are you feeling? </Text>
           <ScrollView horizontal={true}>
-            {["😀","😡","😔","😨"].map(topic => {
+            {['😀', '😡', '😔', '😨'].map(topic => {
               return (
-                <Block style={{padding:5}}>
+                <Block style={{padding: 5}}>
                   <RNChipView title={topic} avatar={false} />
                 </Block>
               );
@@ -250,6 +186,29 @@ export default class Fetch extends Component {
         </Card>
       </Block>
     );
+  }
+
+  apiCall(query) {
+    this.setState({fetched: false});
+    console.log("called")
+    axios
+      .post('http://localhost:8000', qs.stringify({prayer: query}))
+      .then(response => {
+        console.log(response.data);
+        this.setState({
+          fetched: true,
+        });
+      })
+      .catch(error => {
+        this.setState({
+          fetched: true,
+          verse: {
+            verseText:
+              "Oops! We couldn't find a result for that one, could you rephrase that?",
+          },
+        });
+        console.log(error);
+      });
   }
 
   render() {

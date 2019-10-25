@@ -31,13 +31,15 @@
     "react-native-reanimated": "^1.2.0",
     "react-native-screens": "^1.0.0-alpha.23",
     "react-native-snap-carousel": "^3.8.1",
+    "react-native-sound-player": "^0.10.1",
     "react-native-svg": "^9.9.6",
     "react-native-typography": "^1.4.1",
     "react-native-vector-icons": "^6.6.0",
     "react-native-voice": "^0.3.0",
     "react-navigation": "^4.0.10",
     "react-navigation-drawer": "^2.2.2",
-    "react-navigation-stack": "^1.9.0"
+    "react-navigation-stack": "^1.9.0",
+    "xmldom": "^0.1.27"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",

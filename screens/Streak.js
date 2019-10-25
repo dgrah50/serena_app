@@ -96,7 +96,18 @@ export default class Streak extends Component {
         </Card>
       );
   }
-
+  
+  renderSettings(){
+    return (
+      <TouchableOpacity>
+        <Card shadow>
+          <Text center h2>
+            Log out
+          </Text>
+        </Card>
+      </TouchableOpacity>
+    );
+  }
   renderNavBar() {
     const {navigation} = this.props;
 
@@ -136,6 +147,8 @@ export default class Streak extends Component {
           {this.renderStreak()}
           <Block color="gray3" style={styles.hLine} />
           {this.renderCalendar()}
+          <Block color="gray3" style={styles.hLine} />
+          {this.renderSettings()}
         </ScrollView>
         {this.renderNavBar()}
       </React.Fragment>

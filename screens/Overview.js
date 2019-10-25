@@ -85,7 +85,8 @@ export default class Overview extends Component {
       </Block>
     ),
     headerRight: (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => this.props.navigation.navigate('Streak')}
+        >
         <Block flex={false}>
           <Image
             resizeMode="contain"
@@ -199,7 +200,7 @@ export default class Overview extends Component {
           }}>
           <TouchableOpacity
             activeOpacity={0.8}
-            onPress={() => navigation.navigate('OneVerse')}>
+            onPress={() => navigation.navigate('Podcast')}>
             <Icon name="square" size={62 / 2.5} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
