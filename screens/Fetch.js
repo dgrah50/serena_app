@@ -42,6 +42,7 @@ export default class Fetch extends Component {
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
     Voice.onSpeechPartialResults = this.onSpeechPartialResults.bind(this);
   }
+
   static navigationOptions = {
     headerLeft: (
       <Block left style={{paddingLeft: 10}}>
@@ -66,6 +67,7 @@ export default class Fetch extends Component {
       </TouchableOpacity>
     ),
   };
+
   onSpeechPartialResults = e => {
     // eslint-disable-next-line
     console.log('onSpeechPartialResults: ', e);
@@ -88,17 +90,17 @@ export default class Fetch extends Component {
       <Card shadow>
         <Block center middle>
           <Text h3>
-            How are you feeling, Dayan? Hold the mic button to speak
+            How are you feeling, Dayan? Hold the mic button to speak.
           </Text>
           <AnimatedCircularProgress
             onAnimationComplete={() => {
               console.log('animation done');
             }}
             ref={ref => (this.circularProgress = ref)}
-            tintColor={this.state.ringVisible ? 'red' : 'rgba(0,0,0,0)'}>
+            tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
             {fill => this.micButton()}
           </AnimatedCircularProgress>
-          <Text>{this.state.typedText}</Text>
+          <Text h3>{this.state.typedText}</Text>
         </Block>
       </Card>
     );
@@ -115,7 +117,7 @@ export default class Fetch extends Component {
             styles.buttonStyle,
             {backgroundColor: 'rgba(255, 255, 255, 0.8)'},
           ]}>
-          <Icon name={'microphone'} size={60} color={'#5334B8'} />
+          <Icon name={'microphone'} size={60} color={'#5692D0'} />
         </View>
       </TouchableOpacity>
     );
@@ -238,7 +240,7 @@ export default class Fetch extends Component {
       <React.Fragment>
         <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
           {this.renderMicRing()}
-          <Block color="gray3" style={styles.hLine} />
+          {/* <Block color="gray3" style={styles.hLine} /> */}
           {this.renderTopicChips()}
           {this.renderEmotionChips()}
         </ScrollView>

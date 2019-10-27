@@ -18,59 +18,8 @@ import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
 
 const {width} = Dimensions.get('window');
-let ENTRIES1 = [
-  {
-    title: 'Favourites',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
-    // illustration: require('../../assets/piusLBG.png')
-  },
-  {
-    title: 'Love',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
-  },
-  {
-    title: 'Strength',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
-  },
-  {
-    title: 'Fear',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2154354/elephant.jpg',
-  },
-  {
-    title: 'Anxiety',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
-  },
-  {
-    title: 'Faith',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
-  },
-  {
-    title: 'Healing',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
-  },
-  {
-    title: 'Hope',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
-  },
-  {
-    title: 'Marriage',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
-  },
-  {
-    title: 'More Soon...',
-    illustration:
-      'https://cdn.dribbble.com/users/288987/screenshots/3342177/fox-tale.jpg',
-  },
-];
+
+
 export default class Overview extends Component {
   static navigationOptions = {
     headerLeft: (
@@ -85,8 +34,8 @@ export default class Overview extends Component {
       </Block>
     ),
     headerRight: (
-      <TouchableOpacity onPress={() => this.props.navigation.navigate('Streak')}
-        >
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('Streak')}>
         <Block flex={false}>
           <Image
             resizeMode="contain"
@@ -119,15 +68,71 @@ export default class Overview extends Component {
     );
   }
 
-  _renderItem({item, index}) {
+  _renderSermon({item, index}) {
     return (
-      <Card shadow style={{margin: 10}}>
+      <Card shadow style={{margin: 10, width: 150, height: 150, padding: 0}}>
         <Image
+          style={{
+            width: '100%',
+            height: '100%',
+            borderRadius: theme.sizes.border,
+          }}
+          resizeMode="cover"
           source={{
-            uri:
-              'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg',
+            uri: item.speaker.albumArtURL.replace('{size}', 200).replace('{size}', 200),
           }}
         />
+        <Block
+          center
+          middle
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: '25%',
+            paddingHorizontal: '10%',
+            backgroundColor: 'white',
+            borderBottomLeftRadius: theme.sizes.border,
+            borderBottomRightRadius: theme.sizes.border,
+          }}>
+            <Text black center caption>
+              {item.fullTitle}
+            </Text>
+          </Block>
+      </Card>
+    );
+  }
+
+  _renderVOD({item, index}) {
+    console.log(item);
+    return (
+      <Card shadow style={{margin: 10, width: 150, height: 150, padding: 5}}>
+        <Block center >
+          <Text black title center middle>
+            {item.verse}
+            {"\n"}
+            </Text>
+          <Text center gray numberOfLines={4}>
+            {item.verseText}
+          </Text>
+        </Block>
+
+        <Block
+          center
+          middle
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: '25%',
+            backgroundColor: 'white',
+            borderBottomLeftRadius: theme.sizes.border,
+            borderBottomRightRadius: theme.sizes.border,
+          }}>
+          <Text caption>
+            {item.date}
+          </Text>
+        </Block>
       </Card>
     );
   }
@@ -140,8 +145,8 @@ export default class Overview extends Component {
         </Text>
         <Block style={{height: 180}}>
           <Carousel
-            data={ENTRIES1}
-            renderItem={this._renderItem.bind(this)}
+            data={mocks.sermons}
+            renderItem={this._renderSermon.bind(this)}
             sliderWidth={width * 0.9}
             itemWidth={width * 0.4}
             inactiveSlideScale={1}
@@ -167,8 +172,8 @@ export default class Overview extends Component {
         </Text>
         <Block style={{height: 180}}>
           <Carousel
-            data={ENTRIES1}
-            renderItem={this._renderItem.bind(this)}
+            data={mocks.versesOfTheDay}
+            renderItem={this._renderVOD.bind(this)}
             sliderWidth={width * 0.9}
             itemWidth={width * 0.4}
             inactiveSlideScale={1}
@@ -190,28 +195,29 @@ export default class Overview extends Component {
     const {navigation} = this.props;
 
     return (
-      <Block center middle style={styles.endTrip}>
+      <Block center middle style={styles.navbar}>
         <Card
           shadow
           row
           style={{
-            width: '90%',
+            width: '60%',
             justifyContent: 'space-between',
+            paddingHorizontal: '5%'
           }}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate('Player')}>
             <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate('Streak')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
+            <Icon name="bolt" size={62 / 2.5} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate('Fetch')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
+            <Icon name="search" size={62 / 2.5} color="black" />
           </TouchableOpacity>
         </Card>
       </Block>
@@ -241,7 +247,7 @@ const styles = StyleSheet.create({
   },
   // horizontal line
   hLine: {
-    marginVertical: theme.sizes.base * 2,
+    marginVertical: theme.sizes.base ,
     marginHorizontal: theme.sizes.base * 2,
     height: 1,
   },
@@ -250,9 +256,9 @@ const styles = StyleSheet.create({
     marginVertical: theme.sizes.base / 2,
     width: 1,
   },
-  endTrip: {
+   navbar: {
     position: 'absolute',
     width: width,
-    bottom: 0,
+    bottom: '5%',
   },
 });

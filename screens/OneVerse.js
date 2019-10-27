@@ -16,6 +16,7 @@ import {Block, Badge, Card, Text} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
+import {Bars} from 'react-native-loader';
 import axios from 'axios';
 
 const {width} = Dimensions.get('window');
@@ -149,7 +150,7 @@ export default class OneVerse extends Component {
       </TouchableOpacity>
     );
   }
-
+ 
   renderSermons() {
     console.log(this.state.sermons);
     return (
@@ -164,13 +165,25 @@ export default class OneVerse extends Component {
     );
   }
 
+  renderSpinner() {
+    return (
+      <Block center middle>
+        <Bars size={25} color="#000" />
+      </Block>
+    )
+  }
+
   render() {
     return (
       <React.Fragment>
         <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
           {this.renderVerseCard()}
           <Block color="gray3" style={styles.hLine} />
-          {this.state.sermons && this.renderSermons()}
+          {this.state.sermons ? (
+            this.renderSermons()
+          ) : (
+            this.renderSpinner()
+          )}
         </ScrollView>
       </React.Fragment>
     );
