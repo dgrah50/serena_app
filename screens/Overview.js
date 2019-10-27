@@ -19,7 +19,6 @@ import {theme, mocks, time} from '../constants';
 
 const {width} = Dimensions.get('window');
 
-
 export default class Overview extends Component {
   static navigationOptions = {
     headerLeft: (
@@ -33,6 +32,9 @@ export default class Overview extends Component {
         </Text>
       </Block>
     ),
+    headerTitle: <Image 
+    style={{width:30,height:30}}
+    source={require('../assets/images/icon.png')} />,
     headerRight: (
       <TouchableOpacity
         onPress={() => this.props.navigation.navigate('Streak')}>
@@ -53,7 +55,7 @@ export default class Overview extends Component {
         <Block>
           <Block center>
             <Text h3 style={{marginVertical: 8}}>
-              Good morning, Dayan. How are you feeling today?
+              Good evening, Dayan. How are you feeling today?
             </Text>
           </Block>
           <Block row right>
@@ -70,7 +72,14 @@ export default class Overview extends Component {
 
   _renderSermon({item, index}) {
     return (
-      <Card shadow style={{margin: 10, width: 150, height: 150, padding: 0}}>
+      <Card
+        shadow
+        style={{
+          margin: 10,
+          width: 150,
+          height: 150,
+          padding: 0,
+        }}>
         <Image
           style={{
             width: '100%',
@@ -79,7 +88,9 @@ export default class Overview extends Component {
           }}
           resizeMode="cover"
           source={{
-            uri: item.speaker.albumArtURL.replace('{size}', 200).replace('{size}', 200),
+            uri: item.speaker.albumArtURL
+              .replace('{size}', 200)
+              .replace('{size}', 200),
           }}
         />
         <Block
@@ -95,10 +106,10 @@ export default class Overview extends Component {
             borderBottomLeftRadius: theme.sizes.border,
             borderBottomRightRadius: theme.sizes.border,
           }}>
-            <Text black center caption>
-              {item.fullTitle}
-            </Text>
-          </Block>
+          <Text black center caption>
+            {item.fullTitle}
+          </Text>
+        </Block>
       </Card>
     );
   }
@@ -106,12 +117,19 @@ export default class Overview extends Component {
   _renderVOD({item, index}) {
     console.log(item);
     return (
-      <Card shadow style={{margin: 10, width: 150, height: 150, padding: 5}}>
-        <Block center >
+      <Card
+        shadow
+        style={{
+          margin: 10,
+          width: 150,
+          height: 150,
+          padding: 5,
+        }}>
+        <Block center>
           <Text black title center middle>
             {item.verse}
-            {"\n"}
-            </Text>
+            {'\n'}
+          </Text>
           <Text center gray numberOfLines={4}>
             {item.verseText}
           </Text>
@@ -129,9 +147,7 @@ export default class Overview extends Component {
             borderBottomLeftRadius: theme.sizes.border,
             borderBottomRightRadius: theme.sizes.border,
           }}>
-          <Text caption>
-            {item.date}
-          </Text>
+          <Text caption>{item.date}</Text>
         </Block>
       </Card>
     );
@@ -147,10 +163,10 @@ export default class Overview extends Component {
           <Carousel
             data={mocks.sermons}
             renderItem={this._renderSermon.bind(this)}
-            sliderWidth={width * 0.9}
+            sliderWidth={width}
             itemWidth={width * 0.4}
             inactiveSlideScale={1}
-            inactiveSlideOpacity={1}
+            inactiveSlideOpacity={0.8}
             enableMomentum={true}
             activeSlideAlignment={'start'}
             activeAnimationType={'spring'}
@@ -174,10 +190,10 @@ export default class Overview extends Component {
           <Carousel
             data={mocks.versesOfTheDay}
             renderItem={this._renderVOD.bind(this)}
-            sliderWidth={width * 0.9}
+            sliderWidth={width}
             itemWidth={width * 0.4}
             inactiveSlideScale={1}
-            inactiveSlideOpacity={1}
+            inactiveSlideOpacity={0.8}
             enableMomentum={true}
             activeSlideAlignment={'start'}
             activeAnimationType={'spring'}
@@ -202,7 +218,7 @@ export default class Overview extends Component {
           style={{
             width: '60%',
             justifyContent: 'space-between',
-            paddingHorizontal: '5%'
+            paddingHorizontal: '5%',
           }}>
           {/* <TouchableOpacity
             activeOpacity={0.8}
@@ -247,7 +263,7 @@ const styles = StyleSheet.create({
   },
   // horizontal line
   hLine: {
-    marginVertical: theme.sizes.base ,
+    marginVertical: theme.sizes.base,
     marginHorizontal: theme.sizes.base * 2,
     height: 1,
   },
@@ -256,7 +272,7 @@ const styles = StyleSheet.create({
     marginVertical: theme.sizes.base / 2,
     width: 1,
   },
-   navbar: {
+  navbar: {
     position: 'absolute',
     width: width,
     bottom: '5%',
