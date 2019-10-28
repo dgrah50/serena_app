@@ -25,7 +25,7 @@ export default class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPaused: false,
+      playing: false,
     };
     // SoundPlayer.playUrl(enclosures[0].getAttribute('url'));
   }
@@ -53,6 +53,21 @@ export default class Player extends Component {
       </TouchableOpacity>
     ),
   };
+
+  componentDidMount(){
+        const sermon = this.props.navigation.getParam('sermon');
+        const albumArtURL = sermon.speaker.albumArtURL;
+        const title = sermon.fullTitle;
+        const speaker = sermon.speaker.displayName;
+        const audioURL = sermon.media.audio[0].streamURL;
+        SoundPlayer.playUrl(audioURL);
+        SoundPlayer.onFinishedLoading(() => {
+          console.log('finished loading track');
+          this.setState({
+            playing: true,
+          });
+        });
+  }
 
   renderAlbumArt(url) {
     url = url.replace('{size}', 500).replace('{size}', 500);
@@ -113,14 +128,22 @@ export default class Player extends Component {
       </Block>
     );
   }
-  renderPlayBackControls(audioURL) {
-    SoundPlayer.playUrl(audioURL);
-    SoundPlayer.onFinishedLoading(() => {
-      console.log('finished loading track');
+
+  togglePlay() {
+    if (this.state.playing) {
+      SoundPlayer.pause();
+      this.setState({
+        playing: false,
+      });
+    } else {
+      SoundPlayer.resume();
       this.setState({
         playing: true,
       });
-    });
+    }
+  }
+  renderPlayBackControls(audioURL) {
+
     return (
       <Block
         row
@@ -131,8 +154,11 @@ export default class Player extends Component {
           <Icon name="backward" size={30} />
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          <Icon name={this.state.playing ? 'play' : 'pause'} size={60} />
+        <TouchableOpacity
+          onPress={() => {
+            this.togglePlay();
+          }}>
+          <Icon name={this.state.playing ? 'pause' : 'play'} size={60} />
         </TouchableOpacity>
         <TouchableOpacity>
           <Icon name="forward" size={30} />
@@ -147,8 +173,6 @@ export default class Player extends Component {
     const title = sermon.fullTitle;
     const speaker = sermon.speaker.displayName;
     const audioURL = sermon.media.audio[0].streamURL;
-    console.log(sermon);
-    console.log(audioURL);
     return (
       <React.Fragment>
         <Block>

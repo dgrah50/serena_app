@@ -91,6 +91,18 @@ export default class OneVerse extends Component {
             </Text>
           </Block>
         </Block>
+        <Block row middle space={"between"}>
+          <TouchableOpacity>
+            <Icon.Button name="heart" backgroundColor={theme.colors.accent}>
+              Like
+            </Icon.Button>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon.Button name="share-alt" backgroundColor={theme.colors.share}>
+              Share
+            </Icon.Button>
+          </TouchableOpacity>
+        </Block>
       </Card>
     );
   }
@@ -112,7 +124,6 @@ export default class OneVerse extends Component {
       uri = 'https://via.placeholder.com/50';
     }
 
-    console.log(item);
 
     return (
       <TouchableOpacity
@@ -126,7 +137,7 @@ export default class OneVerse extends Component {
           shadow
           center
           middle
-          style={{margin: 10, width: '100%', height: 100}}>
+          style={{height: 100}}>
           <Block middle center row>
             <Image
               style={{width: 80, height: 80, borderRadius: 10, marginRight: 10}}
@@ -152,7 +163,6 @@ export default class OneVerse extends Component {
   }
  
   renderSermons() {
-    console.log(this.state.sermons);
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>

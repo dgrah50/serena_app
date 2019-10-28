@@ -153,6 +153,32 @@ export default class Overview extends Component {
     );
   }
 
+  renderFavourites() {
+    return (
+      <Block>
+        <Text h3 spacing={1} style={{marginVertical: 8}}>
+          Your Favourites
+        </Text>
+        <Block style={{height: 180}}>
+          <Carousel
+            data={mocks.sermons}
+            renderItem={this._renderSermon.bind(this)}
+            sliderWidth={width}
+            itemWidth={width * 0.4}
+            inactiveSlideScale={1}
+            inactiveSlideOpacity={0.8}
+            enableMomentum={true}
+            activeSlideAlignment={'start'}
+            activeAnimationType={'spring'}
+            activeAnimationOptions={{
+              friction: 4,
+              tension: 40,
+            }}
+          />
+        </Block>
+      </Block>
+    );
+  }
   renderRecommendations() {
     return (
       <Block>
@@ -247,6 +273,7 @@ export default class Overview extends Component {
           {this.renderVerseCard()}
           <Block color="gray3" style={styles.hLine} />
           {this.renderRecommendations()}
+          {/* {this.renderFavourites()} */}
           {this.renderVODHistory()}
         </ScrollView>
         {this.renderNavBar()}

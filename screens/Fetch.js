@@ -78,7 +78,6 @@ export default class Fetch extends Component {
 
   onSpeechResults(e) {
     console.log(e.value);
-    console.log('hello');
     this.setState({
       results: e.value,
       typedText: Platform.OS === 'ios' ? e.value.join() : e.value[0],
@@ -94,7 +93,7 @@ export default class Fetch extends Component {
           </Text>
           <AnimatedCircularProgress
             onAnimationComplete={() => {
-              console.log('animation done');
+              // console.log('animation done');
             }}
             ref={ref => (this.circularProgress = ref)}
             tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
@@ -215,7 +214,6 @@ export default class Fetch extends Component {
     axios
       .post('http://localhost:8000', qs.stringify({prayer: query}))
       .then(response => {
-        console.log(response.data);
         this.setState({
           fetched: true,
         });
