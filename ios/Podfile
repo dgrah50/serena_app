@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '9.0'
+platform :ios, '10.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'Serena' do
@@ -49,6 +49,8 @@ target 'Serena' do
   pod 'Fabric', '~> 1.10.2'
   pod 'Crashlytics', '~> 3.14.0'
 
+  pod 'react-native-track-player', :path => '../node_modules/react-native-track-player'
+
   target 'SerenaTests' do
     inherit! :search_paths
     # Pods for testing
@@ -73,7 +75,13 @@ end
  post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.2'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
+    end
+        if ['react-native-track-player'].include? target.name
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '5'
+      end
     end
   end
 end
+

@@ -115,7 +115,6 @@ export default class Overview extends Component {
   }
 
   _renderVOD({item, index}) {
-    console.log(item);
     return (
       <Card
         shadow

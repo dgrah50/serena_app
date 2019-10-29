@@ -16,7 +16,7 @@ import {Block, Badge, Card, Text, Controls} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time, emotions} from '../constants';
-import SoundPlayer from 'react-native-sound-player';
+import TrackPlayer from 'react-native-track-player';
 var Slider = require('react-native-slider');
 
 const {width} = Dimensions.get('window');
@@ -25,7 +25,7 @@ export default class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      playing: false,
+      playing: true,
     };
     // SoundPlayer.playUrl(enclosures[0].getAttribute('url'));
   }
@@ -60,12 +60,18 @@ export default class Player extends Component {
         const title = sermon.fullTitle;
         const speaker = sermon.speaker.displayName;
         const audioURL = sermon.media.audio[0].streamURL;
-        SoundPlayer.playUrl(audioURL);
-        SoundPlayer.onFinishedLoading(() => {
-          console.log('finished loading track');
-          this.setState({
-            playing: true,
+  
+        TrackPlayer.setupPlayer().then(async () => {
+          // Adds a track to the queue
+          await TrackPlayer.add({
+            id: '1',
+            url:'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_700KB.mp3',
+            title: 'Track Title',
+            artist: 'Track Artist',
           });
+
+          // Starts playing it
+          TrackPlayer.play();
         });
   }
 
@@ -131,12 +137,12 @@ export default class Player extends Component {
 
   togglePlay() {
     if (this.state.playing) {
-      SoundPlayer.pause();
+      TrackPlayer.pause();
       this.setState({
         playing: false,
       });
     } else {
-      SoundPlayer.resume();
+      TrackPlayer.play();
       this.setState({
         playing: true,
       });
