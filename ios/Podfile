@@ -49,7 +49,6 @@ target 'Serena' do
   pod 'Fabric', '~> 1.10.2'
   pod 'Crashlytics', '~> 3.14.0'
 
-  pod 'react-native-track-player', :path => '../node_modules/react-native-track-player'
 
   target 'SerenaTests' do
     inherit! :search_paths

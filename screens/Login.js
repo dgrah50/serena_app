@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {Image, KeyboardAvoidingView, Dimensions, Alert} from 'react-native';
 import firebase from 'react-native-firebase';
 import {Button, Block, Text, Input} from '../components';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const {height} = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 class Login extends Component {
   render() {
@@ -21,13 +22,34 @@ class Login extends Component {
               style={{height: 28, width: 102}}
             />
           </Block>
-          <Block flex={2.5} center>
-            <Text h3 style={{marginBottom: 6}}>
-              Sign in to Serena
+          <Block center>
+            <Text h2 style={{marginBottom: 6}}>
+              Welcome back to Serena
             </Text>
-            <Text paragraph >
-              Please enter your credentials to proceed.
-            </Text>
+            <Block row middle center>
+              <Button
+                shadow
+                style={{width: width * 0.4, backgroundColor: '#3b5998'}}>
+                <Icon name="facebook-f" size={30} color="#fff" />
+                <Text button white>
+                  Login with Facebook
+                </Text>
+              </Button>
+              <Button
+                shadow
+                style={{
+                  width: width * 0.4,
+                  marginLeft: width * 0.05,
+                  backgroundColor: '#4285F4',
+                }}>
+                <Icon name="google" size={30} color="#fff" />
+                <Text button white>
+                  Login with Google
+                </Text>
+              </Button>
+            </Block>
+          </Block>
+          <Block flex={3.5}>
             <Block center style={{marginTop: 44}}>
               <Input
                 full
@@ -45,7 +67,7 @@ class Login extends Component {
                 rightLabel={
                   <Text
                     paragraph
-                    color="gray"
+                    color="red"
                     onPress={() => navigation.navigate('Forgot')}>
                     Forgot password?
                   </Text>
@@ -53,10 +75,17 @@ class Login extends Component {
               />
 
               <Button
-                full
-                style={{marginBottom: 12}}
+                shadow
+                style={{
+                  marginBottom: 12,
+                  width: width * 0.4,
+                  backgroundColor: '#808080',
+                }}
                 onPress={() => this.onLoginPress()}>
-                <Text button>Sign in</Text>
+                <Icon name="envelope" size={30} color="#fff" />
+                <Text button white>
+                  Or sign in with email
+                </Text>
               </Button>
               <Text paragraph color="gray">
                 Don't have an account?{' '}
@@ -85,14 +114,13 @@ class Login extends Component {
     });
   };
 
-
   onLoginPress() {
     this.setState({loading: true});
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
-      .catch((err) => {
-        console.log(err)
+      .catch(err => {
+        console.log(err);
         this.onLoginFail(err);
       });
   }
@@ -107,8 +135,6 @@ class Login extends Component {
   onLoginSuccess() {
     navigation.navigate('Overview');
   }
-
-
 }
 
 export default Login;

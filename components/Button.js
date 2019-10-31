@@ -6,9 +6,10 @@ const { width } = Dimensions.get('window');
 
 export default class Button extends Component {
   render() {
-    const { style, full, opacity, children, ...props } = this.props;
+    const { style, full, opacity, children,shadow, ...props } = this.props;
     const buttonStyles = [
       styles.button,
+      shadow && styles.shadow,
       full && styles.full,
       style,
     ];
@@ -36,5 +37,11 @@ const styles = StyleSheet.create({
   },
   full: {
     width: width - 50,
-  }
+  },
+  shadow: {
+    shadowColor: theme.colors.black,
+    shadowOpacity: 0.11,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 13,
+  },
 });

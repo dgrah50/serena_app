@@ -199,9 +199,9 @@ class Register extends Component {
 
             <Button
               full
-              style={{marginBottom: 12}}
+              style={{marginBottom: 12, width:100}}
               onPress={() => this.onSignupPress()}>
-              <Text button>Create Account</Text>
+              <Text button white>Create Account</Text>
             </Button>
             <Text paragraph color="gray">
               Already have an account?{' '}

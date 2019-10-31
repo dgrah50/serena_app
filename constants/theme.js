@@ -1,14 +1,15 @@
 const colors = {
-  accent: "#FF4957",
-  primary: "#27A9FF",
-  secondary: "#4DA1FF",
-  tertiary: "#FFE358",
-  black: "#2F2F2F",
-  white: "#FFFFFF",
-  gray: "#BDBFC7",
-  gray2: "#D8D8D8",
-  gray3: "#F0F0F0",
-  gray4: "#F7F8FA",
+  accent: '#FF4957',
+  primary: '#27A9FF',
+  secondary: '#4DA1FF',
+  tertiary: '#FFE358',
+  black: '#2F2F2F',
+  white: '#FFFFFF',
+  gray: '#BDBFC7',
+  gray2: '#D8D8D8',
+  gray3: '#F0F0F0',
+  gray4: '#F7F8FA',
+  blue: '#24a0ed',
 };
 
 const sizes = {
@@ -31,34 +32,34 @@ const sizes = {
 
 const fonts = {
   h1: {
-    fontFamily: "Rubik-Light",
-    fontSize: sizes.h1
+    fontFamily: 'Rubik-Light',
+    fontSize: sizes.h1,
   },
   h2: {
-    fontFamily: "Rubik-Medium",
-    fontSize: sizes.h2
+    fontFamily: 'Rubik-Medium',
+    fontSize: sizes.h2,
   },
   h3: {
-    fontFamily: "Rubik-Regular",
-    fontSize: sizes.h3
+    fontFamily: 'Rubik-Regular',
+    fontSize: sizes.h3,
   },
   header: {
-    fontFamily: "Rubik-Bold",
-    fontSize: sizes.header
+    fontFamily: 'Rubik-Bold',
+    fontSize: sizes.header,
   },
   title: {
-    fontFamily: "Rubik-Regular",
-    fontSize: sizes.title
+    fontFamily: 'Rubik-Regular',
+    fontSize: sizes.title,
   },
   body: {
-    fontSize: sizes.body
+    fontSize: sizes.body,
   },
   caption: {
-    fontSize: sizes.caption
+    fontSize: sizes.caption,
   },
   small: {
-    fontSize: sizes.small
-  }
+    fontSize: sizes.small,
+  },
 };
 
-export { colors, sizes, fonts };
+export {colors, sizes, fonts};
