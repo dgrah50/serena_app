@@ -15,6 +15,7 @@ import {Block, Badge, Card, Text} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
+import firebase from 'react-native-firebase';
 
 const {width} = Dimensions.get('window');
 
@@ -101,7 +102,21 @@ export default class Streak extends Component {
   
   renderSettings(){
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          firebase
+            .auth()
+            .signOut()
+            .then(
+              () => {
+                this.props.navigation.navigate('Login');
+              },
+              function(error) {
+                // An error happened.
+              },
+            );
+        }}>
+
         <Card shadow>
           <Text center h2>
             Log out

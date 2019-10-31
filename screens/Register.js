@@ -116,10 +116,10 @@ class Register extends Component {
           <Text h3 style={{marginBottom: 6}}>
             Get started for free
           </Text>
-          <Text paragraph color="black3">
+          <Text paragraph >
             Free forever. No credit card needed.
           </Text>
-          <Block row style={{marginHorizontal: 28, marginTop: 40}}>
+          {/* <Block row style={{marginHorizontal: 28, marginTop: 40}}>
             <TouchableWithoutFeedback
               onPress={() => this.handleType('administrator')}
               style={active === 'administrator' ? styles.activeBorder : null}>
@@ -142,7 +142,7 @@ class Register extends Component {
                 <Text h4 style={{marginBottom: 11}}>
                   Administrator
                 </Text>
-                <Text paragraph center color="black3">
+                <Text paragraph center >
                   Full access to all settings
                 </Text>
               </Block>
@@ -174,7 +174,7 @@ class Register extends Component {
                 </Text>
               </Block>
             </TouchableWithoutFeedback>
-          </Block>
+          </Block> */}
           <Block center style={{marginTop: 25}}>
             <Input
               full

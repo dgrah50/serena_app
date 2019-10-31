@@ -25,7 +25,7 @@ class Login extends Component {
             <Text h3 style={{marginBottom: 6}}>
               Sign in to Serena
             </Text>
-            <Text paragraph color="black3">
+            <Text paragraph >
               Please enter your credentials to proceed.
             </Text>
             <Block center style={{marginTop: 44}}>
@@ -91,8 +91,8 @@ class Login extends Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
-      .then(this.onLoginSuccess.bind(this))
       .catch((err) => {
+        console.log(err)
         this.onLoginFail(err);
       });
   }

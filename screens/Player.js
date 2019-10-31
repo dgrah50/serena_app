@@ -16,66 +16,91 @@ import {Block, Badge, Card, Text, Controls} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time, emotions} from '../constants';
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, {useProgress, State} from 'react-native-track-player';
 var Slider = require('react-native-slider');
 
 const {width} = Dimensions.get('window');
 
-export default class Player extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      playing: true,
-    };
-    // SoundPlayer.playUrl(enclosures[0].getAttribute('url'));
-  }
-  static navigationOptions = {
-    headerLeft: (
-      <Block left style={{paddingLeft: 10}}>
-        <Text gray style={theme.fonts.title}>
-          {time.DateNow.weekday}
-          {', '}
-          <Text style={theme.fonts.title}>
-            {time.DateNow.month} {time.DateNow.date}
-          </Text>
-        </Text>
+// class ProgressBar extends ProgressComponent {
+//   render() {
+//     return (
+//       <View style={styles.progress}>
+//         <View style={{flex: this.getProgress(), backgroundColor: 'white'}} />
+//         <View style={{flex: 1 - this.getProgress(), backgroundColor: 'grey'}} />
+//       </View>
+//     );
+//   }
+// }
+
+export default function Player(props) {
+  const sermon = props.navigation.getParam('sermon');
+  const albumArtURL = sermon.speaker.albumArtURL;
+  const title = sermon.fullTitle;
+  const speaker = sermon.speaker.displayName;
+  const audioURL = sermon.media.audio[0].streamURL;
+
+  TrackPlayer.setupPlayer().then(async () => {
+    // Adds a track to the queue
+    await TrackPlayer.add({
+      id: '1',
+      url: audioURL,
+      title: 'Track Title',
+      artist: 'Track Artist',
+    });
+
+    // Starts playing it
+    TrackPlayer.play();
+  });
+
+  // renderTrackDetails(title, speaker) {
+  //   return (
+  //     <Block center middle>
+  //       <Text title>{title}</Text>
+  //       <Text capto>{speaker}</Text>
+  //     </Block>
+  //   );
+  // }
+
+  // togglePlay() {
+  //   if (this.state.playing) {
+  //     TrackPlayer.pause();
+  //     this.setState({
+  //       playing: false,
+  //     });
+  //   } else {
+  //     TrackPlayer.play();
+  //     this.setState({
+  //       playing: true,
+  //     });
+  //   }
+  // }
+
+  function renderPlayBackControls() {
+    return (
+      <Block
+        row
+        center
+        space={'between'}
+        style={{width: '80%', height: '15%', marginHorizontal: '10%'}}>
+        <TouchableOpacity>
+          <Icon name="backward" size={30} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            this.togglePlay();
+          }}>
+          {/* <Icon name={this.state.playing ? 'pause' : 'play'} size={60} /> */}
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Icon name="forward" size={30} />
+        </TouchableOpacity>
       </Block>
-    ),
-    headerRight: (
-      <TouchableOpacity>
-        <Block flex={false}>
-          <Image
-            resizeMode="contain"
-            source={require('../assets/images/Icon/Menu.png')}
-            style={{width: 45, height: 18, paddingRight: 40}}
-          />
-        </Block>
-      </TouchableOpacity>
-    ),
-  };
-
-  componentDidMount(){
-        const sermon = this.props.navigation.getParam('sermon');
-        const albumArtURL = sermon.speaker.albumArtURL;
-        const title = sermon.fullTitle;
-        const speaker = sermon.speaker.displayName;
-        const audioURL = sermon.media.audio[0].streamURL;
-  
-        TrackPlayer.setupPlayer().then(async () => {
-          // Adds a track to the queue
-          await TrackPlayer.add({
-            id: '1',
-            url:'https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_700KB.mp3',
-            title: 'Track Title',
-            artist: 'Track Artist',
-          });
-
-          // Starts playing it
-          TrackPlayer.play();
-        });
+    );
   }
 
-  renderAlbumArt(url) {
+
+  function renderAlbumArt(url) {
     url = url.replace('{size}', 500).replace('{size}', 500);
     return (
       <Card
@@ -92,104 +117,40 @@ export default class Player extends Component {
     );
   }
 
-  renderTrackDetails(title, speaker) {
+  function ProgressBar() {
+    const progress = useProgress();
+    console.log(progress.position);
+    const playbackState = usePlaybackState();
+    console.log(playbackState)
+
     return (
-      <Block center middle>
-        <Text title>{title}</Text>
-        <Text capto>{speaker}</Text>
-      </Block>
+      <Slider
+        style={styles.slider}
+        trackStyle={styles.progress}
+        thumbStyle={styles.progressThumb}
+        maximumValue={progress.duration}
+        value={progress.position}
+        minimumTrackTintColor={colors.canarySecondary}
+        maximumTrackTintColor="transparent"
+        thumbTintColor={colors.canarySecondary}
+        onSlidingComplete={(value: number) => TrackPlayer.seekTo(value)}
+      />
     );
   }
-  pad(n, width, z = 0) {
-    n = n + '';
-    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-  }
-  minutesAndSeconds = position => [
-    pad(Math.floor(position / 60), 2),
-    pad(position % 60, 2),
-  ];
-  renderSeekBar() {
-    const elapsed = this.minutesAndSeconds(currentPosition);
-    const remaining = this.minutesAndSeconds(trackLength - currentPosition);
-    return (
+
+  // render() {
+
+  return (
+    <React.Fragment>
       <Block>
-        <Block row>
-          <Text>{elapsed[0] + ':' + elapsed[1]}</Text>
-
-          <Text>
-            {trackLength > 1 && '-' + remaining[0] + ':' + remaining[1]}
-          </Text>
-        </Block>
-        <Slider
-          maximumValue={Math.max(trackLength, 1, currentPosition + 1)}
-          onSlidingStart={onSlidingStart}
-          onSlidingComplete={onSeek}
-          value={currentPosition}
-          style={styles.slider}
-          minimumTrackTintColor="#fff"
-          maximumTrackTintColor="rgba(255, 255, 255, 0.14)"
-          thumbStyle={styles.thumb}
-          trackStyle={styles.track}
-        />
+        <ProgressBar />
+        {renderAlbumArt(albumArtURL)}
+        {renderPlayBackControls()}
+        {ProgressBar()}
       </Block>
-    );
-  }
-
-  togglePlay() {
-    if (this.state.playing) {
-      TrackPlayer.pause();
-      this.setState({
-        playing: false,
-      });
-    } else {
-      TrackPlayer.play();
-      this.setState({
-        playing: true,
-      });
-    }
-  }
-  renderPlayBackControls(audioURL) {
-
-    return (
-      <Block
-        row
-        center
-        space={'between'}
-        style={{width: '80%', height: '15%', marginHorizontal: '10%'}}>
-        <TouchableOpacity>
-          <Icon name="backward" size={30} />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            this.togglePlay();
-          }}>
-          <Icon name={this.state.playing ? 'pause' : 'play'} size={60} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Icon name="forward" size={30} />
-        </TouchableOpacity>
-      </Block>
-    );
-  }
-
-  render() {
-    const sermon = this.props.navigation.getParam('sermon');
-    const albumArtURL = sermon.speaker.albumArtURL;
-    const title = sermon.fullTitle;
-    const speaker = sermon.speaker.displayName;
-    const audioURL = sermon.media.audio[0].streamURL;
-    return (
-      <React.Fragment>
-        <Block>
-          {this.renderAlbumArt(albumArtURL)}
-          {this.renderTrackDetails(title, speaker)}
-          {/* {this.renderSeekBar()} */}
-          {this.renderPlayBackControls(audioURL)}
-        </Block>
-      </React.Fragment>
-    );
-  }
+    </React.Fragment>
+  );
+  // }
 }
 
 const styles = StyleSheet.create({
@@ -221,5 +182,11 @@ const styles = StyleSheet.create({
   },
   slider: {
     marginTop: -12,
+  },
+  progress: {
+    height: 10,
+    width: '90%',
+    marginTop: 10,
+    flexDirection: 'row',
   },
 });
