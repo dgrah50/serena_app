@@ -210,6 +210,7 @@ export default class Fetch extends Component {
   }
 
   apiCall(query) {
+    console.log(this.props.navigation)
     this.setState({fetched: false});
     axios
       .post('http://localhost:8000', qs.stringify({prayer: query}))
@@ -249,7 +250,7 @@ export default class Fetch extends Component {
 
 const styles = StyleSheet.create({
   welcome: {
-    paddingVertical: theme.sizes.padding,
+    paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
   },

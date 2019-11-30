@@ -143,7 +143,7 @@ export default class Streak extends Component {
 
 const styles = StyleSheet.create({
   welcome: {
-    paddingVertical: theme.sizes.padding,
+    paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
   },

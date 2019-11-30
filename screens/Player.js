@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -17,9 +17,9 @@ import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time, emotions} from '../constants';
 import TrackPlayer, {useProgress, State} from 'react-native-track-player';
-var Slider = require('react-native-slider');
+import Slider from 'react-native-slider';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 // class ProgressBar extends ProgressComponent {
 //   render() {
@@ -33,129 +33,176 @@ const {width} = Dimensions.get('window');
 // }
 
 export default function Player(props) {
-  const sermon = props.navigation.getParam('sermon');
-  const albumArtURL = sermon.speaker.albumArtURL;
-  const title = sermon.fullTitle;
-  const speaker = sermon.speaker.displayName;
-  const audioURL = sermon.media.audio[0].streamURL;
+  const {navigation, screenProps} = props;
+  const {currentSongData} = screenProps;
+  const [paused, setPlayerState] = useState(false);
+  const [favorited, setFavorited] = useState(false);
+  console.log(currentSongData);
 
   TrackPlayer.setupPlayer().then(async () => {
     // Adds a track to the queue
     await TrackPlayer.add({
       id: '1',
-      url: audioURL,
-      title: 'Track Title',
-      artist: 'Track Artist',
+      url: currentSongData.downloadURL,
+      title: currentSongData.title,
+      artist: currentSongData.artist,
     });
 
     // Starts playing it
     TrackPlayer.play();
   });
 
-  // renderTrackDetails(title, speaker) {
-  //   return (
-  //     <Block center middle>
-  //       <Text title>{title}</Text>
-  //       <Text capto>{speaker}</Text>
-  //     </Block>
-  //   );
-  // }
+  function togglePlay() {
+    console.log(paused)
+    if (paused) {
+      TrackPlayer.play();
+      setPlayerState(false)
+    } else {
+      TrackPlayer.pause();
+      setPlayerState(true)
+    }
+  }
 
-  // togglePlay() {
-  //   if (this.state.playing) {
-  //     TrackPlayer.pause();
-  //     this.setState({
-  //       playing: false,
-  //     });
-  //   } else {
-  //     TrackPlayer.play();
-  //     this.setState({
-  //       playing: true,
-  //     });
-  //   }
-  // }
-
-  function renderPlayBackControls() {
+  function _renderPlayBackControls() {
     return (
       <Block
-        row
+        flex={false}
+        middle
         center
-        space={'between'}
-        style={{width: '80%', height: '15%', marginHorizontal: '10%'}}>
+        style={{
+          width: '40%',
+          height: '10%',
+          flexDirection: 'row',
+          marginHorizontal: '10%',
+          justifyContent: 'space-between',
+          alignContent: 'center',
+          alignSelf: 'center',
+        }}>
         <TouchableOpacity>
-          <Icon name="backward" size={30} />
+          <Icon color={theme.colors.white} name="step-backward" size={30} />
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {
-            this.togglePlay();
+            togglePlay();
           }}>
-          {/* <Icon name={this.state.playing ? 'pause' : 'play'} size={60} /> */}
+          <Icon name={paused ? 'play-circle' : 'pause-circle'} size={60} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Icon name="forward" size={30} />
+          <Icon color={theme.colors.white} name="step-forward" size={30} />
         </TouchableOpacity>
       </Block>
     );
   }
 
-
-  function renderAlbumArt(url) {
+  function _renderAlbumArt(url) {
     url = url.replace('{size}', 500).replace('{size}', 500);
     return (
-      <Card
-        shadow
-        center
-        middle
+      <Block
+        flex={false}
         style={{
-          width: width * 0.6,
-          height: width * 0.6,
-          marginHorizontal: width * 0.2,
+          width: '100%',
+          height: '50%',
+          // backgroundColor: 'green',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
-        <Image style={{width: width, height: width}} source={{uri: url}} />
-      </Card>
+        <Block
+          flex={false}
+          style={{
+            // justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Image
+            style={{width: width * 0.9, height: width * 0.9}}
+            source={{uri: url}}
+          />
+
+          <Text left white h2 style={{paddingTop: 20}}>
+            {currentSongData.title}
+          </Text>
+          <Text white title>
+            {currentSongData.artist}
+          </Text>
+        </Block>
+      </Block>
     );
   }
 
-  function ProgressBar() {
-    const progress = useProgress();
-    console.log(progress.position);
-    const playbackState = usePlaybackState();
-    console.log(playbackState)
+  function _renderProgressBar() {
+    // const progress = useProgress();
+    // console.log(progress.position);
+    // const playbackState = usePlaybackState();
+    // console.log(playbackState);
 
     return (
-      <Slider
-        style={styles.slider}
-        trackStyle={styles.progress}
-        thumbStyle={styles.progressThumb}
-        maximumValue={progress.duration}
-        value={progress.position}
-        minimumTrackTintColor={colors.canarySecondary}
-        maximumTrackTintColor="transparent"
-        thumbTintColor={colors.canarySecondary}
-        onSlidingComplete={(value: number) => TrackPlayer.seekTo(value)}
-      />
+      <Block flex={false} style={{paddingHorizontal: '5%'}}>
+        <Slider
+          // style={styles.slider}
+          trackStyle={styles.progress}
+          thumbStyle={styles.progressThumb}
+          maximumValue={512}
+          value={0}
+          minimumTrackTintColor={theme.colors.gray4}
+          maximumTrackTintColor={theme.colors.gray}
+          thumbTintColor={theme.colors.white}
+          // onSlidingComplete={(value: number) => TrackPlayer.seekTo(value)}
+        />
+        <Block row space={'between'} flex={false}>
+          <Text caption white>
+            0:00
+          </Text>
+          <Text caption white>
+            3:45
+          </Text>
+        </Block>
+      </Block>
     );
   }
 
-  // render() {
+  function _renderHeader() {
+    return (
+      <Block
+        flex={false}
+        middle
+        center
+        style={{
+          height: '10%',
+          top: '5%',
+          paddingHorizontal: '5%',
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack(null)}
+          style={{left: 20, position: 'absolute'}}>
+          <Icon color={theme.colors.white} name="chevron-down" size={20} />
+        </TouchableOpacity>
+        <Text white h3>
+          {currentSongData.album}
+        </Text>
+      </Block>
+    );
+  }
 
   return (
-    <React.Fragment>
-      <Block>
-        <ProgressBar />
-        {renderAlbumArt(albumArtURL)}
-        {renderPlayBackControls()}
-        {ProgressBar()}
-      </Block>
-    </React.Fragment>
+    <Block
+      style={{
+        width: '100%',
+        flex: 1,
+        backgroundColor: theme.colors.black,
+      }}>
+      {_renderHeader()}
+      {_renderAlbumArt(currentSongData.albumArtURL)}
+      {_renderProgressBar()}
+      {_renderPlayBackControls()}
+    </Block>
   );
-  // }
 }
 
 const styles = StyleSheet.create({
   welcome: {
-    paddingVertical: theme.sizes.padding,
+    paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
   },
@@ -170,21 +217,20 @@ const styles = StyleSheet.create({
     marginVertical: theme.sizes.base / 2,
     width: 1,
   },
-  track: {
+  progressTrack: {
     height: 2,
     borderRadius: 1,
   },
-  thumb: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+  progressThumb: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     backgroundColor: 'white',
   },
   slider: {
     marginTop: -12,
   },
-  progress: {
-    height: 10,
+  slider: {
     width: '90%',
     marginTop: 10,
     flexDirection: 'row',

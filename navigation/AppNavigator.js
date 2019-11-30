@@ -1,7 +1,7 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import Screens from './Screens';
+import ModalNavigator from './ModalNavigator';
 import Loading from '../screens/Loading';
 import Auth from './Auth';
 
@@ -14,10 +14,10 @@ export default createAppContainer(
     {
       Auth,
       Loading,
-      Main: Screens,
+      Main: ModalNavigator,
     },
     {
       initialRouteName: 'Loading',
-    }
+    },
   ),
 );

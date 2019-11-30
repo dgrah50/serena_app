@@ -56,27 +56,38 @@ export default class OneVerse extends Component {
 
   componentDidMount() {
     let query = this.props.navigation.getParam('response').keyword;
-    const options = {
-      headers: {'x-api-key': '9A6AF52A-CB55-47C1-9082-296BBF6BED1E'},
-    };
-    axios
-      .get(
-        'https://api.sermonaudio.com/v2/node/sermons?sortBy=downloads&searchKeyword=' +
-          query,
-        options,
-      )
-      .then(response => {
-        this.setState({
-          sermons: response.data.results,
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    // const options = {
+    //   headers: {'x-api-key': '9A6AF52A-CB55-47C1-9082-296BBF6BED1E'},
+    // };
+    // axios
+    //   .get(
+    //     'https://api.sermonaudio.com/v2/node/sermons?sortBy=downloads&searchKeyword=' +
+    //       query,
+    //     options,
+    //   )
+    //   .then(response => {
+    //     this.setState({
+    //       sermons: response.data.results,
+    //     });
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
   }
 
   renderVerseCard() {
-    let verses = this.props.navigation.getParam('response').verses;
+    let navprop = this.props.navigation.getParam('response').verses;
+    let verses = [
+      {
+        verse:
+          'You will seek Me and find Me when you search for Me with all your heart.',
+        bookname: 'Jeremiah 29:13',
+      },
+    ];
+    if (navprop.length != 0) {
+      verses = navprop;
+    }
+
     return (
       <Card shadow>
         <Block>
@@ -91,7 +102,7 @@ export default class OneVerse extends Component {
             </Text>
           </Block>
         </Block>
-        <Block row middle space={"between"}>
+        <Block row middle space={'between'}>
           <TouchableOpacity>
             <Icon.Button name="heart" backgroundColor={theme.colors.accent}>
               Like
@@ -124,7 +135,6 @@ export default class OneVerse extends Component {
       uri = 'https://via.placeholder.com/50';
     }
 
-
     return (
       <TouchableOpacity
         key={item.sermonID}
@@ -133,11 +143,7 @@ export default class OneVerse extends Component {
             sermon: item,
           });
         }}>
-        <Card
-          shadow
-          center
-          middle
-          style={{height: 100}}>
+        <Card shadow center middle style={{height: 100}}>
           <Block middle center row>
             <Image
               style={{width: 80, height: 80, borderRadius: 10, marginRight: 10}}
@@ -161,7 +167,7 @@ export default class OneVerse extends Component {
       </TouchableOpacity>
     );
   }
- 
+
   renderSermons() {
     return (
       <Block>
@@ -180,7 +186,7 @@ export default class OneVerse extends Component {
       <Block center middle>
         <Bars size={25} color="#000" />
       </Block>
-    )
+    );
   }
 
   render() {
@@ -189,11 +195,11 @@ export default class OneVerse extends Component {
         <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
           {this.renderVerseCard()}
           <Block color="gray3" style={styles.hLine} />
-          {this.state.sermons ? (
-            this.renderSermons()
-          ) : (
-            this.renderSpinner()
-          )}
+          {this.state.sermons
+            ? {
+                /* this.renderSermons() */
+              }
+            : this.renderSpinner()}
         </ScrollView>
       </React.Fragment>
     );
@@ -202,7 +208,7 @@ export default class OneVerse extends Component {
 
 const styles = StyleSheet.create({
   welcome: {
-    paddingVertical: theme.sizes.padding,
+    paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
   },

@@ -49,7 +49,7 @@ export default class Overview extends Component {
     ),
   };
 
-  renderVerseCard() {
+  _renderVerseCard() {
     return (
       <Card shadow>
         <Block>
@@ -152,7 +152,7 @@ export default class Overview extends Component {
     );
   }
 
-  renderFavourites() {
+  _renderFavourites() {
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>
@@ -178,7 +178,8 @@ export default class Overview extends Component {
       </Block>
     );
   }
-  renderRecommendations() {
+  
+  _renderRecommendations() {
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>
@@ -205,7 +206,7 @@ export default class Overview extends Component {
     );
   }
 
-  renderVODHistory() {
+  _renderVODHistory() {
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>
@@ -232,58 +233,23 @@ export default class Overview extends Component {
     );
   }
 
-  renderNavBar() {
-    const {navigation} = this.props;
-
-    return (
-      <Block center middle style={styles.navbar}>
-        <Card
-          shadow
-          row
-          style={{
-            width: '60%',
-            justifyContent: 'space-between',
-            paddingHorizontal: '5%',
-          }}>
-          {/* <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Player')}>
-            <Icon name="square" size={62 / 2.5} color="black" />
-          </TouchableOpacity> */}
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Streak')}>
-            <Icon name="bolt" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate('Fetch')}>
-            <Icon name="search" size={62 / 2.5} color="black" />
-          </TouchableOpacity>
-        </Card>
-      </Block>
-    );
-  }
 
   render() {
     return (
-      <React.Fragment>
-        <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
-          {this.renderVerseCard()}
+        <ScrollView style={styles.home} showsVerticalScrollIndicator={false}>
+          {this._renderVerseCard()}
           <Block color="gray3" style={styles.hLine} />
-          {this.renderRecommendations()}
+          {this._renderRecommendations()}
           {/* {this.renderFavourites()} */}
-          {this.renderVODHistory()}
+          {this._renderVODHistory()}
         </ScrollView>
-        {this.renderNavBar()}
-      </React.Fragment>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  welcome: {
-    paddingVertical: theme.sizes.padding,
+  home: {
+    paddingTop: 2* theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
   },
