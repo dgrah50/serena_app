@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Dimensions,
   Image,
@@ -16,7 +16,11 @@ import {Block, Badge, Card, Text, Controls} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time, emotions} from '../constants';
-import TrackPlayer, {useProgress, State} from 'react-native-track-player';
+import TrackPlayer, {
+  useProgress,
+  State,
+  usePlaybackState,
+} from 'react-native-track-player';
 import Slider from 'react-native-slider';
 
 const {width, height} = Dimensions.get('window');
@@ -35,31 +39,30 @@ const {width, height} = Dimensions.get('window');
 export default function Player(props) {
   const {navigation, screenProps} = props;
   const {currentSongData} = screenProps;
+
   const [paused, setPlayerState] = useState(false);
   const [favorited, setFavorited] = useState(false);
-  console.log(currentSongData);
 
-  TrackPlayer.setupPlayer().then(async () => {
-    // Adds a track to the queue
-    await TrackPlayer.add({
-      id: '1',
-      url: currentSongData.downloadURL,
-      title: currentSongData.title,
-      artist: currentSongData.artist,
+  useEffect(() => {
+    TrackPlayer.setupPlayer().then(async () => {
+      // Adds a track to the queue
+      await TrackPlayer.add({
+        id: '1',
+        url: currentSongData.downloadURL,
+        title: currentSongData.title,
+        artist: currentSongData.artist,
+      });
+      TrackPlayer.play();
     });
-
-    // Starts playing it
-    TrackPlayer.play();
-  });
+  }, []);
 
   function togglePlay() {
-    console.log(paused)
     if (paused) {
       TrackPlayer.play();
-      setPlayerState(false)
+      setPlayerState(false);
     } else {
       TrackPlayer.pause();
-      setPlayerState(true)
+      setPlayerState(true);
     }
   }
 
@@ -86,7 +89,11 @@ export default function Player(props) {
           onPress={() => {
             togglePlay();
           }}>
-          <Icon name={paused ? 'play-circle' : 'pause-circle'} size={60} />
+          <Icon
+            color={theme.colors.white}
+            name={paused ? 'play-circle' : 'pause-circle'}
+            size={60}
+          />
         </TouchableOpacity>
         <TouchableOpacity>
           <Icon color={theme.colors.white} name="step-forward" size={30} />
@@ -130,10 +137,30 @@ export default function Player(props) {
   }
 
   function _renderProgressBar() {
-    // const progress = useProgress();
-    // console.log(progress.position);
-    // const playbackState = usePlaybackState();
-    // console.log(playbackState);
+    const progress = useProgress();
+    console.log(progress.position);
+    const playbackState = usePlaybackState();
+    console.log(playbackState);
+
+    function convertToMinutes(time) {
+      time = parseInt(time);
+
+      // Hours, minutes and seconds
+      var hrs = ~~(time / 3600);
+      var mins = ~~((time % 3600) / 60);
+      var secs = ~~time % 60;
+
+      // Output like "1:01" or "4:03:59" or "123:03:59"
+      var ret = '';
+
+      if (hrs > 0) {
+        ret += '' + hrs + ':' + (mins < 10 ? '0' : '');
+      }
+
+      ret += '' + mins + ':' + (secs < 10 ? '0' : '');
+      ret += '' + secs;
+      return ret;
+    }
 
     return (
       <Block flex={false} style={{paddingHorizontal: '5%'}}>
@@ -141,20 +168,26 @@ export default function Player(props) {
           // style={styles.slider}
           trackStyle={styles.progress}
           thumbStyle={styles.progressThumb}
-          maximumValue={512}
-          value={0}
+          maximumValue={progress.duration}
+          minimumValue={0}
+          value={progress.position}
           minimumTrackTintColor={theme.colors.gray4}
           maximumTrackTintColor={theme.colors.gray}
           thumbTintColor={theme.colors.white}
-          // onSlidingComplete={(value: number) => TrackPlayer.seekTo(value)}
+          onSlidingComplete={(value: number) => TrackPlayer.seekTo(value)}
         />
+
         <Block row space={'between'} flex={false}>
-          <Text caption white>
-            0:00
-          </Text>
-          <Text caption white>
-            3:45
-          </Text>
+          {playbackState != 'buffering' && playbackState != 'loading' && (
+            <React.Fragment>
+              <Text caption white>
+                {convertToMinutes(progress.position)}
+              </Text>
+              <Text caption white>
+                {convertToMinutes(progress.duration)}
+              </Text>
+            </React.Fragment>
+          )}
         </Block>
       </Block>
     );
