@@ -6,7 +6,6 @@ import {
   TouchableWithoutFeedback,
   Alert
 } from 'react-native';
-
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import firebase from 'react-native-firebase';
 import {Button, Block, Text, Input} from '../components';

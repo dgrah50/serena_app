@@ -40,7 +40,6 @@ export default class Fetch extends Component {
     };
     Voice.onSpeechStart = this.onSpeechStart;
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
-    Voice.onSpeechPartialResults = this.onSpeechPartialResults.bind(this);
   }
 
   static navigationOptions = {

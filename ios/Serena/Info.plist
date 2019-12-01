@@ -40,25 +40,11 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	  <key>NSMicrophoneUsageDescription</key>
-  <string>Description of why you require the use of the microphone</string>
-  <key>NSSpeechRecognitionUsageDescription</key>
-  <string>Description of why you require the use of the speech recognition</string>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Description of why you require the use of the microphone</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Description of why you require the use of the speech recognition</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Rubik-Black.ttf</string>
@@ -89,5 +75,39 @@
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+	<key>CFBundleURLSchemes</key>
+	<array>
+		<string>fb2380687995390435</string>
+	</array>
+	</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>2380687995390435</string>
+	<key>FacebookDisplayName</key>
+	<string>Serena</string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

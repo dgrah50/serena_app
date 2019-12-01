@@ -12,6 +12,20 @@ PODS:
     - Fabric (~> 1.10.2)
   - DoubleConversion (1.1.6)
   - Fabric (1.10.2)
+  - FBSDKCoreKit (5.8.0):
+    - FBSDKCoreKit/Basics (= 5.8.0)
+    - FBSDKCoreKit/Core (= 5.8.0)
+  - FBSDKCoreKit/Basics (5.8.0)
+  - FBSDKCoreKit/Core (5.8.0):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (5.8.0):
+    - FBSDKLoginKit/Login (= 5.8.0)
+  - FBSDKLoginKit/Login (5.8.0):
+    - FBSDKCoreKit (~> 5.0)
+  - FBSDKShareKit (5.8.0):
+    - FBSDKShareKit/Share (= 5.8.0)
+  - FBSDKShareKit/Share (5.8.0):
+    - FBSDKCoreKit (~> 5.0)
   - Firebase/Auth (6.8.1):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.2.3)
@@ -254,6 +268,20 @@ PODS:
     - React-cxxreact (= 0.60.5)
     - React-jsi (= 0.60.5)
   - React-jsinspector (0.60.5)
+  - react-native-fbsdk (1.1.1):
+    - React
+    - react-native-fbsdk/Core (= 1.1.1)
+    - react-native-fbsdk/Login (= 1.1.1)
+    - react-native-fbsdk/Share (= 1.1.1)
+  - react-native-fbsdk/Core (1.1.1):
+    - FBSDKCoreKit (= 5.8)
+    - React
+  - react-native-fbsdk/Login (1.1.1):
+    - FBSDKLoginKit (= 5.8)
+    - React
+  - react-native-fbsdk/Share (1.1.1):
+    - FBSDKShareKit (= 5.8)
+    - React
   - react-native-music-control (0.10.7):
     - React
   - react-native-track-player (2.0.0-rc13):
@@ -316,6 +344,8 @@ DEPENDENCIES:
   - Crashlytics (~> 3.14.0)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Fabric (~> 1.10.2)
+  - FBSDKCoreKit
+  - FBSDKLoginKit
   - Firebase/Auth (~> 6.8.1)
   - Firebase/Core (~> 6.8.1)
   - Firebase/Database (~> 6.8.1)
@@ -336,6 +366,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-music-control (from `../node_modules/react-native-music-control`)
   - react-native-track-player (from `../node_modules/react-native-track-player`)
   - react-native-voice (from `../node_modules/react-native-voice`)
@@ -360,7 +391,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - boost-for-react-native
     - BoringSSL-GRPC
     - Crashlytics
@@ -394,6 +425,10 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - Protobuf
+  trunk:
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - FBSDKShareKit
 
 EXTERNAL SOURCES:
   BVLinearGradient:
@@ -420,6 +455,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-fbsdk:
+    :path: "../node_modules/react-native-fbsdk"
   react-native-music-control:
     :path: "../node_modules/react-native-music-control"
   react-native-track-player:
@@ -472,6 +509,9 @@ SPEC CHECKSUMS:
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
+  FBSDKCoreKit: e7dcac0aabcfb09d0166998edd95fe3b05a0ce5d
+  FBSDKLoginKit: 1b0cf04df0370b37404213157b060d6666ede814
+  FBSDKShareKit: abc29e1bb4f9f59f679adf1ae191006d68455f96
   Firebase: 9cbe4e5b5eaafa05dc932be58b7c8c3820d71e88
   FirebaseABTesting: 0d10f3cdc3fa00f3f175b5b56c1003c8e888299f
   FirebaseAnalytics: 843c7f64a8f9c79f0d03281197ebe7bb1d58d477
@@ -511,6 +551,7 @@ SPEC CHECKSUMS:
   React-jsi: 4d8c9efb6312a9725b18d6fc818ffc103f60fec2
   React-jsiexecutor: 90ad2f9db09513fc763bc757fdc3c4ff8bde2a30
   React-jsinspector: e08662d1bf5b129a3d556eb9ea343a3f40353ae4
+  react-native-fbsdk: b94a83971c496a35803f38b921aec6d637ba07b5
   react-native-music-control: 74b1f7d03b781aa38557d706ca4650ff1c96095a
   react-native-track-player: 6c2c2f163534bb6d6b5fea68959b3641f70718dd
   react-native-voice: 0253a5cde07d9c675463e36f7e668a76b0825de4
@@ -534,6 +575,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
 
-PODFILE CHECKSUM: 7f3d4b043550ca542e6395fbdb94fed623180bdb
+PODFILE CHECKSUM: 79ff7264ade7e4c0c1fc9b480aada4c20a8e2871
 
-COCOAPODS: 1.7.2
+COCOAPODS: 1.8.4

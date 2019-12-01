@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Image, KeyboardAvoidingView, Dimensions, Alert} from 'react-native';
 import firebase from 'react-native-firebase';
+import {AccessToken, LoginManager} from 'react-native-fbsdk';
 import {Button, Block, Text, Input} from '../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {theme, mocks, time} from '../constants';
@@ -77,6 +78,7 @@ class Login extends Component {
         <Block row middle center>
           <Button
             shadow
+            onPress={() => this.facebookLogin()}
             style={{width: width * 0.8, backgroundColor: '#3b5998'}}>
             {/* <Icon name="facebook-f" size={30} color="#fff" /> */}
             <Text button white>
@@ -89,16 +91,39 @@ class Login extends Component {
   }
 
   //****** HELPER FUNCTIONS SECTION
-  onLoginFacebookPress() {
-    this.setState({loading: true});
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
-      .catch(err => {
-        console.log(err);
-        this.onLoginFail(err);
-      });
+ async facebookLogin() {
+  try {
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+
+    if (result.isCancelled) {
+      // handle this however suites the flow of your app
+      throw new Error('User cancelled request'); 
+    }
+
+    console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
+
+    // get the access token
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      // handle this however suites the flow of your app
+      throw new Error('Something went wrong obtaining the users access token');
+    }
+
+    // create a new firebase credential with the token
+    const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+
+    // login with credential
+    const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
+
+    console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()))
+  } catch (e) {
+    console.error(e);
   }
+}
 
   onLoginFail(err) {
     this.setState({err, loading: false});
@@ -106,7 +131,6 @@ class Login extends Component {
       cancelable: false,
     });
   }
-
   onLoginSuccess() {
     navigation.navigate('Overview');
   }

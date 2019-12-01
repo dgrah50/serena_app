@@ -1,7 +1,5 @@
 import React from 'react';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-
-
 import {theme, mocks, time} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomTabBar from '../components/CustomTabBar';
@@ -40,10 +38,6 @@ export default createBottomTabNavigator(
         ),
       },
     },
-    // OneVerse,
-    // Streak,
-    // Fetch,
-    // Player,
   },
   {
     initialRouteName: 'Overview',
