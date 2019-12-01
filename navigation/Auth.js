@@ -2,12 +2,14 @@ import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack';
 
 import Login from '../screens/Login';
+import EmailLogin from '../screens/EmailLogin';
 import Register from '../screens/Register';
 import Forgot from '../screens/Forgot';
 
 export default createStackNavigator(
   {
     Login,
+    EmailLogin,
     Register,
     Forgot,
   },
