@@ -128,7 +128,6 @@ export default class Streak extends Component {
 
   render() {
     return (
-      <React.Fragment>
         <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
           {this.renderStreak()}
           <Block color="gray3" style={styles.hLine} />
@@ -136,7 +135,6 @@ export default class Streak extends Component {
           <Block color="gray3" style={styles.hLine} />
           {this.renderSettings()}
         </ScrollView>
-      </React.Fragment>
     );
   }
 }
@@ -146,6 +144,7 @@ const styles = StyleSheet.create({
     paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
+    flex: 1
   },
   // horizontal line
   hLine: {

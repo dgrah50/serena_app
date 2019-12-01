@@ -3,6 +3,7 @@ import {Image, KeyboardAvoidingView, Dimensions, Alert} from 'react-native';
 import firebase from 'react-native-firebase';
 import {Button, Block, Text, Input} from '../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {theme, mocks, time} from '../constants';
 
 const {height, width} = Dimensions.get('window');
 
@@ -13,43 +14,29 @@ class Login extends Component {
       <KeyboardAvoidingView
         enabled
         behavior="padding"
-        style={{flex: 1}}
+        style={{flex: 1, backgroundColor: theme.colors.black}}
         keyboardVerticalOffset={height * 0.2}>
-        <Block center middle>
-          <Block middle>
+        <Block center space={'between'} style={{top: '10%'}}>
+          <Block
+            flex={false}
+            center
+            middle
+            style={{marginVertical: '10%', height: '30%'}}>
             <Image
               source={require('../assets/images/Base/Logobig.png')}
-              style={{height: 28, width: 102}}
+              style={{height: 56, width: 204, marginVertical: '10%'}}
             />
-          </Block>
-          <Block center>
-            <Text h2 style={{marginBottom: 6}}>
-              Welcome back to Serena
+            <Text h2 white center>
+              Welcome back to Serena. {'\n'} {'\n'}
+              <Text h3 white center>
+                Find the right scripture or sermon for you. {'\n'}
+                Any time, any place.
+              </Text>
             </Text>
-            <Block row middle center>
-              <Button
-                shadow
-                style={{width: width * 0.4, backgroundColor: '#3b5998'}}>
-                <Icon name="facebook-f" size={30} color="#fff" />
-                <Text button white>
-                  Login with Facebook
-                </Text>
-              </Button>
-              <Button
-                shadow
-                style={{
-                  width: width * 0.4,
-                  marginLeft: width * 0.05,
-                  backgroundColor: '#4285F4',
-                }}>
-                <Icon name="google" size={30} color="#fff" />
-                <Text button white>
-                  Login with Google
-                </Text>
-              </Button>
-            </Block>
           </Block>
-          <Block flex={3.5}>
+          {this._renderButtons()}
+
+          {/* <Block flex={3.5}>
             <Block center style={{marginTop: 44}}>
               <Input
                 full
@@ -97,9 +84,46 @@ class Login extends Component {
                 </Text>
               </Text>
             </Block>
-          </Block>
+          </Block> */}
         </Block>
       </KeyboardAvoidingView>
+    );
+  }
+
+
+  _renderButtons () {
+    return (
+      <Block
+        flex={false}
+        style={{height: '20%', marginBottom: '10%'}}>
+        <Block row middle center space={'between'} >
+          <Button
+            shadow
+            style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
+            {/* <Icon name="facebook-f" size={30} color="#fff" /> */}
+            <Text button black>
+              LOG IN
+            </Text>
+          </Button>
+          <Button
+            shadow
+            style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
+            <Text button black>
+              SIGN UP
+            </Text>
+          </Button>
+        </Block>
+        <Block row middle center>
+          <Button
+            shadow
+            style={{width: width * 0.8, backgroundColor: '#3b5998'}}>
+            {/* <Icon name="facebook-f" size={30} color="#fff" /> */}
+            <Text button white>
+              CONTINUE WITH FACEBOOK
+            </Text>
+          </Button>
+        </Block>
+      </Block>
     );
   }
 
