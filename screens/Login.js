@@ -22,6 +22,7 @@ class Login extends Component {
     );
   }
 
+  //****** SUB COMPONENTS SECTION
   _renderSerenaHeader() {
     return (
       <Block center space={'between'} style={{top: '10%'}}>
@@ -45,19 +46,28 @@ class Login extends Component {
       </Block>
     );
   }
-  
+
   _renderButtons() {
     return (
       <Block flex={false} style={{height: '20%', marginBottom: '10%'}}>
-        <Block row middle center space={'between'} style={{marginHorizontal:"10%",marginBottom:20}}> 
-          <Button shadow onPress={() => this.props.navigation.navigate('EmailLogin')}
+        <Block
+          row
+          middle
+          center
+          space={'between'}
+          style={{marginHorizontal: '10%', marginBottom: 20}}>
+          <Button
+            shadow
+            onPress={() => this.props.navigation.navigate('EmailLogin')}
             style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
             {/* <Icon name="facebook-f" size={30} color="#fff" /> */}
             <Text button black>
               LOG IN
             </Text>
           </Button>
-          <Button shadow onPress={() => this.props.navigation.navigate('Register')}
+          <Button
+            shadow
+            onPress={() => this.props.navigation.navigate('Register')}
             style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
             <Text button black>
               SIGN UP
@@ -78,6 +88,7 @@ class Login extends Component {
     );
   }
 
+  //****** HELPER FUNCTIONS SECTION
   onLoginFacebookPress() {
     this.setState({loading: true});
     firebase

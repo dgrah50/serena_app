@@ -47,6 +47,7 @@ export default class OneVerse extends Component {
     ),
   };
 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -75,7 +76,24 @@ export default class OneVerse extends Component {
     //   });
   }
 
-  renderVerseCard() {
+  render() {
+    return (
+      <React.Fragment>
+        <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
+          {this._renderVerseCard()}
+          <Block color="gray3" style={styles.hLine} />
+          {this.state.sermons
+            ? {
+                /* this._renderSermons() */
+              }
+            : this._renderSpinner()}
+        </ScrollView>
+      </React.Fragment>
+    );
+  }
+
+  //****** SUB COMPONENTS SECTION
+  _renderVerseCard() {
     let navprop = this.props.navigation.getParam('response').verses;
     let verses = [
       {
@@ -117,7 +135,6 @@ export default class OneVerse extends Component {
       </Card>
     );
   }
-
   _renderItem(item) {
     let uri = undefined;
     let speakerName = undefined;
@@ -146,7 +163,12 @@ export default class OneVerse extends Component {
         <Card shadow center middle style={{height: 100}}>
           <Block middle center row>
             <Image
-              style={{width: 80, height: 80, borderRadius: 10, marginRight: 10}}
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 10,
+                marginRight: 10,
+              }}
               source={{
                 uri: uri,
               }}
@@ -167,8 +189,7 @@ export default class OneVerse extends Component {
       </TouchableOpacity>
     );
   }
-
-  renderSermons() {
+  _renderSermons() {
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>
@@ -180,28 +201,11 @@ export default class OneVerse extends Component {
       </Block>
     );
   }
-
-  renderSpinner() {
+  _renderSpinner() {
     return (
       <Block center middle>
         <Bars size={25} color="#000" />
       </Block>
-    );
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
-          {this.renderVerseCard()}
-          <Block color="gray3" style={styles.hLine} />
-          {this.state.sermons
-            ? {
-                /* this.renderSermons() */
-              }
-            : this.renderSpinner()}
-        </ScrollView>
-      </React.Fragment>
     );
   }
 }

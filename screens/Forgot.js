@@ -17,26 +17,6 @@ const styles = StyleSheet.create({
 });
 
 class Forgot extends Component {
-  emailAddressTextHandler = e => {
-    this.setState({
-      emailAddress: e,
-    });
-  };
-
-  forgotPassword = yourEmail => {
-    firebase
-      .auth()
-      .sendPasswordResetEmail(yourEmail)
-      .then(function(user) {
-        alert('Please check your email.');
-      })
-      .catch(function(err) {
-        Alert.alert(err, 'Try again!', [{text: 'OK'}], {
-          cancelable: false,
-        });
-      });
-  };
-
   render() {
     return (
       <KeyboardAvoidingView
@@ -86,6 +66,26 @@ class Forgot extends Component {
       </KeyboardAvoidingView>
     );
   }
+
+  //****** HELPER FUNCTIONS SECTION
+  emailAddressTextHandler = e => {
+    this.setState({
+      emailAddress: e,
+    });
+  };
+  forgotPassword = yourEmail => {
+    firebase
+      .auth()
+      .sendPasswordResetEmail(yourEmail)
+      .then(function(user) {
+        alert('Please check your email.');
+      })
+      .catch(function(err) {
+        Alert.alert(err, 'Try again!', [{text: 'OK'}], {
+          cancelable: false,
+        });
+      });
+  };
 }
 
 export default Forgot;

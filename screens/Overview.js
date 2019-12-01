@@ -8,9 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import rgba from 'hex-to-rgba';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
 import {Block, Badge, Card, Text} from '../components';
 import {styles as blockStyles} from '../components/Block';
@@ -32,9 +30,12 @@ export default class Overview extends Component {
         </Text>
       </Block>
     ),
-    headerTitle: <Image 
-    style={{width:30,height:30}}
-    source={require('../assets/images/icon.png')} />,
+    headerTitle: (
+      <Image
+        style={{width: 30, height: 30}}
+        source={require('../assets/images/icon.png')}
+      />
+    ),
     headerRight: (
       <TouchableOpacity
         onPress={() => this.props.navigation.navigate('Streak')}>
@@ -49,6 +50,19 @@ export default class Overview extends Component {
     ),
   };
 
+  render() {
+    return (
+      <ScrollView style={styles.home} showsVerticalScrollIndicator={false}>
+        {this._renderVerseCard()}
+        <Block color="gray3" style={styles.hLine} />
+        {this._renderRecommendations()}
+        {/* {this.renderFavourites()} */}
+        {this._renderVODHistory()}
+      </ScrollView>
+    );
+  }
+
+  //****** SUB COMPONENTS SECTION
   _renderVerseCard() {
     return (
       <Card shadow>
@@ -69,7 +83,6 @@ export default class Overview extends Component {
       </Card>
     );
   }
-
   _renderSermon({item, index}) {
     return (
       <Card
@@ -113,7 +126,6 @@ export default class Overview extends Component {
       </Card>
     );
   }
-
   _renderVOD({item, index}) {
     return (
       <Card
@@ -151,7 +163,6 @@ export default class Overview extends Component {
       </Card>
     );
   }
-
   _renderFavourites() {
     return (
       <Block>
@@ -178,7 +189,6 @@ export default class Overview extends Component {
       </Block>
     );
   }
-  
   _renderRecommendations() {
     return (
       <Block>
@@ -205,7 +215,6 @@ export default class Overview extends Component {
       </Block>
     );
   }
-
   _renderVODHistory() {
     return (
       <Block>
@@ -232,24 +241,11 @@ export default class Overview extends Component {
       </Block>
     );
   }
-
-
-  render() {
-    return (
-        <ScrollView style={styles.home} showsVerticalScrollIndicator={false}>
-          {this._renderVerseCard()}
-          <Block color="gray3" style={styles.hLine} />
-          {this._renderRecommendations()}
-          {/* {this.renderFavourites()} */}
-          {this._renderVODHistory()}
-        </ScrollView>
-    );
-  }
 }
 
 const styles = StyleSheet.create({
   home: {
-    paddingTop: 2* theme.sizes.padding,
+    paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
   },

@@ -56,17 +56,22 @@ export default function Player(props) {
     });
   }, []);
 
-  function togglePlay() {
-    if (paused) {
-      TrackPlayer.play();
-      setPlayerState(false);
-    } else {
-      TrackPlayer.pause();
-      setPlayerState(true);
-    }
-  }
+  return (
+    <Block
+      style={{
+        width: '100%',
+        flex: 1,
+        backgroundColor: theme.colors.black,
+      }}>
+      {_renderHeader()}
+      {_renderAlbumArt(currentSongData.albumArtURL)}
+      {_renderProgressBar()}
+      {_renderPlayBackControls()}
+    </Block>
+  );
 
-  function _renderPlayBackControls() {
+  //****** SUB COMPONENTS SECTION
+  function _rendePlayBackControls() {
     return (
       <Block
         flex={false}
@@ -121,7 +126,10 @@ export default function Player(props) {
             alignItems: 'center',
           }}>
           <Image
-            style={{width: width * 0.9, height: width * 0.9}}
+            style={{
+              width: width * 0.9,
+              height: width * 0.9,
+            }}
             source={{uri: url}}
           />
 
@@ -208,7 +216,10 @@ export default function Player(props) {
         }}>
         <TouchableOpacity
           onPress={() => navigation.goBack(null)}
-          style={{left: 20, position: 'absolute'}}>
+          style={{
+            left: 20,
+            position: 'absolute',
+          }}>
           <Icon color={theme.colors.white} name="chevron-down" size={20} />
         </TouchableOpacity>
         <Text white h3>
@@ -218,19 +229,16 @@ export default function Player(props) {
     );
   }
 
-  return (
-    <Block
-      style={{
-        width: '100%',
-        flex: 1,
-        backgroundColor: theme.colors.black,
-      }}>
-      {_renderHeader()}
-      {_renderAlbumArt(currentSongData.albumArtURL)}
-      {_renderProgressBar()}
-      {_renderPlayBackControls()}
-    </Block>
-  );
+  //****** HELPER FUNCTONS SECTION
+  function togglePlay() {
+    if (paused) {
+      TrackPlayer.play();
+      setPlayerState(false);
+    } else {
+      TrackPlayer.pause();
+      setPlayerState(true);
+    }
+  }
 }
 
 const styles = StyleSheet.create({

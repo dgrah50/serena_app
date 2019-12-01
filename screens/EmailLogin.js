@@ -16,83 +16,94 @@ class EmailLogin extends Component {
         behavior="padding"
         style={{flex: 1, backgroundColor: theme.colors.black}}
         keyboardVerticalOffset={height * 0.2}>
-        <Block center space={'between'} style={{top: '10%'}}>
-          <Block
-            flex={false}
-            center
-            middle
-            style={{marginVertical: '10%', height: '30%'}}>
-            <Text h2 white center>
-              Log in {'\n'} {'\n'}
-              <Text h3 white center>
-                Find the right scripture or sermon for you. {'\n'}
-                Any time, any place.
-              </Text>
-            </Text>
-          </Block>
-
-          <Block flex={3.5}>
-            <Block center style={{marginTop: 44}}>
-              <Input
-                full
-                email
-                label="Email address"
-                style={{
-                  marginBottom: 25,
-                  color: theme.colors.white,
-                  borderColor: theme.colors.white,
-                }}
-                onChangeTextHandler={this.emailAddressTextHandler}
-              />
-              <Input
-                full
-                password
-                label="Password"
-                style={{
-                  marginBottom: 25,
-                  color: theme.colors.white,
-                  borderColor: theme.colors.white,
-                }}
-                onChangeTextHandler={this.passwordTextHandler}
-                rightLabel={
-                  <Text
-                    paragraph
-                    color="red"
-                    onPress={() => navigation.navigate('Forgot')}>
-                    Forgot password?
-                  </Text>
-                }
-              />
-
-              <Button
-                shadow
-                style={{
-                  marginBottom: 12,
-                  width: width * 0.4,
-                  backgroundColor: theme.colors.white,
-                }}
-                onPress={() => this.onLoginPress()}>
-                <Text button black>
-                  LOG IN
-                </Text>
-              </Button>
-              <Text paragraph color="gray">
-                Don't have an account?{' '}
-                <Text
-                  height={18}
-                  color="blue"
-                  onPress={() => navigation.navigate('Register')}>
-                  Sign up
-                </Text>
-              </Text>
-            </Block>
-          </Block>
-        </Block>
+        {this._renderHeader()}
+        {this._renderInputAndButtons()}
       </KeyboardAvoidingView>
     );
   }
 
+  //****** SUB COMPONENTS SECTION
+  _renderInputAndButtons() {
+    return (
+      <Block flex={3.5}>
+        <Block center style={{marginTop: 44}}>
+          <Input
+            full
+            email
+            label="Email address"
+            style={{
+              marginBottom: 25,
+              color: theme.colors.white,
+              borderColor: theme.colors.white,
+            }}
+            onChangeTextHandler={this.emailAddressTextHandler}
+          />
+          <Input
+            full
+            password
+            label="Password"
+            style={{
+              marginBottom: 25,
+              color: theme.colors.white,
+              borderColor: theme.colors.white,
+            }}
+            onChangeTextHandler={this.passwordTextHandler}
+            rightLabel={
+              <Text
+                paragraph
+                color="red"
+                onPress={() => navigation.navigate('Forgot')}>
+                Forgot password?
+              </Text>
+            }
+          />
 
+          <Button
+            shadow
+            style={{
+              marginBottom: 12,
+              width: width * 0.4,
+              backgroundColor: theme.colors.white,
+            }}
+            onPress={() => this.onLoginPress()}>
+            <Text button black>
+              LOG IN
+            </Text>
+          </Button>
+          <Text paragraph color="gray">
+            Don't have an account?{' '}
+            <Text
+              height={18}
+              color="blue"
+              onPress={() => navigation.navigate('Register')}>
+              Sign up
+            </Text>
+          </Text>
+        </Block>
+      </Block>
+    );
+  }
+  _renderHeader() {
+    return (
+      <Block center space={'between'} style={{top: '10%'}}>
+        <Block
+          flex={false}
+          center
+          middle
+          style={{marginVertical: '10%', height: '30%'}}>
+          <Text h2 white center>
+            Log in {'\n'} {'\n'}
+            <Text h3 white center>
+              Find the right scripture or sermon for you. {'\n'}
+              Any time, any place.
+            </Text>
+          </Text>
+        </Block>
+      </Block>
+    );
+  }
+
+  //****** HELPER FUNCTIONS SECTION
   emailAddressTextHandler = e => {
     this.setState({
       emailAddress: e,
@@ -103,7 +114,6 @@ class EmailLogin extends Component {
       password: e,
     });
   };
-
   onLoginPress() {
     this.setState({loading: true});
     firebase
@@ -114,7 +124,6 @@ class EmailLogin extends Component {
         this.onLoginFail(err);
       });
   }
-
   onLoginFail(err) {
     this.setState({err, loading: false});
     Alert.alert(err, 'Try again!', [{text: 'OK'}], {

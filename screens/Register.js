@@ -15,92 +15,10 @@ import * as theme from '../constants/theme';
 const {height} = Dimensions.get('window');
 
 class Register extends Component {
-  state = {
-    active: null,
-  };
-
-  handleType = id => {
-    const {active} = this.state;
-    this.setState({active: active === id ? null : id});
-  };
-
-  emailAddressTextHandler = e => {
-    this.setState({
-      emailAddress: e,
-    });
-  };
-  passwordTextHandler = e => {
-    this.setState({
-      password: e,
-    });
-  };
-  nameTextHandler = e => {
-    this.setState({
-      name: e,
-    });
-  };
-
-  onSignupPress() {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(
-        this.state.emailAddress,
-        this.state.password,
-      )
-      // .then(userCredentials => {
-      //   if (userCredentials.user) {
-      //     userCredentials.user
-      //       .updateProfile({
-      //         displayName: this.state.name,
-      //       })
-            // .then(this.onSignupSuccess.bind(this));
-        // }
-      // })
-      .catch(err => {
-        this.creationFailure(err).bind(this);
-      });
-  }
-
-  onSignupSuccess() {
-    navigation.navigate('Overview');
-  }
-
-  creationFailure(err) {
-    this.setState({error: err, loading: false});
-    Alert.alert(
-      'Account creation failed. ' + err,
-      'Try again!',
-      [{text: 'OK'}],
-      {
-        cancelable: false,
-      },
-    );
-  }
 
   render() {
     const {navigation} = this.props;
     const {active} = this.state;
-
-    const adminIcon = (
-      <Image
-        source={require('../assets/images/icons/energy.png')}
-        style={{height: 16, width: 14}}
-      />
-    );
-
-    const operatorIcon = (
-      <Image
-        source={require('../assets/images/icons/message.png')}
-        style={{height: 14, width: 14}}
-      />
-    );
-
-    const checkIcon = (
-      <Image
-        source={require('../assets/images/icons/check.png')}
-        style={{height: 18, width: 18}}
-      />
-    );
 
     return (
       <KeyboardAwareScrollView
@@ -116,9 +34,7 @@ class Register extends Component {
           <Text h3 style={{marginBottom: 6}}>
             Get started for free
           </Text>
-          <Text paragraph >
-            Free forever. No credit card needed.
-          </Text>
+          <Text paragraph>Free forever. No credit card needed.</Text>
           {/* <Block row style={{marginHorizontal: 28, marginTop: 40}}>
             <TouchableWithoutFeedback
               onPress={() => this.handleType('administrator')}
@@ -199,9 +115,11 @@ class Register extends Component {
 
             <Button
               full
-              style={{marginBottom: 12, width:100}}
+              style={{marginBottom: 12, width: 100}}
               onPress={() => this.onSignupPress()}>
-              <Text button white>Create Account</Text>
+              <Text button white>
+                Create Account
+              </Text>
             </Button>
             <Text paragraph color="gray">
               Already have an account?{' '}
@@ -215,6 +133,62 @@ class Register extends Component {
           </Block>
         </Block>
       </KeyboardAwareScrollView>
+    );
+  }
+
+  //****** HELPER FUNCTIONS SECTION
+
+  handleType = id => {
+    const {active} = this.state;
+    this.setState({active: active === id ? null : id});
+  };
+  emailAddressTextHandler = e => {
+    this.setState({
+      emailAddress: e,
+    });
+  };
+  passwordTextHandler = e => {
+    this.setState({
+      password: e,
+    });
+  };
+  nameTextHandler = e => {
+    this.setState({
+      name: e,
+    });
+  };
+  onSignupPress() {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(
+        this.state.emailAddress,
+        this.state.password,
+      )
+      // .then(userCredentials => {
+      //   if (userCredentials.user) {
+      //     userCredentials.user
+      //       .updateProfile({
+      //         displayName: this.state.name,
+      //       })
+      // .then(this.onSignupSuccess.bind(this));
+      // }
+      // })
+      .catch(err => {
+        this.creationFailure(err).bind(this);
+      });
+  }
+  onSignupSuccess() {
+    navigation.navigate('Overview');
+  }
+  creationFailure(err) {
+    this.setState({error: err, loading: false});
+    Alert.alert(
+      'Account creation failed. ' + err,
+      'Try again!',
+      [{text: 'OK'}],
+      {
+        cancelable: false,
+      },
     );
   }
 }

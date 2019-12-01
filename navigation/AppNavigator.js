@@ -14,7 +14,7 @@ export default createAppContainer(
     {
       Auth,
       Loading,
-      Main: ModalNavigator,
+      Main: ModalNavigator, //ModalNavigator is the logged in view, which supports a modal player.
     },
     {
       initialRouteName: 'Loading',

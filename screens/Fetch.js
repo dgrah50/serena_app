@@ -68,96 +68,21 @@ export default class Fetch extends Component {
     ),
   };
 
-  onSpeechPartialResults = e => {
-    // eslint-disable-next-line
-    console.log('onSpeechPartialResults: ', e);
-    this.setState({
-      partialResults: e.value,
-    });
-  };
-
-  onSpeechResults(e) {
-    console.log(e.value);
-    this.setState({
-      results: e.value,
-      typedText: Platform.OS === 'ios' ? e.value.join() : e.value[0],
-    });
-  }
-
-  renderMicRing() {
+  render() {
     return (
-      <Card shadow>
-        <Block center middle>
-          <Text h3>
-            How are you feeling, Dayan? Hold the mic button to speak.
-          </Text>
-          <AnimatedCircularProgress
-            onAnimationComplete={() => {
-              // console.log('animation done');
-            }}
-            ref={ref => (this.circularProgress = ref)}
-            tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
-            {fill => this.micButton()}
-          </AnimatedCircularProgress>
-          <Text h3>{this.state.typedText}</Text>
-        </Block>
-      </Card>
+      <React.Fragment>
+        <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
+          {this._renderMicRing()}
+          {/* <Block color="gray3" style={styles.hLine} /> */}
+          {this._renderTopicChips()}
+          {this._renderEmotionChips()}
+        </ScrollView>
+      </React.Fragment>
     );
   }
 
-  micButton() {
-    return (
-      <TouchableOpacity
-        hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
-        onPressIn={this.setRingOn.bind(this)}
-        onPressOut={this.stopListen.bind(this)}>
-        <View
-          style={[
-            styles.buttonStyle,
-            {backgroundColor: 'rgba(255, 255, 255, 0.8)'},
-          ]}>
-          <Icon name={'microphone'} size={60} color={'#5692D0'} />
-        </View>
-      </TouchableOpacity>
-    );
-  }
-
-  stopListen() {
-    try {
-      Voice.cancel();
-      this.circularProgress.stopAnimate();
-    } catch (e) {
-      console.log(e);
-    }
-    if (this.state.typedText != '') {
-      this.apiCall(this.state.typedText);
-    }
-    this.setState({
-      typedText: '',
-      listening: false,
-      ringVisible: false,
-    });
-  }
-
-  setRingOn() {
-    this.setState({ringVisible: true}, () => this.startListen());
-  }
-
-  async startListen(e) {
-    this.circularProgress.reAnimate(0, 100, 8000, Easing.quad);
-    this.setState({
-      results: [],
-      typedText: '',
-      listening: true,
-    });
-    try {
-      await Voice.start('en-US');
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  renderTopicChips() {
+  //****** SUB COMPONENTS SECTION
+  _renderTopicChips() {
     return (
       <Card shadow>
         <Block center middle>
@@ -181,10 +106,9 @@ export default class Fetch extends Component {
       </Card>
     );
   }
-
   //To be implemented. Each emoji needs to map to a sub emotion
   //List of sub emotions is given in emotions.emotions
-  renderEmotionChips() {
+  _renderEmotionChips() {
     return (
       <Card shadow>
         <Block center middle>
@@ -208,9 +132,46 @@ export default class Fetch extends Component {
       </Card>
     );
   }
+  _renderMicRing() {
+    return (
+      <Card shadow>
+        <Block center middle>
+          <Text h3>
+            How are you feeling, Dayan? Hold the mic button to speak.
+          </Text>
+          <AnimatedCircularProgress
+            onAnimationComplete={() => {
+              // console.log('animation done');
+            }}
+            ref={ref => (this.circularProgress = ref)}
+            tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
+            {fill => this._renderMicButton()}
+          </AnimatedCircularProgress>
+          <Text h3>{this.state.typedText}</Text>
+        </Block>
+      </Card>
+    );
+  }
+  _renderMicButton() {
+    return (
+      <TouchableOpacity
+        hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
+        onPressIn={this.setRingOn.bind(this)}
+        onPressOut={this.stopListen.bind(this)}>
+        <View
+          style={[
+            styles.buttonStyle,
+            {backgroundColor: 'rgba(255, 255, 255, 0.8)'},
+          ]}>
+          <Icon name={'microphone'} size={60} color={'#5692D0'} />
+        </View>
+      </TouchableOpacity>
+    );
+  }
 
+  //****** HELPER FUNCTIONS SECTION
   apiCall(query) {
-    console.log(this.props.navigation)
+    console.log(this.props.navigation);
     this.setState({fetched: false});
     axios
       .post('http://localhost:8000', qs.stringify({prayer: query}))
@@ -233,18 +194,44 @@ export default class Fetch extends Component {
         console.log(error);
       });
   }
-
-  render() {
-    return (
-      <React.Fragment>
-        <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
-          {this.renderMicRing()}
-          {/* <Block color="gray3" style={styles.hLine} /> */}
-          {this.renderTopicChips()}
-          {this.renderEmotionChips()}
-        </ScrollView>
-      </React.Fragment>
-    );
+  onSpeechResults(e) {
+    console.log(e.value);
+    this.setState({
+      results: e.value,
+      typedText: Platform.OS === 'ios' ? e.value.join() : e.value[0],
+    });
+  }
+  stopListen() {
+    try {
+      Voice.cancel();
+      this.circularProgress.stopAnimate();
+    } catch (e) {
+      console.log(e);
+    }
+    if (this.state.typedText != '') {
+      this.apiCall(this.state.typedText);
+    }
+    this.setState({
+      typedText: '',
+      listening: false,
+      ringVisible: false,
+    });
+  }
+  setRingOn() {
+    this.setState({ringVisible: true}, () => this.startListen());
+  }
+  async startListen(e) {
+    this.circularProgress.reAnimate(0, 100, 8000, Easing.quad);
+    this.setState({
+      results: [],
+      typedText: '',
+      listening: true,
+    });
+    try {
+      await Voice.start('en-US');
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
 
