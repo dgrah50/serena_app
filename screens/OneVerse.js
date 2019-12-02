@@ -117,12 +117,11 @@ export default class OneVerse extends Component {
     );
   }
   _renderItem(item, idx) {
-    console.log(item);
     let uri = item.speakerimg;
     let speakerName = item.author;
     let duration = item.duration;
     let plays = item.plays;
-
+    const changeSong = this.props.screenProps.changeSong
     return (
       <TouchableOpacity
         key={idx}
@@ -130,6 +129,7 @@ export default class OneVerse extends Component {
           this.props.navigation.navigate('Player', {
             sermon: item,
           });
+          changeSong(item)
         }}>
         <Card shadow center middle style={{height: 100}}>
           <Block middle center row>

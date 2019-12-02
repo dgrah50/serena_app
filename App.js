@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 import firebase from 'react-native-firebase';
@@ -8,33 +8,64 @@ import TrackPlayer, {
   usePlaybackState,
 } from 'react-native-track-player';
 
+// const mocksong = {
+//   album: 'Swimming',
+//   artist: 'Mac Miller',
+//   image: 'swimming',
+//   length: 312,
+//   title: 'So It Goes',
+//   downloadURL:
+//     'https://mp3.sermonaudio.com/filearea/9131918851854/9131918851854.mp3',
+//   albumArtURL:
+//     'https://vps.sermonaudio.com/resize_image/sources/podcast/{size}/{size}/lamplighter-01.jpg',
+// };
+
+// 'https://mp3.sermonaudio.com/filearea/9131918851854/9131918851854.mp3',
+
 const mocksong = {
-  album: 'Swimming',
-  artist: 'Mac Miller',
-  image: 'swimming',
-  length: 312,
-  title: 'So It Goes',
-  downloadURL:
-    'https://mp3.sermonaudio.com/filearea/9131918851854/9131918851854.mp3',
-  albumArtURL:
-    'https://vps.sermonaudio.com/resize_image/sources/podcast/{size}/{size}/lamplighter-01.jpg',
+  title: 'The Only Peace: Part 3',
+  mp3link: '//mp3.sermonaudio.com/download/11301511845/11301511845.mp3',
+  speakerimg:
+    'https://media.sermonaudio.com/gallery/photos/thumbnails/CouchJon-01.PNG',
+  date_uploaded: 'MON 11/30/2015',
+  duration: ' 26 min',
+  author: 'Jon Couch',
+  plays: '140+ ',
 };
 
 export default function App(props) {
   const [currentSongData, setCurrentSong] = useState(mocksong);
   const [tabBarVisible, showTabBar] = useState(false);
+  const didMountRef = useRef(false);
 
   useEffect(() => {
     TrackPlayer.setupPlayer().then(async () => {
       // Adds a track to the queue
+      let url = currentSongData.mp3link;
+      url = url.replace(
+        '//mp3.sermonaudio.com/download/',
+        'https://mp3.sermonaudio.com/filearea/',
+      );
+
       await TrackPlayer.add({
         id: '1',
-        url: currentSongData.downloadURL,
+        url: url,
         title: currentSongData.title,
-        artist: currentSongData.artist,
+        artist: currentSongData.author,
       });
     });
   });
+
+  useEffect(() => {
+  if (didMountRef.current){
+    TrackPlayer.reset().then(() => {
+      TrackPlayer.play();
+    });
+  } else {
+     didMountRef.current = true;
+  }
+
+  }, [currentSongData]);
 
   return (
     <View style={styles.container}>
@@ -59,7 +90,26 @@ export default function App(props) {
   }
 
   function changeSong(data) {
-    setCurrentSong(data);
+    setCurrentSong(data)
+    // .then(() => {
+    //   TrackPlayer.reset();
+    // })
+    // .then(() => {
+    //   let url = currentSongData.mp3link;
+    //   url = url.replace(
+    //     '//mp3.sermonaudio.com/download/',
+    //     'https://mp3.sermonaudio.com/filearea/',
+    //   );
+    //   TrackPlayer.add({
+    //     id: '1',
+    //     url: url,
+    //     title: currentSongData.title,
+    //     artist: currentSongData.author,
+    //   });
+    // })
+    // .then(() => {
+    //   TrackPlayer.play();
+    // });
   }
 }
 

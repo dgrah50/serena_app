@@ -40,7 +40,7 @@ export default function Player(props) {
         backgroundColor: theme.colors.black,
       }}>
       {_renderHeader()}
-      {_renderAlbumArt(currentSongData.albumArtURL)}
+      {_renderAlbumArt(currentSongData.speakerimg)}
       {_renderProgressBar()}
       {_renderPlayBackControls()}
     </Block>
@@ -80,7 +80,7 @@ export default function Player(props) {
   }
 
   function _renderAlbumArt(url) {
-    url = url.replace('{size}', 500).replace('{size}', 500);
+    // url = url.replace('{size}', 500).replace('{size}', 500);
     return (
       <Block
         flex={false}
@@ -107,7 +107,7 @@ export default function Player(props) {
             {currentSongData.title}
           </Text>
           <Text white title>
-            {currentSongData.artist}
+            {currentSongData.author}
           </Text>
         </Block>
       </Block>
@@ -189,7 +189,7 @@ export default function Player(props) {
           <Icon color={theme.colors.white} name="chevron-down" size={20} />
         </TouchableOpacity>
         <Text white h3>
-          {currentSongData.album}
+          {currentSongData.title}
         </Text>
       </Block>
     );
