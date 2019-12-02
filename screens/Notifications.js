@@ -45,7 +45,7 @@ const mockMessages = [
   },
 ];
 
-export default class Groups extends Component {
+export default class Notifications extends Component {
   static navigationOptions = {
     headerLeft: (
       <Block left style={{paddingLeft: 10}}>
@@ -70,74 +70,6 @@ export default class Groups extends Component {
       </TouchableOpacity>
     ),
   };
-
-  _renderGroup(item) {
-    return (
-      <Card
-        center
-        row
-        flex={false}
-        shadow
-        space={'between'}
-        style={{paddingHorizontal: '5%', marginVertical: 0}}>
-        <Block flex={false}>
-          <Image
-            resizeMode="contain"
-            source={{
-              uri: item.imageURL,
-            }}
-            style={{
-              width: 50,
-              height: 50,
-              paddingHorizontal: 20,
-              borderRadius: 25,
-              resizeMode: 'contain',
-            }}
-          />
-        </Block>
-        <Block style={{paddingLeft: 20}}>
-          <Text h3 bold>
-            {item.groupname}
-          </Text>
-          <Text blue caption>
-            {item.message}
-          </Text>
-        </Block>
-        <Block flex={false}>
-          <Icon color={theme.colors.primary} name="circle" size={20} />
-        </Block>
-      </Card>
-    );
-  }
-  _renderGroups() {
-    return (
-      <React.Fragment>
-        <Card flex={false}>
-          <Input label={'Search for groups'} />
-        </Card>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {mockMessages.map(item => {
-            return this._renderGroup(item);
-          })}
-          <Card
-            center
-            middle
-            shadow
-            flex={false}
-            row
-            style={{marginHorizontal: '20%'}}>
-            <Icon
-              color={theme.colors.black}
-              name="plus"
-              size={20}
-              style={{marginHorizontal: 10}}
-            />
-            <Text h3>Create a new group</Text>
-          </Card>
-        </ScrollView>
-      </React.Fragment>
-    );
-  }
 
   renderCalendar() {
     return (
@@ -164,12 +96,36 @@ export default class Groups extends Component {
     );
   }
 
-
+  renderSettings() {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          firebase
+            .auth()
+            .signOut()
+            .then(
+              () => {
+                this.props.navigation.navigate('Login');
+              },
+              function(error) {},
+            );
+        }}>
+        <Card shadow flex={false}>
+          <Text center h3>
+            Log out
+          </Text>
+        </Card>
+      </TouchableOpacity>
+    );
+  }
 
   render() {
     return (
       <Block style={styles.welcome} flex={false}>
-        {this._renderGroups()}
+        {/* <Block color="gray3" style={styles.hLine} /> */}
+        {/* {this.renderCalendar()} */}
+        {/* <Block color="gray3" style={styles.hLine} /> */}
+        {this.renderSettings()}
       </Block>
     );
   }
