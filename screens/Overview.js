@@ -66,22 +66,24 @@ export default class Overview extends Component {
   //****** SUB COMPONENTS SECTION
   _renderVerseCard() {
     return (
-      <Card shadow>
-        <Block>
-          <Block center>
-            <Text h3 style={{marginVertical: 8}}>
-              Good evening, Dayan. How are you feeling today?
-            </Text>
-          </Block>
-          <Block row right>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => navigation.navigate('Welcome')}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => this.props.navigation.navigate('Pray')}>
+        <Card shadow>
+          <Block>
+            <Block center>
+              <Text h3 style={{marginVertical: 8}}>
+                Good evening, Dayan. How are you feeling today? {'\n'}
+                {'\n'}
+                You're on a 4 day streak, keep it up!
+              </Text>
+            </Block>
+            <Block row right>
               <Icon name="quote-right" size={42} color="black" />
-            </TouchableOpacity>
+            </Block>
           </Block>
-        </Block>
-      </Card>
+        </Card>
+      </TouchableOpacity>
     );
   }
   _renderSermon({item, index}) {

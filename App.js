@@ -8,19 +8,6 @@ import TrackPlayer, {
   usePlaybackState,
 } from 'react-native-track-player';
 
-// const mocksong = {
-//   album: 'Swimming',
-//   artist: 'Mac Miller',
-//   image: 'swimming',
-//   length: 312,
-//   title: 'So It Goes',
-//   downloadURL:
-//     'https://mp3.sermonaudio.com/filearea/9131918851854/9131918851854.mp3',
-//   albumArtURL:
-//     'https://vps.sermonaudio.com/resize_image/sources/podcast/{size}/{size}/lamplighter-01.jpg',
-// };
-
-// 'https://mp3.sermonaudio.com/filearea/9131918851854/9131918851854.mp3',
 
 const mocksong = {
   title: 'The Only Peace: Part 3',

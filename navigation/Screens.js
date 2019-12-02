@@ -20,15 +20,6 @@ export default createBottomTabNavigator(
         ),
       },
     },
-    Streak: {
-      screen: Streak,
-      navigationOptions: {
-        tabBarLabel: 'Streak',
-        tabBarIcon: ({tintColor}) => (
-          <Icon name="bolt" size={25} color={tintColor} />
-        ),
-      },
-    },
     Pray: {
       screen: createStackNavigator(
         {
@@ -48,6 +39,24 @@ export default createBottomTabNavigator(
         tabBarLabel: 'Pray',
         tabBarIcon: ({tintColor}) => (
           <Icon name="microphone" size={25} color={tintColor} />
+        ),
+      },
+    },
+    Streak: {
+      screen: Streak,
+      navigationOptions: {
+        tabBarLabel: 'Groups',
+        tabBarIcon: ({tintColor}) => (
+          <Icon name="comments" size={25} color={tintColor} />
+        ),
+      },
+    },
+    Notifications: {
+      screen: Streak,
+      navigationOptions: {
+        tabBarLabel: 'Notifications',
+        tabBarIcon: ({tintColor}) => (
+          <Icon name="bell" size={25} color={tintColor} />
         ),
       },
     },

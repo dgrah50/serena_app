@@ -19,6 +19,32 @@ import firebase from 'react-native-firebase';
 
 const {width} = Dimensions.get('window');
 
+const mockMessages = [
+  {
+    groupname: 'Serena Community',
+    message: 'Welcome to the app!',
+    imageURL:
+      'https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-9/p960x960/78941335_112769923535574_2271841299319488512_o.jpg?_nc_cat=104&_nc_ohc=d8wUMTvCISgAQlP2eSaGoO6ymrxjEOhNBRLhNHrjA-Hui43zoBs_7hwHQ&_nc_ht=scontent-lhr3-1.xx&oh=42b1f813c1020d4f727b7a147b5936b1&oe=5E715D4B',
+  },
+  {
+    groupname: 'Inspiration Group',
+    message: 'Isaiah 54:16',
+    imageURL: 'https://apprecs.org/ios/images/app-icons/256/ca/565301194.jpg',
+  },
+  {
+    groupname: 'Marriage Support Group',
+    message: 'Isaiah 54:16',
+    imageURL:
+      'https://viviamaridi.com/wp-content/uploads/2019/02/01_marriage_icon.png',
+  },
+  {
+    groupname: 'Net Church Dartford Youth Group',
+    message: 'Isaiah 54:16',
+    imageURL:
+      'https://icon-library.net/images/church-icon-png/church-icon-png-19.jpg',
+  },
+];
+
 export default class Streak extends Component {
   static navigationOptions = {
     headerLeft: (
@@ -45,42 +71,81 @@ export default class Streak extends Component {
     ),
   };
 
-  renderStreak() {
+  _renderGroup(item) {
     return (
-      <Block center middle>
-        <Icon name="bolt" size={62} color="black" />
-        <Text h2>You're on a 17 day streak!</Text>
-      </Block>
+      <Card
+        center
+        row
+        flex={false}
+        shadow
+        space={'between'}
+        style={{paddingHorizontal: '5%'}}>
+        <Block flex={false}>
+          <Image
+            resizeMode="contain"
+            source={{
+              uri:
+                item.imageURL
+            }}
+            style={{
+              width: 50,
+              height: 50,
+              paddingHorizontal: 20,
+              borderRadius: 25,
+              resizeMode: 'contain',
+            }}
+          />
+        </Block>
+        <Block style={{paddingLeft:20}}>
+          <Text h3 bold>
+            {item.groupname}
+          </Text>
+          <Text blue caption>
+            {item.message}
+          </Text>
+        </Block>
+        <Block flex={false}>
+          <Icon color={theme.colors.primary} name="circle" size={20} />
+        </Block>
+      </Card>
     );
   }
-  
-  renderCalendar(){
-      return (
-        <Card shadow>
-          <Calendar
-            current={Date() - 7}
-            minDate={Date() - 14}
-            maxDate={Date()}
-            onDayPress={day => {
-              console.log('selected day', day);
-            }}
-            monthFormat={'MMM yyyy'}
-
-            hideArrows={false}
-            renderArrow={direction =>
-              direction == 'left' ? <Text h1>⟵</Text> : <Text h1>⟶</Text>
-            }
-            firstDay={1}
-            hideDayNames={false}
-            showWeekNumbers={false}
-            onPressArrowLeft={substractMonth => substractMonth()}
-            onPressArrowRight={addMonth => addMonth()}
-          />
-        </Card>
-      );
+  _renderGroups() {
+    return (
+      <ScrollView  showsVerticalScrollIndicator={false}>
+      {mockMessages.map( item => {
+        return(this._renderGroup(item))
+      })}
+      </ScrollView>
+    );
   }
-  
-  renderSettings(){
+
+  renderCalendar() {
+    return (
+      <Card shadow>
+        <Calendar
+          current={Date() - 7}
+          minDate={Date() - 14}
+          maxDate={Date()}
+          onDayPress={day => {
+            console.log('selected day', day);
+          }}
+          monthFormat={'MMM yyyy'}
+          hideArrows={false}
+          renderArrow={direction =>
+            direction == 'left' ? <Text h1>⟵</Text> : <Text h1>⟶</Text>
+          }
+          firstDay={1}
+          hideDayNames={false}
+          showWeekNumbers={false}
+          onPressArrowLeft={substractMonth => substractMonth()}
+          onPressArrowRight={addMonth => addMonth()}
+        />
+      </Card>
+    );
+  }
+
+  renderSettings() {
     return (
       <TouchableOpacity
         onPress={() => {
@@ -91,12 +156,11 @@ export default class Streak extends Component {
               () => {
                 this.props.navigation.navigate('Login');
               },
-              function(error) {
-              },
+              function(error) {},
             );
         }}>
-        <Card shadow>
-          <Text center h2>
+        <Card shadow flex={false}>
+          <Text center h3>
             Log out
           </Text>
         </Card>
@@ -106,13 +170,13 @@ export default class Streak extends Component {
 
   render() {
     return (
-        <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
-          {this.renderStreak()}
-          <Block color="gray3" style={styles.hLine} />
-          {this.renderCalendar()}
-          <Block color="gray3" style={styles.hLine} />
-          {this.renderSettings()}
-        </ScrollView>
+      <Block style={styles.welcome} flex={false}>
+        {this._renderGroups()}
+        {/* <Block color="gray3" style={styles.hLine} /> */}
+        {/* {this.renderCalendar()} */}
+        {/* <Block color="gray3" style={styles.hLine} /> */}
+        {this.renderSettings()}
+      </Block>
     );
   }
 }
@@ -122,7 +186,8 @@ const styles = StyleSheet.create({
     paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
-    flex: 1
+    alignContent:"center",
+    flex: 1,
   },
   // horizontal line
   hLine: {
