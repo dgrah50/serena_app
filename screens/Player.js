@@ -25,36 +25,12 @@ import Slider from 'react-native-slider';
 
 const {width, height} = Dimensions.get('window');
 
-// class ProgressBar extends ProgressComponent {
-//   render() {
-//     return (
-//       <View style={styles.progress}>
-//         <View style={{flex: this.getProgress(), backgroundColor: 'white'}} />
-//         <View style={{flex: 1 - this.getProgress(), backgroundColor: 'grey'}} />
-//       </View>
-//     );
-//   }
-// }
-
 export default function Player(props) {
   const {navigation, screenProps} = props;
   const {currentSongData} = screenProps;
-
-  const [paused, setPlayerState] = useState(false);
   const [favorited, setFavorited] = useState(false);
-
-  useEffect(() => {
-    TrackPlayer.setupPlayer().then(async () => {
-      // Adds a track to the queue
-      await TrackPlayer.add({
-        id: '1',
-        url: currentSongData.downloadURL,
-        title: currentSongData.title,
-        artist: currentSongData.artist,
-      });
-      TrackPlayer.play();
-    });
-  }, []);
+  const playbackState = usePlaybackState();
+  const iconPlay = playbackState != 'playing' ? 'play-circle' : 'pause-circle';
 
   return (
     <Block
@@ -71,7 +47,7 @@ export default function Player(props) {
   );
 
   //****** SUB COMPONENTS SECTION
-  function _rendePlayBackControls() {
+  function _renderPlayBackControls() {
     return (
       <Block
         flex={false}
@@ -96,7 +72,7 @@ export default function Player(props) {
           }}>
           <Icon
             color={theme.colors.white}
-            name={paused ? 'play-circle' : 'pause-circle'}
+            name={iconPlay}
             size={60}
           />
         </TouchableOpacity>
@@ -115,14 +91,12 @@ export default function Player(props) {
         style={{
           width: '100%',
           height: '50%',
-          // backgroundColor: 'green',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
         <Block
           flex={false}
           style={{
-            // justifyContent: 'center',
             alignItems: 'center',
           }}>
           <Image
@@ -146,9 +120,7 @@ export default function Player(props) {
 
   function _renderProgressBar() {
     const progress = useProgress();
-    console.log(progress.position);
     const playbackState = usePlaybackState();
-    console.log(playbackState);
 
     function convertToMinutes(time) {
       time = parseInt(time);
@@ -231,12 +203,11 @@ export default function Player(props) {
 
   //****** HELPER FUNCTONS SECTION
   function togglePlay() {
-    if (paused) {
-      TrackPlayer.play();
-      setPlayerState(false);
-    } else {
+    if (playbackState == 'playing') {
       TrackPlayer.pause();
-      setPlayerState(true);
+      console.log('meant to pause');
+    } else {
+      TrackPlayer.play();
     }
   }
 }

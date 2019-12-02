@@ -1,70 +1,82 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 import firebase from 'react-native-firebase';
+import TrackPlayer, {
+  useProgress,
+  State,
+  usePlaybackState,
+} from 'react-native-track-player';
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
+const mocksong = {
+  album: 'Swimming',
+  artist: 'Mac Miller',
+  image: 'swimming',
+  length: 312,
+  title: 'So It Goes',
+  downloadURL:
+    'https://mp3.sermonaudio.com/filearea/9131918851854/9131918851854.mp3',
+  albumArtURL:
+    'https://vps.sermonaudio.com/resize_image/sources/podcast/{size}/{size}/lamplighter-01.jpg',
+};
 
-    this.state = {
-      currentSongData: {
-        album: 'Swimming',
-        artist: 'Mac Miller',
-        image: 'swimming',
-        length: 312,
-        title: 'So It Goes',
-        downloadURL:
-          'https://mp3.sermonaudio.com/filearea/9131918851854/9131918851854.mp3',
-        albumArtURL:
-          'https://vps.sermonaudio.com/resize_image/sources/podcast/{size}/{size}/lamplighter-01.jpg'
-      },
-      isLoading: true,
-      toggleTabBar: false,
-    };
+export default function App(props) {
+  const [currentSongData, setCurrentSong] = useState(mocksong);
+  const [isLoading, setLoadingState] = useState(false);
+  const [isPlaying, setPlayingState] = useState(false);
+  const [tabBarVisible, showTabBar] = useState(false);
 
-    this.changeSong = this.changeSong.bind(this);
-    this.setToggleTabBar = this.setToggleTabBar.bind(this);
-  }
-
-  async componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        console.log('user is logged in');
-      } else {
-        console.log('user is not logged in ');
-      }
+  useEffect(() => {
+    TrackPlayer.setupPlayer().then(async () => {
+      // Adds a track to the queue
+      await TrackPlayer.add({
+        id: '1',
+        url: currentSongData.downloadURL,
+        title: currentSongData.title,
+        artist: currentSongData.artist,
+      });
     });
+  });
+
+  function setToggleTabBar() {
+    if (tabBarVisible) {
+      showTabBar(false);
+    } else {
+      showTabBar(true);
+    }
   }
 
-  setToggleTabBar() {
-    this.setState(({toggleTabBar}) => ({
-      toggleTabBar: !toggleTabBar,
-    }));
+  function setTogglePlaying() {
+    if (isPlaying) {
+      setPlayingState(false);
+      TrackPlayer.pause();
+    } else {
+      setPlayingState(true);
+      TrackPlayer.play();
+    }
   }
 
-  changeSong(data) {
-    this.setState({
-      currentSongData: data,
-    });
+  function changeSong(data) {
+    setCurrentSong(data);
   }
 
-  render() {
-    const {currentSongData, isLoading, toggleTabBar} = this.state;
-    return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator
-          screenProps={{
-            currentSongData,
-            changeSong: this.changeSong,
-            setToggleTabBar: this.setToggleTabBar,
-            toggleTabBarState: toggleTabBar,
-          }}
-        />
-      </View>
-    );
-  }
+  // const {currentSongData, isLoading, isPlaying, toggleTabBar} = this.state;
+  // currentSongData = null;
+  return (
+    <View style={styles.container}>
+      {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+      <AppNavigator
+        screenProps={{
+          currentSongData,
+          changeSong: changeSong,
+          setToggleTabBar: setToggleTabBar,
+          toggleTabBarState: tabBarVisible,
+          setTogglePlaying: setTogglePlaying,
+          playingState: isPlaying,
+        }}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

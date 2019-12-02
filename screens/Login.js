@@ -100,7 +100,8 @@ class Login extends Component {
 
     if (result.isCancelled) {
       // handle this however suites the flow of your app
-      throw new Error('User cancelled request'); 
+      // throw new Error('User cancelled request'); 
+      return null
     }
 
     console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
@@ -119,7 +120,7 @@ class Login extends Component {
     // login with credential
     const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
 
-    console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()))
+    console.log(JSON.stringify(firebaseUserCredential.user.toJSON()))
   } catch (e) {
     console.error(e);
   }

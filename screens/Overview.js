@@ -15,6 +15,7 @@ import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
 
+
 const {width} = Dimensions.get('window');
 
 export default class Overview extends Component {

@@ -6,41 +6,37 @@ import {Block, Badge, Card, Text} from './';
 import {styles as blockStyles} from './Block';
 import {styles as cardStyles} from './Card';
 import {theme, mocks, time} from '../constants';
+import TrackPlayer, {
+  useProgress,
+  State,
+  usePlaybackState,
+} from 'react-native-track-player';
 
 const {width} = Dimensions.get('window');
 
-class BarMusicPlayer extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      favorited: false,
-      paused: true,
-    };
+function BarMusicPlayer (props) {
+  const playbackState = usePlaybackState();
 
-    this.toggleFavorite = this.toggleFavorite.bind(this);
-    this.togglePlay = this.togglePlay.bind(this);
+
+  function togglePlay() {
+    if ( playbackState == 'playing'){
+      TrackPlayer.pause()
+      console.log("meant to pause")
+    } else {
+      TrackPlayer.play()
+    }
   }
 
-  toggleFavorite() {
-    this.setState(prev => ({
-      favorited: !prev.favorited,
-    }));
-  }
+  
+    const {navigation, song} = props;
+    const iconPlay = (playbackState != 'playing') ? 'play-circle' : 'pause-circle';
+    const favoriteColor = theme.colors.white ;
+    const favoriteIcon = 'heart' ;
 
-  togglePlay() {
-    this.setState(prev => ({
-      paused: !prev.paused,
-    }));
-  }
-
-  render() {
-    const {navigation, song} = this.props;
-    const {favorited, paused} = this.state;
-
-    const favoriteColor = favorited ? theme.colors.white : theme.colors.white;
-    const favoriteIcon = favorited ? 'heart' : 'heart-o';
-    const iconPlay = paused ? 'play-circle' : 'pause-circle';
+    // const favoriteColor = favorited ? theme.colors.white : theme.colors.white;
+    // const favoriteIcon = favorited ? 'heart' : 'heart-o';
+    
 
     return (
       <TouchableOpacity
@@ -65,14 +61,14 @@ class BarMusicPlayer extends React.Component {
         <TouchableOpacity
           // activeOpacity={gStyle.activeOpacity}
           hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
-          onPress={this.togglePlay}
+          onPress={togglePlay}
           style={styles.containerIcon}>
           <Icon color={theme.colors.white} name={iconPlay} size={28} />
         </TouchableOpacity>
       </TouchableOpacity>
     );
   }
-}
+
 
 BarMusicPlayer.defaultProps = {
   song: null,
