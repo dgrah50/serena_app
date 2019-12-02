@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomTabBar from '../components/CustomTabBar';
 import Overview from '../screens/Overview';
 import OneVerse from '../screens/OneVerse';
-import Streak from '../screens/Streak';
+import Groups from '../screens/Groups';
 import Fetch from '../screens/Fetch';
 
 export default createBottomTabNavigator(
@@ -42,8 +42,8 @@ export default createBottomTabNavigator(
         ),
       },
     },
-    Streak: {
-      screen: Streak,
+    Groups: {
+      screen: Groups,
       navigationOptions: {
         tabBarLabel: 'Groups',
         tabBarIcon: ({tintColor}) => (
@@ -52,7 +52,7 @@ export default createBottomTabNavigator(
       },
     },
     Notifications: {
-      screen: Streak,
+      screen: Groups,
       navigationOptions: {
         tabBarLabel: 'Notifications',
         tabBarIcon: ({tintColor}) => (

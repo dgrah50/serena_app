@@ -15,7 +15,6 @@ import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
 
-
 const {width} = Dimensions.get('window');
 
 export default class Overview extends Component {
@@ -39,7 +38,7 @@ export default class Overview extends Component {
     ),
     headerRight: (
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('Streak')}>
+        onPress={() => this.props.navigation.navigate('Groups')}>
         <Block flex={false}>
           <Image
             resizeMode="contain"
