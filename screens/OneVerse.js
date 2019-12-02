@@ -64,13 +64,12 @@ export default class OneVerse extends Component {
 
   render() {
     return (
-      <React.Fragment>
-        <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
-          {this._renderVerseCard()}
-          <Block color="gray3" style={styles.hLine} />
+      <Block style={styles.welcome}>
+        {this._renderVerseCard()}
+        <Block >
           {this.state.sermons ? this._renderSermons() : this._renderSpinner()}
-        </ScrollView>
-      </React.Fragment>
+        </Block>
+      </Block>
     );
   }
 
@@ -89,20 +88,20 @@ export default class OneVerse extends Component {
     }
 
     return (
-      <Card shadow>
-        <Block>
-          <Block center>
+      <Card flex={false} shadow>
+        <Block flex={false}>
+          <Block flex={false} center>
             <Text h2 style={{marginVertical: 8}}>
               {verses[0].verse}
             </Text>
           </Block>
-          <Block center>
+          <Block flex={false} center>
             <Text h3 style={{marginVertical: 8}}>
               {verses[0].bookname}
             </Text>
           </Block>
         </Block>
-        <Block row middle space={'between'}>
+        <Block flex={false} row middle space={'between'}>
           <TouchableOpacity>
             <Icon.Button name="heart" backgroundColor={theme.colors.accent}>
               Like
@@ -117,20 +116,12 @@ export default class OneVerse extends Component {
       </Card>
     );
   }
-  _renderItem(item,idx) {
+  _renderItem(item, idx) {
     console.log(item);
     let uri = item.speakerimg;
     let speakerName = item.author;
     let duration = item.duration;
-
-    // if (item.speaker) {
-    //   uri = item.speaker.albumArtURL
-    //     .replace('{size}', 80)
-    //     .replace('{size}', 80);
-    //   speakerName = item.speaker.displayName;
-    // } else {
-    //   uri = 'https://via.placeholder.com/50';
-    // }
+    let plays = item.plays;
 
     return (
       <TouchableOpacity
@@ -175,9 +166,11 @@ export default class OneVerse extends Component {
         <Text h3 spacing={1} style={{marginVertical: 8}}>
           Related Sermons
         </Text>
-        {this.state.sermons.map((sermon,idx) => {
-          return this._renderItem(sermon,idx);
-        })}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {this.state.sermons.map((sermon, idx) => {
+            return this._renderItem(sermon, idx);
+          })}
+        </ScrollView>
       </Block>
     );
   }
