@@ -14,61 +14,55 @@ import TrackPlayer, {
 
 const {width} = Dimensions.get('window');
 
-
-function BarMusicPlayer (props) {
+function BarMusicPlayer(props) {
   const playbackState = usePlaybackState();
 
-
   function togglePlay() {
-    if ( playbackState == 'playing'){
-      TrackPlayer.pause()
-      console.log("meant to pause")
+    if (playbackState == 'playing') {
+      TrackPlayer.pause();
     } else {
-      TrackPlayer.play()
+      TrackPlayer.play();
     }
   }
 
-  
-    const {navigation, song} = props;
-    const iconPlay = (playbackState != 'playing') ? 'play-circle' : 'pause-circle';
-    const favoriteColor = theme.colors.white ;
-    const favoriteIcon = 'heart' ;
+  const {navigation, song} = props;
+  const iconPlay = playbackState != 'playing' ? 'play-circle' : 'pause-circle';
+  const favoriteColor = theme.colors.white;
+  const favoriteIcon = 'heart';
 
-    // const favoriteColor = favorited ? theme.colors.white : theme.colors.white;
-    // const favoriteIcon = favorited ? 'heart' : 'heart-o';
-    
+  // const favoriteColor = favorited ? theme.colors.white : theme.colors.white;
+  // const favoriteIcon = favorited ? 'heart' : 'heart-o';
 
-    return (
+  return (
+    <TouchableOpacity
+      activeOpacity={1}
+      onPress={() => navigation.navigate('Player')}
+      style={styles.container}>
       <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => navigation.navigate('Player')}
-        style={styles.container}>
-        <TouchableOpacity
-          // activeOpacity={gStyle.activeOpacity}
-          hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
-          onPress={this.toggleFavorite}
-          style={styles.containerIcon}>
-          <Icon color={favoriteColor} name={favoriteIcon} size={20} />
-        </TouchableOpacity>
-        {song && (
-            <Block flex row center middle style={styles.containerSong}>
-              <Text white h3>{`${song.title} · `}</Text>
-              <Text white h3>
-                {song.artist}
-              </Text>
-            </Block>
-        )}
-        <TouchableOpacity
-          // activeOpacity={gStyle.activeOpacity}
-          hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
-          onPress={togglePlay}
-          style={styles.containerIcon}>
-          <Icon color={theme.colors.white} name={iconPlay} size={28} />
-        </TouchableOpacity>
+        // activeOpacity={gStyle.activeOpacity}
+        hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
+        onPress={this.toggleFavorite}
+        style={styles.containerIcon}>
+        <Icon color={favoriteColor} name={favoriteIcon} size={20} />
       </TouchableOpacity>
-    );
-  }
-
+      {song && (
+        <Block flex row center middle style={styles.containerSong}>
+          <Text white h3>{`${song.title} · `}</Text>
+          <Text white h3>
+            {song.artist}
+          </Text>
+        </Block>
+      )}
+      <TouchableOpacity
+        // activeOpacity={gStyle.activeOpacity}
+        hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
+        onPress={togglePlay}
+        style={styles.containerIcon}>
+        <Icon color={theme.colors.white} name={iconPlay} size={28} />
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
+}
 
 BarMusicPlayer.defaultProps = {
   song: null,

@@ -72,7 +72,6 @@ export default class Fetch extends Component {
       <React.Fragment>
         <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
           {this._renderMicRing()}
-          {/* <Block color="gray3" style={styles.hLine} /> */}
           {this._renderTopicChips()}
           {this._renderEmotionChips()}
         </ScrollView>
@@ -170,7 +169,7 @@ export default class Fetch extends Component {
 
   //****** HELPER FUNCTIONS SECTION
   apiCall(query) {
-    console.log(this.props.navigation);
+    console.log("test")
     this.setState({fetched: false});
     axios
       .post('http://localhost:8000', qs.stringify({prayer: query}))

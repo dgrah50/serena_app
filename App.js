@@ -22,8 +22,6 @@ const mocksong = {
 
 export default function App(props) {
   const [currentSongData, setCurrentSong] = useState(mocksong);
-  const [isLoading, setLoadingState] = useState(false);
-  const [isPlaying, setPlayingState] = useState(false);
   const [tabBarVisible, showTabBar] = useState(false);
 
   useEffect(() => {
@@ -38,30 +36,6 @@ export default function App(props) {
     });
   });
 
-  function setToggleTabBar() {
-    if (tabBarVisible) {
-      showTabBar(false);
-    } else {
-      showTabBar(true);
-    }
-  }
-
-  function setTogglePlaying() {
-    if (isPlaying) {
-      setPlayingState(false);
-      TrackPlayer.pause();
-    } else {
-      setPlayingState(true);
-      TrackPlayer.play();
-    }
-  }
-
-  function changeSong(data) {
-    setCurrentSong(data);
-  }
-
-  // const {currentSongData, isLoading, isPlaying, toggleTabBar} = this.state;
-  // currentSongData = null;
   return (
     <View style={styles.container}>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
@@ -70,13 +44,23 @@ export default function App(props) {
           currentSongData,
           changeSong: changeSong,
           setToggleTabBar: setToggleTabBar,
-          toggleTabBarState: tabBarVisible,
-          setTogglePlaying: setTogglePlaying,
-          playingState: isPlaying,
         }}
       />
     </View>
   );
+
+  //****** HELPER FUNCTONS SECTION
+  function setToggleTabBar() {
+    if (tabBarVisible) {
+      showTabBar(false);
+    } else {
+      showTabBar(true);
+    }
+  }
+
+  function changeSong(data) {
+    setCurrentSong(data);
+  }
 }
 
 const styles = StyleSheet.create({

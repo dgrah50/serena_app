@@ -47,7 +47,6 @@ export default class OneVerse extends Component {
     ),
   };
 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -57,23 +56,10 @@ export default class OneVerse extends Component {
 
   componentDidMount() {
     let query = this.props.navigation.getParam('response').keyword;
-    // const options = {
-    //   headers: {'x-api-key': '9A6AF52A-CB55-47C1-9082-296BBF6BED1E'},
-    // };
-    // axios
-    //   .get(
-    //     'https://api.sermonaudio.com/v2/node/sermons?sortBy=downloads&searchKeyword=' +
-    //       query,
-    //     options,
-    //   )
-    //   .then(response => {
-    //     this.setState({
-    //       sermons: response.data.results,
-    //     });
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
+    this.setState({
+      sermons: this.props.navigation.getParam('response').sermons,
+    });
+    console.log(this.props.navigation.getParam('response'));
   }
 
   render() {
@@ -82,11 +68,7 @@ export default class OneVerse extends Component {
         <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
           {this._renderVerseCard()}
           <Block color="gray3" style={styles.hLine} />
-          {this.state.sermons
-            ? {
-                /* this._renderSermons() */
-              }
-            : this._renderSpinner()}
+          {this.state.sermons ? this._renderSermons() : this._renderSpinner()}
         </ScrollView>
       </React.Fragment>
     );
@@ -135,26 +117,24 @@ export default class OneVerse extends Component {
       </Card>
     );
   }
-  _renderItem(item) {
-    let uri = undefined;
-    let speakerName = undefined;
-    let duration = item.media.audio[0].duration;
-    var measuredTime = new Date(null);
-    measuredTime.setSeconds(duration); // specify value of SECONDS
-    var MHSTime = measuredTime.toISOString().substr(11, 8);
+  _renderItem(item,idx) {
+    console.log(item);
+    let uri = item.speakerimg;
+    let speakerName = item.author;
+    let duration = item.duration;
 
-    if (item.speaker) {
-      uri = item.speaker.albumArtURL
-        .replace('{size}', 80)
-        .replace('{size}', 80);
-      speakerName = item.speaker.displayName;
-    } else {
-      uri = 'https://via.placeholder.com/50';
-    }
+    // if (item.speaker) {
+    //   uri = item.speaker.albumArtURL
+    //     .replace('{size}', 80)
+    //     .replace('{size}', 80);
+    //   speakerName = item.speaker.displayName;
+    // } else {
+    //   uri = 'https://via.placeholder.com/50';
+    // }
 
     return (
       <TouchableOpacity
-        key={item.sermonID}
+        key={idx}
         onPress={() => {
           this.props.navigation.navigate('Player', {
             sermon: item,
@@ -175,13 +155,13 @@ export default class OneVerse extends Component {
             />
             <Block middle>
               <Text title numberOfLines={1}>
-                {item.fullTitle}
+                {item.title}
               </Text>
               <Text caption secondary>
                 {speakerName}
               </Text>
               <Text right h3 light>
-                {MHSTime}
+                {duration}
               </Text>
             </Block>
           </Block>
@@ -195,8 +175,8 @@ export default class OneVerse extends Component {
         <Text h3 spacing={1} style={{marginVertical: 8}}>
           Related Sermons
         </Text>
-        {this.state.sermons.map(sermon => {
-          return this._renderItem(sermon);
+        {this.state.sermons.map((sermon,idx) => {
+          return this._renderItem(sermon,idx);
         })}
       </Block>
     );

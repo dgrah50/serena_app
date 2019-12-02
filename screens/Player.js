@@ -70,11 +70,7 @@ export default function Player(props) {
           onPress={() => {
             togglePlay();
           }}>
-          <Icon
-            color={theme.colors.white}
-            name={iconPlay}
-            size={60}
-          />
+          <Icon color={theme.colors.white} name={iconPlay} size={60} />
         </TouchableOpacity>
         <TouchableOpacity>
           <Icon color={theme.colors.white} name="step-forward" size={30} />
@@ -125,12 +121,10 @@ export default function Player(props) {
     function convertToMinutes(time) {
       time = parseInt(time);
 
-      // Hours, minutes and seconds
       var hrs = ~~(time / 3600);
       var mins = ~~((time % 3600) / 60);
       var secs = ~~time % 60;
 
-      // Output like "1:01" or "4:03:59" or "123:03:59"
       var ret = '';
 
       if (hrs > 0) {
@@ -205,7 +199,6 @@ export default function Player(props) {
   function togglePlay() {
     if (playbackState == 'playing') {
       TrackPlayer.pause();
-      console.log('meant to pause');
     } else {
       TrackPlayer.play();
     }

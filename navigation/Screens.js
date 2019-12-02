@@ -1,5 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createStackNavigator} from 'react-navigation-stack';
 import {theme, mocks, time} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomTabBar from '../components/CustomTabBar';
@@ -7,7 +8,6 @@ import Overview from '../screens/Overview';
 import OneVerse from '../screens/OneVerse';
 import Streak from '../screens/Streak';
 import Fetch from '../screens/Fetch';
-
 
 export default createBottomTabNavigator(
   {
@@ -30,7 +30,20 @@ export default createBottomTabNavigator(
       },
     },
     Pray: {
-      screen: Fetch,
+      screen: createStackNavigator(
+        {
+          Pray: {
+            screen: Fetch,
+          },
+          OneVerse: {
+            screen: OneVerse,
+          },
+        },
+        {
+          headerMode: 'none',
+          initialRouteName: 'Pray',
+        },
+      ),
       navigationOptions: {
         tabBarLabel: 'Pray',
         tabBarIcon: ({tintColor}) => (
@@ -53,4 +66,3 @@ export default createBottomTabNavigator(
     },
   },
 );
-
