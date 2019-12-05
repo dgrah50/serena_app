@@ -112,6 +112,95 @@ let sermons = [
     videoDownloadCount: 0,
   },
   {
+    bibleText: 'Philippians 4:6-6',
+    broadcaster: {
+      aboutUs:
+        'The largest and most trusted library of audio sermons from conservative churches and ministries worldwide with over one million sermons. The mission and purpose of SermonAudio is the preservation and propagation of Bible preaching to this generation and the next.',
+      address: 'SERMONAUDIO\nOffice HQ, Greenville\nSouth Carolina, USA',
+      albumArtURL:
+        'https://vps.sermonaudio.com/resize_image/sources/podcast/{size}/{size}/misc3-07.jpg',
+      bibleVersion: 'KJV',
+      broadcasterID: 'misc',
+      canWebcast: true,
+      country: 'USA',
+      denomination: null,
+      displayName: 'SermonAudio Classics',
+      facebookUsername: 'sermonaudio',
+      homePageURL: 'http://www.sermonaudio.com',
+      idCode: '00000',
+      imageURL:
+        'https://media.sermonaudio.com/gallery/photos/sources/misc3-07.jpg',
+      latitude: 34.846897,
+      listenLineNumber: null,
+      location: 'Office HQ, Greenville SC',
+      longitude: -82.402767,
+      minister: 'Multiple Speakers',
+      phone: '864-214-5111',
+      serviceTimes: null,
+      serviceTimesArePreformatted: false,
+      shortName: 'SermonAudio Classics',
+      twitterUsername: 'SermonAudio',
+      type: 'broadcaster',
+      vacantPulpit: false,
+      webcastInProgress: false,
+    },
+    displayEventType: 'Classic Audio',
+    displayTitle: 'In Everything By Prayer',
+    documentDownloadCount: 0,
+    downloadCount: 12220,
+    eventType: 'Classic Audio',
+    externalLink: null,
+    fullTitle: 'In Everything By Prayer',
+    keywords: null,
+    languageCode: 'en',
+    media: {
+      audio: [
+        {
+          adaptiveBitrate: false,
+          audioCodec: 'mp3',
+          bitrate: 16,
+          downloadURL:
+            'https://mp3.sermonaudio.com/filearea/11240215752/11240215752.mp3',
+          duration: 2154,
+          live: false,
+          mediaType: 'mp3',
+          streamURL:
+            'https://mp3.sermonaudio.com/filearea/11240215752/11240215752.mp3',
+          thumbnailImageURL: null,
+          type: 'media',
+          videoCodec: null,
+        },
+      ],
+      text: [],
+      type: 'media_set',
+      video: [],
+    },
+    moreInfoText: null,
+    pickDate: '2019-10-07',
+    preachDate: '1960-01-01',
+    publishDate: '2002-11-24',
+    publishTimestamp: 1038121073,
+    series: null,
+    sermonID: '11240215752',
+    speaker: {
+      albumArtURL:
+        'https://vps.sermonaudio.com/resize_image/speakers/podcast/{size}/{size}/tozer.jpg',
+      bio:
+        "A 20th-century prophet\" they called him even in his lifetime. For 31 years he was pastor of Southside Alliance Church in Chicago, where his reputation as a man of God was citywide. Concurrently he became editor of Alliance Life, a responsibility he fulfilled until his death in 1963. His greatest legacy to the Christian world has been his 30 books. Because A.W. Tozer lived in the presence of God he saw clearly and he spoke as a prophet to the church. He sought for God's honor with the zeal of Elijah and mourned with Jeremiah at the apostasy of God's people. But he was not a prophet of despair. His writings are messages of concern. They expose the weaknesses of the church and denounce compromise. They warn and exhort. But they are messages of hope as well, for God is always there, ever faithful to restore and to fulfill His Word to those who hear and obey.",
+      displayName: 'A. W. Tozer',
+      mostRecentPreachDate: null,
+      portraitURL: 'https://media.sermonaudio.com/gallery/photos/tozer.jpg',
+      roundedThumbnailImageURL:
+        'https://media.sermonaudio.com/gallery/photos/thumbnails/tozer.PNG',
+      sortName: 'Tozer, A. W.',
+      type: 'speaker',
+    },
+    subtitle: null,
+    type: 'sermon',
+    updateDate: 1551815166,
+    videoDownloadCount: 0,
+  },
+  {
     bibleText: 'Luke 11:5-13',
     broadcaster: {
       aboutUs:
@@ -217,112 +306,23 @@ let sermons = [
     updateDate: 1551815166,
     videoDownloadCount: 0,
   },
-  {
-    bibleText: 'Philippians 4:6-6',
-    broadcaster: {
-      aboutUs:
-        'The largest and most trusted library of audio sermons from conservative churches and ministries worldwide with over one million sermons. The mission and purpose of SermonAudio is the preservation and propagation of Bible preaching to this generation and the next.',
-      address: 'SERMONAUDIO\nOffice HQ, Greenville\nSouth Carolina, USA',
-      albumArtURL:
-        'https://vps.sermonaudio.com/resize_image/sources/podcast/{size}/{size}/misc3-07.jpg',
-      bibleVersion: 'KJV',
-      broadcasterID: 'misc',
-      canWebcast: true,
-      country: 'USA',
-      denomination: null,
-      displayName: 'SermonAudio Classics',
-      facebookUsername: 'sermonaudio',
-      homePageURL: 'http://www.sermonaudio.com',
-      idCode: '00000',
-      imageURL:
-        'https://media.sermonaudio.com/gallery/photos/sources/misc3-07.jpg',
-      latitude: 34.846897,
-      listenLineNumber: null,
-      location: 'Office HQ, Greenville SC',
-      longitude: -82.402767,
-      minister: 'Multiple Speakers',
-      phone: '864-214-5111',
-      serviceTimes: null,
-      serviceTimesArePreformatted: false,
-      shortName: 'SermonAudio Classics',
-      twitterUsername: 'SermonAudio',
-      type: 'broadcaster',
-      vacantPulpit: false,
-      webcastInProgress: false,
-    },
-    displayEventType: 'Classic Audio',
-    displayTitle: 'In Everything By Prayer',
-    documentDownloadCount: 0,
-    downloadCount: 12220,
-    eventType: 'Classic Audio',
-    externalLink: null,
-    fullTitle: 'In Everything By Prayer',
-    keywords: null,
-    languageCode: 'en',
-    media: {
-      audio: [
-        {
-          adaptiveBitrate: false,
-          audioCodec: 'mp3',
-          bitrate: 16,
-          downloadURL:
-            'https://mp3.sermonaudio.com/filearea/11240215752/11240215752.mp3',
-          duration: 2154,
-          live: false,
-          mediaType: 'mp3',
-          streamURL:
-            'https://mp3.sermonaudio.com/filearea/11240215752/11240215752.mp3',
-          thumbnailImageURL: null,
-          type: 'media',
-          videoCodec: null,
-        },
-      ],
-      text: [],
-      type: 'media_set',
-      video: [],
-    },
-    moreInfoText: null,
-    pickDate: '2019-10-07',
-    preachDate: '1960-01-01',
-    publishDate: '2002-11-24',
-    publishTimestamp: 1038121073,
-    series: null,
-    sermonID: '11240215752',
-    speaker: {
-      albumArtURL:
-        'https://vps.sermonaudio.com/resize_image/speakers/podcast/{size}/{size}/tozer.jpg',
-      bio:
-        "A 20th-century prophet\" they called him even in his lifetime. For 31 years he was pastor of Southside Alliance Church in Chicago, where his reputation as a man of God was citywide. Concurrently he became editor of Alliance Life, a responsibility he fulfilled until his death in 1963. His greatest legacy to the Christian world has been his 30 books. Because A.W. Tozer lived in the presence of God he saw clearly and he spoke as a prophet to the church. He sought for God's honor with the zeal of Elijah and mourned with Jeremiah at the apostasy of God's people. But he was not a prophet of despair. His writings are messages of concern. They expose the weaknesses of the church and denounce compromise. They warn and exhort. But they are messages of hope as well, for God is always there, ever faithful to restore and to fulfill His Word to those who hear and obey.",
-      displayName: 'A. W. Tozer',
-      mostRecentPreachDate: null,
-      portraitURL: 'https://media.sermonaudio.com/gallery/photos/tozer.jpg',
-      roundedThumbnailImageURL:
-        'https://media.sermonaudio.com/gallery/photos/thumbnails/tozer.PNG',
-      sortName: 'Tozer, A. W.',
-      type: 'speaker',
-    },
-    subtitle: null,
-    type: 'sermon',
-    updateDate: 1551815166,
-    videoDownloadCount: 0,
-  },
 ];
 
 let versesOfTheDay = [
   {
     verse : "John 3:16",
     verseText: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth on him should not perish, but have eternal life. ... For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
-    date:"27 Oct"
+    date:"5 Dec"
   },
   {
     verse : "Psalm 5:3",
     verseText: "In the morning, Lord, you hear my voice; in the morning I lay my requests before you and wait expectantly.",
-    date:"26 Oct"
+    date:"4 Dec"
   },
   {
     verse : "Romans 8:18",
     verseText: " I consider that our present sufferings are not worth comparing with the glory that will be revealed in us.",
-    date:"25 Oct"
+    date:"3 Dec"
   },
 ]
 

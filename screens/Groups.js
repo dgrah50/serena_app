@@ -73,40 +73,44 @@ export default class Groups extends Component {
 
   _renderGroup(item) {
     return (
-      <Card
-        center
-        row
-        flex={false}
-        shadow
-        space={'between'}
-        style={{paddingHorizontal: '5%', marginVertical: 0}}>
-        <Block flex={false}>
-          <Image
-            resizeMode="contain"
-            source={{
-              uri: item.imageURL,
-            }}
-            style={{
-              width: 50,
-              height: 50,
-              paddingHorizontal: 20,
-              borderRadius: 25,
-              resizeMode: 'contain',
-            }}
-          />
-        </Block>
-        <Block style={{paddingLeft: 20}}>
-          <Text h3 bold>
-            {item.groupname}
-          </Text>
-          <Text blue caption>
-            {item.message}
-          </Text>
-        </Block>
-        <Block flex={false}>
-          <Icon color={theme.colors.primary} name="circle" size={20} />
-        </Block>
-      </Card>
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('Chats')}
+        >
+        <Card
+          center
+          row
+          flex={false}
+          shadow
+          space={'between'}
+          style={{paddingHorizontal: '5%', marginVertical: 0}}>
+          <Block flex={false}>
+            <Image
+              resizeMode="contain"
+              source={{
+                uri: item.imageURL,
+              }}
+              style={{
+                width: 50,
+                height: 50,
+                paddingHorizontal: 20,
+                borderRadius: 25,
+                resizeMode: 'contain',
+              }}
+            />
+          </Block>
+          <Block style={{paddingLeft: 20}}>
+            <Text h3 bold>
+              {item.groupname}
+            </Text>
+            <Text blue caption>
+              {item.message}
+            </Text>
+          </Block>
+          <Block flex={false}>
+            <Icon color={theme.colors.primary} name="circle" size={20} />
+          </Block>
+        </Card>
+      </TouchableOpacity>
     );
   }
   _renderGroups() {
@@ -119,21 +123,23 @@ export default class Groups extends Component {
           {mockMessages.map(item => {
             return this._renderGroup(item);
           })}
-          <Card
-            center
-            middle
-            shadow
-            flex={false}
-            row
-            style={{marginHorizontal: '20%'}}>
-            <Icon
-              color={theme.colors.black}
-              name="plus"
-              size={20}
-              style={{marginHorizontal: 10}}
-            />
-            <Text h3>Create a new group</Text>
-          </Card>
+          <TouchableOpacity>
+            <Card
+              center
+              middle
+              shadow
+              flex={false}
+              row
+              style={{marginHorizontal: '20%'}}>
+              <Icon
+                color={theme.colors.black}
+                name="plus"
+                size={20}
+                style={{marginHorizontal: 10}}
+              />
+              <Text h3>Create a new group</Text>
+            </Card>
+          </TouchableOpacity>
         </ScrollView>
       </React.Fragment>
     );
@@ -163,8 +169,6 @@ export default class Groups extends Component {
       </Card>
     );
   }
-
-
 
   render() {
     return (

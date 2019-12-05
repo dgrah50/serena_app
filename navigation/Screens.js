@@ -7,6 +7,7 @@ import CustomTabBar from '../components/CustomTabBar';
 import Overview from '../screens/Overview';
 import OneVerse from '../screens/OneVerse';
 import Groups from '../screens/Groups';
+import Chats from '../screens/Chats';
 import Notifications from '../screens/Notifications';
 import Fetch from '../screens/Fetch';
 
@@ -44,7 +45,20 @@ export default createBottomTabNavigator(
       },
     },
     Groups: {
-      screen: Groups,
+      screen: createStackNavigator(
+        {
+          Groups: {
+            screen: Groups,
+          },
+          Chats: {
+            screen: Chats,
+          },
+        },
+        {
+          headerMode: 'none',
+          initialRouteName: 'Groups',
+        },
+      ),
       navigationOptions: {
         tabBarLabel: 'Groups',
         tabBarIcon: ({tintColor}) => (

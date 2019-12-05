@@ -195,7 +195,7 @@ export default class Overview extends Component {
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>
-          Recommended Sermons
+          Recommended For You
         </Text>
         <Block style={{height: 180}}>
           <Carousel
