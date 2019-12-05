@@ -74,7 +74,9 @@ export default class Groups extends Component {
   _renderGroup(item) {
     return (
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('Chats')}
+        onPress={() => this.props.navigation.navigate('Chats',{
+          imageURL: item.imageURL
+        })}
         >
         <Card
           center

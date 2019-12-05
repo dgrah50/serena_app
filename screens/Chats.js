@@ -52,6 +52,8 @@ export default class Chats extends Component {
     };
   }
   componentWillMount() {
+    const avatarImg = this.props.navigation.getParam('imageURL')
+
     this.setState({
       messages: [
         {
@@ -62,7 +64,7 @@ export default class Chats extends Component {
           user: {
             _id: 2,
             name: 'Serena',
-            avatar: 'https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-9/p960x960/78941335_112769923535574_2271841299319488512_o.jpg?_nc_cat=104&_nc_ohc=d8wUMTvCISgAQlP2eSaGoO6ymrxjEOhNBRLhNHrjA-Hui43zoBs_7hwHQ&_nc_ht=scontent-lhr3-1.xx&oh=42b1f813c1020d4f727b7a147b5936b1&oe=5E715D4B',
+            avatar: avatarImg,
           },
         },
         {
@@ -72,7 +74,7 @@ export default class Chats extends Component {
           user: {
             _id: 2,
             name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
+            avatar: avatarImg,
           },
         },
       ],
