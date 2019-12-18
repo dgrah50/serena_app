@@ -6,18 +6,15 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Share
 } from 'react-native';
-
-import rgba from 'hex-to-rgba';
+import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import LinearGradient from 'react-native-linear-gradient';
-import Carousel from 'react-native-snap-carousel';
 import {Block, Badge, Card, Text} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
 import {Bars} from 'react-native-loader';
-import axios from 'axios';
 
 const {width} = Dimensions.get('window');
 
@@ -52,6 +49,7 @@ export default class OneVerse extends Component {
     this.state = {
       sermons: undefined,
     };
+    this.onShare = this.onShare.bind(this);
   }
 
   componentDidMount() {
@@ -66,7 +64,7 @@ export default class OneVerse extends Component {
     return (
       <Block style={styles.welcome}>
         {this._renderVerseCard()}
-        <Block >
+        <Block>
           {this.state.sermons ? this._renderSermons() : this._renderSpinner()}
         </Block>
       </Block>
@@ -108,7 +106,12 @@ export default class OneVerse extends Component {
             </Icon.Button>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Icon.Button name="share-alt" backgroundColor={theme.colors.share}>
+            <Icon.Button
+              name="share-alt"
+              backgroundColor={theme.colors.share}
+              onPress={() =>
+                this.onShare(verses[0].verse + ' ' + verses[0].bookname)
+              }>
               Share
             </Icon.Button>
           </TouchableOpacity>
@@ -121,7 +124,7 @@ export default class OneVerse extends Component {
     let speakerName = item.author;
     let duration = item.duration;
     let plays = item.plays;
-    const changeSong = this.props.screenProps.changeSong
+    const changeSong = this.props.screenProps.changeSong;
     return (
       <TouchableOpacity
         key={idx}
@@ -129,7 +132,7 @@ export default class OneVerse extends Component {
           this.props.navigation.navigate('Player', {
             sermon: item,
           });
-          changeSong(item)
+          changeSong(item);
         }}>
         <Card shadow center middle style={{height: 100}}>
           <Block middle center row>
@@ -180,6 +183,49 @@ export default class OneVerse extends Component {
         <Bars size={25} color="#000" />
       </Block>
     );
+  }
+
+  //****** HELPER FUNCTIONS SECTION
+  onShare = async message => {
+    try {
+      const result = await Share.share({
+        message: message,
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  addToFavourites(verseText, bookText, osis) {
+    osis = osis.toString();
+    if (osis.length == 7) {
+      osis = '0' + osis.toString();
+    }
+    let firestoreref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('likes');
+    try {
+      firestoreref.doc(osis).set({
+        verseText: verseText,
+        bookText: bookText,
+        time: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      this.setState({alreadyLiked: true});
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 

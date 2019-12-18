@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import axios from 'axios';
+import qs from 'qs';
 import {
   Dimensions,
   Image,
@@ -7,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
 import rgba from 'hex-to-rgba';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
@@ -16,6 +17,16 @@ import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
 import firebase from 'react-native-firebase';
+import {
+  StreamApp,
+  FlatFeed,
+  StatusUpdateForm,
+  LikeButton,
+  Activity,
+  CommentBox,
+  CommentList
+} from 'react-native-activity-feed';
+var stream = require('getstream');
 
 const {width} = Dimensions.get('window');
 
@@ -45,138 +56,165 @@ const mockMessages = [
   },
 ];
 
-export default class Groups extends Component {
-  static navigationOptions = {
-    headerLeft: (
-      <Block left style={{paddingLeft: 10}}>
-        <Text gray style={theme.fonts.title}>
-          {time.DateNow.weekday}
-          {', '}
-          <Text style={theme.fonts.title}>
-            {time.DateNow.month} {time.DateNow.date}
-          </Text>
-        </Text>
-      </Block>
-    ),
-    headerRight: (
-      <TouchableOpacity>
+const _renderGroup = item => {
+  return (
+    <TouchableOpacity
+      onPress={() =>
+        this.props.navigation.navigate('Chats', {
+          imageURL: item.imageURL,
+        })
+      }>
+      <Card
+        center
+        row
+        flex={false}
+        shadow
+        space={'between'}
+        style={{paddingHorizontal: '5%', marginVertical: 0}}>
         <Block flex={false}>
           <Image
             resizeMode="contain"
-            source={require('../assets/images/Icon/Menu.png')}
-            style={{width: 45, height: 18, paddingRight: 40}}
+            source={{
+              uri: item.imageURL,
+            }}
+            style={{
+              width: 50,
+              height: 50,
+              paddingHorizontal: 20,
+              borderRadius: 25,
+              resizeMode: 'contain',
+            }}
           />
         </Block>
-      </TouchableOpacity>
-    ),
-  };
-
-  _renderGroup(item) {
-    return (
-      <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('Chats',{
-          imageURL: item.imageURL
-        })}
-        >
-        <Card
-          center
-          row
-          flex={false}
-          shadow
-          space={'between'}
-          style={{paddingHorizontal: '5%', marginVertical: 0}}>
-          <Block flex={false}>
-            <Image
-              resizeMode="contain"
-              source={{
-                uri: item.imageURL,
-              }}
-              style={{
-                width: 50,
-                height: 50,
-                paddingHorizontal: 20,
-                borderRadius: 25,
-                resizeMode: 'contain',
-              }}
-            />
-          </Block>
-          <Block style={{paddingLeft: 20}}>
-            <Text h3 bold>
-              {item.groupname}
-            </Text>
-            <Text blue caption>
-              {item.message}
-            </Text>
-          </Block>
-          <Block flex={false}>
-            <Icon color={theme.colors.primary} name="circle" size={20} />
-          </Block>
-        </Card>
-      </TouchableOpacity>
-    );
-  }
-  _renderGroups() {
-    return (
-      <React.Fragment>
-        <Card flex={false}>
-          <Input label={'Search for groups'} />
-        </Card>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {mockMessages.map(item => {
-            return this._renderGroup(item);
-          })}
-          <TouchableOpacity>
-            <Card
-              center
-              middle
-              shadow
-              flex={false}
-              row
-              style={{marginHorizontal: '20%'}}>
-              <Icon
-                color={theme.colors.black}
-                name="plus"
-                size={20}
-                style={{marginHorizontal: 10}}
-              />
-              <Text h3>Create a new group</Text>
-            </Card>
-          </TouchableOpacity>
-        </ScrollView>
-      </React.Fragment>
-    );
-  }
-
-  renderCalendar() {
-    return (
-      <Card shadow>
-        <Calendar
-          current={Date() - 7}
-          minDate={Date() - 14}
-          maxDate={Date()}
-          onDayPress={day => {
-            console.log('selected day', day);
-          }}
-          monthFormat={'MMM yyyy'}
-          hideArrows={false}
-          renderArrow={direction =>
-            direction == 'left' ? <Text h1>⟵</Text> : <Text h1>⟶</Text>
-          }
-          firstDay={1}
-          hideDayNames={false}
-          showWeekNumbers={false}
-          onPressArrowLeft={substractMonth => substractMonth()}
-          onPressArrowRight={addMonth => addMonth()}
-        />
+        <Block style={{paddingLeft: 20}}>
+          <Text h3 bold>
+            {item.groupname}
+          </Text>
+          <Text blue caption>
+            {item.message}
+          </Text>
+        </Block>
+        <Block flex={false}>
+          <Icon color={theme.colors.primary} name="circle" size={20} />
+        </Block>
       </Card>
-    );
+    </TouchableOpacity>
+  );
+};
+const _renderGroups = () => {
+  return (
+    <React.Fragment>
+      <Card flex={false}>
+        <Input label={'Search for groups'} />
+      </Card>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {mockMessages.map(item => {
+          return this._renderGroup(item);
+        })}
+        <TouchableOpacity>
+          <Card
+            center
+            middle
+            shadow
+            flex={false}
+            row
+            style={{marginHorizontal: '20%'}}>
+            <Icon
+              color={theme.colors.black}
+              name="plus"
+              size={20}
+              style={{marginHorizontal: 10}}
+            />
+            <Text h3>Create a new group</Text>
+          </Card>
+        </TouchableOpacity>
+      </ScrollView>
+    </React.Fragment>
+  );
+};
+
+const CustomActivity = props => {
+  console.log(props)
+  return (
+    <React.Fragment>
+      <Activity
+        {...props}
+        Footer={props => {
+          return (
+            <CommentBox
+              onSubmit={text =>
+                props.onAddReaction('comment', props.activity, {text: text})
+              }
+              avatarProps={{
+                source: userData => userData.data.profileImage,
+              }}
+              styles={{container: {height: 78}}}
+            />
+          );
+        }}
+      />
+      <CommentList
+        CommentItem={({comment}) => <CommentItem comment={comment} />}
+        activityId={props.activity.id}
+        reactions={props.activity.latest_reactions}
+      />
+    </React.Fragment>
+  );
+};
+
+
+export default class Groups extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      token: null,
+    };
+    firebase
+      .auth()
+      .currentUser.getIdToken()
+      .then((idToken)=> {
+        console.log(idToken)
+      })
+      .catch((error)=>{
+        console.log(error)
+      });
+    const response = null;
   }
+
+  componentDidMount() {
+    axios
+      .post(
+        'http://localhost:8000/api/users/token',
+        qs.stringify({content: 'testUserID'}),
+      )
+      .then(res => {
+        this.setState({
+          loading: false,
+          token: res.data,
+        });
+      });
+  }
+
 
   render() {
     return (
-      <Block style={styles.welcome} flex={false}>
-        {this._renderGroups()}
-      </Block>
+      <View style={{flex: 1, paddingTop: '10%'}}>
+        {!this.state.loading && (
+          <StreamApp
+            apiKey="zgrr2ez3h3yz"
+            appId="65075"
+            token={this.state.token}>
+            <FlatFeed
+              feedGroup="user"
+              userId="testUserID"
+              Activity={CustomActivity}
+              notify
+            />
+            <StatusUpdateForm feedGroup="user" userId="testUserID" />
+          </StreamApp>
+        )}
+      </View>
     );
   }
 }

@@ -14,6 +14,7 @@ type Props = {
 };
 
 const Follow = ({activities}: Props) => {
+  console.log(activities)
   return (
     <View style={styles.item}>
       {activities.length !== 1 ? (

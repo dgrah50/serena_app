@@ -172,7 +172,7 @@ export default class Fetch extends Component {
     console.log("test")
     this.setState({fetched: false});
     axios
-      .post('http://localhost:8000', qs.stringify({prayer: query}))
+      .post('http://localhost:8000/api/verses', qs.stringify({content: query}))
       .then(response => {
         this.setState({
           fetched: true,

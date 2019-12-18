@@ -10,8 +10,6 @@ import {
 } from 'react-native';
 import rgba from 'hex-to-rgba';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import axios from 'axios';
-import qs from 'qs';
 import {Block, Badge, Card, Text, Controls} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';

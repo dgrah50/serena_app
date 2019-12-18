@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
+import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Carousel from 'react-native-snap-carousel';
 import {Block, Badge, Card, Text} from '../components';
@@ -50,18 +50,54 @@ export default class Overview extends Component {
     ),
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      likes: [],
+    };
+    this.fetchLikes();
+  }
+
   render() {
     return (
       <ScrollView style={styles.home} showsVerticalScrollIndicator={false}>
         {this._renderVerseCard()}
         <Block color="gray3" style={styles.hLine} />
         {this._renderRecommendations()}
-        {/* {this.renderFavourites()} */}
-        {this._renderVODHistory()}
+        {this._renderFavourites()}
       </ScrollView>
     );
   }
 
+  //****** HELPER FUNCTIONS SECTION
+  fetchLikes() {
+    let firestoreref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('likes');
+    likesarray = [];
+    firestoreref
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          likesarray.push({
+            bookText: doc.data().bookText,
+            osis: doc.id,
+            time: doc.data().time.toMillis(),
+            verseText: doc.data().verseText,
+          });
+        });
+      })
+      .then(() => {
+        console.log(likesarray)
+        this.setState({
+          likes: likesarray.sort(
+            (a, b) => parseFloat(b.time) - parseFloat(a.time),
+          ),
+        });
+      });
+  }
   //****** SUB COMPONENTS SECTION
   _renderVerseCard() {
     return (
@@ -165,32 +201,6 @@ export default class Overview extends Component {
       </Card>
     );
   }
-  _renderFavourites() {
-    return (
-      <Block>
-        <Text h3 spacing={1} style={{marginVertical: 8}}>
-          Your Favourites
-        </Text>
-        <Block style={{height: 180}}>
-          <Carousel
-            data={mocks.sermons}
-            renderItem={this._renderSermon.bind(this)}
-            sliderWidth={width}
-            itemWidth={width * 0.4}
-            inactiveSlideScale={1}
-            inactiveSlideOpacity={0.8}
-            enableMomentum={true}
-            activeSlideAlignment={'start'}
-            activeAnimationType={'spring'}
-            activeAnimationOptions={{
-              friction: 4,
-              tension: 40,
-            }}
-          />
-        </Block>
-      </Block>
-    );
-  }
   _renderRecommendations() {
     return (
       <Block>
@@ -217,32 +227,67 @@ export default class Overview extends Component {
       </Block>
     );
   }
-  _renderVODHistory() {
+  _renderFavourites() {
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>
-          Your Verses of The Day
+          Your Favourite Verses
         </Text>
-        <Block style={{height: 180}}>
-          <Carousel
-            data={mocks.versesOfTheDay}
-            renderItem={this._renderVOD.bind(this)}
-            sliderWidth={width}
-            itemWidth={width * 0.4}
-            inactiveSlideScale={1}
-            inactiveSlideOpacity={0.8}
-            enableMomentum={true}
-            activeSlideAlignment={'start'}
-            activeAnimationType={'spring'}
-            activeAnimationOptions={{
-              friction: 4,
-              tension: 40,
-            }}
-          />
-        </Block>
+
+        {!(this.state.likes.length == 0) ? (
+          <Block style={{height: 180}}>
+            <Carousel
+              data={mocks.versesOfTheDay}
+              renderItem={this._renderVOD.bind(this)}
+              sliderWidth={width}
+              itemWidth={width * 0.4}
+              inactiveSlideScale={1}
+              inactiveSlideOpacity={0.8}
+              enableMomentum={true}
+              activeSlideAlignment={'start'}
+              activeAnimationType={'spring'}
+              activeAnimationOptions={{
+                friction: 4,
+                tension: 40,
+              }}
+            />
+          </Block>
+        ) : (
+          this._renderEmptyState()
+        )}
       </Block>
     );
   }
+  _renderEmptyState = () => (
+    <TouchableOpacity onPress={() => this.props.navigation.navigate('Pray')}>
+      <Card
+        shadow
+        style={{
+          margin: 10,
+          width: 150,
+          height: 150,
+          padding: 5,
+        }}>
+        <Block center>
+          <Text black title center middle>
+            You havent added any favourites yet. Tap to add your first.
+          </Text>
+        </Block>
+        <Block
+          center
+          middle
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: '25%',
+            backgroundColor: 'white',
+            borderBottomLeftRadius: theme.sizes.border,
+            borderBottomRightRadius: theme.sizes.border,
+          }}></Block>
+      </Card>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({

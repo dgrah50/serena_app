@@ -25,7 +25,7 @@ import {
   LikeButton,
   StatusUpdateForm,
   NotificationFeed,
-  ReactionIcon
+  ReactionIcon,
 } from 'react-native-activity-feed';
 const {width} = Dimensions.get('window');
 
@@ -33,58 +33,53 @@ import CategoriesIcon from '../assets/icons/categories.png';
 import PostIcon from '../assets/icons/post.png';
 import ReplyIcon from '../assets/icons/reply.png';
 
+export default Notifications = props => {
+  const _renderGroup = ({activityGroup, styles, ...props}: any) => {
+    let verb = activityGroup.activities[0].verb;
+    if (verb === 'follow') {
+      return <Follow activities={activityGroup.activities} styles={styles} />;
+    } else if (verb === 'heart' || verb === 'repost') {
+      return (
+        <Notification activities={activityGroup.activities} styles={styles} />
+      );
+    } else {
+      let activity = activityGroup.activities[0];
+      return (
+        <Activity
+          activity={activity}
+          {...props}
+          Footer={
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <LikeButton activity={activity} {...props} />
 
-export default Notifications = (props) => {
- const _renderGroup = ({activityGroup, styles, ...props}: any) => {
-   let verb = activityGroup.activities[0].verb;
-   if (verb === 'follow') {
-     return <Follow activities={activityGroup.activities} styles={styles} />;
-   } else if (verb === 'heart' || verb === 'repost') {
-     return (
-       <Notification activities={activityGroup.activities} styles={styles} />
-     );
-   } else {
-     let activity = activityGroup.activities[0];
-     return (
-       <Activity
-         activity={activity}
-         {...props}
-         Footer={
-           <View
-             style={{
-               flexDirection: 'row',
-               alignItems: 'center',
-             }}>
-             <LikeButton activity={activity} {...props} />
-
-             <ReactionIcon
-               icon={ReplyIcon}
-               labelSingle="comment"
-               labelPlural="comments"
-               counts={activityGroup.activities.reaction_counts}
-               kind="comment"
-             />
-           </View>
-         }
-       />
-     );
-   }
- };
-//  _navListener: NavigationEventSubscription;
-const {navigation} = props.navigation;
+              <ReactionIcon
+                icon={ReplyIcon}
+                labelSingle="comment"
+                labelPlural="comments"
+                counts={activityGroup.activities.reaction_counts}
+                kind="comment"
+              />
+            </View>
+          }
+        />
+      );
+    }
+  };
+  //  _navListener: NavigationEventSubscription;
+  const {navigation} = props.navigation;
   return (
-    <SafeAreaView style={{flex: 1}} forceInset={{top: 'always'}}>
+    <View style={{flex: 1,paddingTop:"10%"}}>
       <StreamApp
         apiKey="27ynt5dv5wtm"
         appId="65297"
         token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidXNlci1vbmUifQ.tBnzNBolwyioz7nLEgh6VOGI9T1HLssgGjmf6lMmcsQ">
-        <NotificationFeed
-          Group={_renderGroup}
-          navigation={navigation}
-          notify
-        />
+        <NotificationFeed Group={_renderGroup} navigation={navigation} notify />
       </StreamApp>
-    </SafeAreaView>
+    </View>
   );
 };
 
