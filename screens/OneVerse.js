@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  Share
+  Share,
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -101,7 +101,16 @@ export default class OneVerse extends Component {
         </Block>
         <Block flex={false} row middle space={'between'}>
           <TouchableOpacity>
-            <Icon.Button name="heart" backgroundColor={theme.colors.accent}>
+            <Icon.Button
+              name="heart"
+              backgroundColor={theme.colors.accent}
+              onPress={() =>
+                this.addToFavourites(
+                  verses[0].verse,
+                  verses[0].bookname,
+                  verses[0].osis,
+                )
+              }>
               Like
             </Icon.Button>
           </TouchableOpacity>

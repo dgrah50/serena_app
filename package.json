@@ -18,6 +18,7 @@
     "expo-activity-feed": "^0.8.17",
     "getstream": "^4.3.0",
     "hex-to-rgba": "^2.0.1",
+    "javascript-time-ago": "^2.0.4",
     "jetifier": "^1.6.4",
     "react": "16.8.6",
     "react-native": "0.60.5",

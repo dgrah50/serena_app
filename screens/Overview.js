@@ -14,7 +14,6 @@ import {Block, Badge, Card, Text} from '../components';
 import {styles as blockStyles} from '../components/Block';
 import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
-
 const {width} = Dimensions.get('window');
 
 export default class Overview extends Component {
@@ -98,6 +97,34 @@ export default class Overview extends Component {
         });
       });
   }
+
+ timeSince(date) {
+
+  var seconds = Math.floor((new Date() - date) / 1000);
+
+  var interval = Math.floor(seconds / 31536000);
+
+  if (interval > 1) {
+    return interval + " years";
+  }
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) {
+    return interval + " months";
+  }
+  interval = Math.floor(seconds / 86400);
+  if (interval > 1) {
+    return interval + " days";
+  }
+  interval = Math.floor(seconds / 3600);
+  if (interval > 1) {
+    return interval + " hours";
+  }
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) {
+    return interval + " minutes";
+  }
+  return Math.floor(seconds) + " seconds";
+}
   //****** SUB COMPONENTS SECTION
   _renderVerseCard() {
     return (
@@ -165,9 +192,14 @@ export default class Overview extends Component {
     );
   }
   _renderVOD({item, index}) {
+    console.log(item)
+    const serverdate = new Date(item.time);
+    console.log(Date.now() - serverdate)
     return (
       <Card
         shadow
+        center
+        middle
         style={{
           margin: 10,
           width: 150,
@@ -175,12 +207,15 @@ export default class Overview extends Component {
           padding: 5,
         }}>
         <Block center>
-          <Text black title center middle>
-            {item.verse}
-            {'\n'}
-          </Text>
           <Text center gray numberOfLines={4}>
             {item.verseText}
+            {'\n'}
+          </Text>
+          <Text black  center middle>
+             {item.bookText}
+            </Text>
+          <Text black caption center middle>
+            {this.timeSince(serverdate) + " ago"}
           </Text>
         </Block>
 
@@ -237,7 +272,7 @@ export default class Overview extends Component {
         {!(this.state.likes.length == 0) ? (
           <Block style={{height: 180}}>
             <Carousel
-              data={mocks.versesOfTheDay}
+              data={this.state.likes}
               renderItem={this._renderVOD.bind(this)}
               sliderWidth={width}
               itemWidth={width * 0.4}
