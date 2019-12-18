@@ -169,7 +169,6 @@ export default class Fetch extends Component {
 
   //****** HELPER FUNCTIONS SECTION
   apiCall(query) {
-    console.log("test")
     this.setState({fetched: false});
     axios
       .post('http://localhost:8000/api/verses', qs.stringify({content: query}))

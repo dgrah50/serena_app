@@ -192,9 +192,7 @@ export default class Overview extends Component {
     );
   }
   _renderVOD({item, index}) {
-    console.log(item)
     const serverdate = new Date(item.time);
-    console.log(Date.now() - serverdate)
     return (
       <Card
         shadow

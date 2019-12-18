@@ -55,9 +55,8 @@ export default class OneVerse extends Component {
   componentDidMount() {
     let query = this.props.navigation.getParam('response').keyword;
     this.setState({
-      sermons: this.props.navigation.getParam('response').sermons,
+      sermons: this.props.navigation.getParam('response').sermons.current,
     });
-    console.log(this.props.navigation.getParam('response'));
   }
 
   render() {

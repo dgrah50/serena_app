@@ -24,7 +24,7 @@ import {
   LikeButton,
   Activity,
   CommentBox,
-  CommentList
+  CommentList,
 } from 'react-native-activity-feed';
 var stream = require('getstream');
 
@@ -33,6 +33,8 @@ const {width} = Dimensions.get('window');
 const mockMessages = [
   {
     groupname: 'Serena Community',
+    groupID: 'Serena',
+    bio: 'The home of the Serena App',
     message: 'Welcome to the app!',
     imageURL:
       'https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-9/p960x960/78941335_112769923535574_2271841299319488512_o.jpg?_nc_cat=104&_nc_ohc=d8wUMTvCISgAQlP2eSaGoO6ymrxjEOhNBRLhNHrjA-Hui43zoBs_7hwHQ&_nc_ht=scontent-lhr3-1.xx&oh=42b1f813c1020d4f727b7a147b5936b1&oe=5E715D4B',
@@ -56,85 +58,7 @@ const mockMessages = [
   },
 ];
 
-const _renderGroup = item => {
-  return (
-    <TouchableOpacity
-      onPress={() =>
-        this.props.navigation.navigate('Chats', {
-          imageURL: item.imageURL,
-        })
-      }>
-      <Card
-        center
-        row
-        flex={false}
-        shadow
-        space={'between'}
-        style={{paddingHorizontal: '5%', marginVertical: 0}}>
-        <Block flex={false}>
-          <Image
-            resizeMode="contain"
-            source={{
-              uri: item.imageURL,
-            }}
-            style={{
-              width: 50,
-              height: 50,
-              paddingHorizontal: 20,
-              borderRadius: 25,
-              resizeMode: 'contain',
-            }}
-          />
-        </Block>
-        <Block style={{paddingLeft: 20}}>
-          <Text h3 bold>
-            {item.groupname}
-          </Text>
-          <Text blue caption>
-            {item.message}
-          </Text>
-        </Block>
-        <Block flex={false}>
-          <Icon color={theme.colors.primary} name="circle" size={20} />
-        </Block>
-      </Card>
-    </TouchableOpacity>
-  );
-};
-const _renderGroups = () => {
-  return (
-    <React.Fragment>
-      <Card flex={false}>
-        <Input label={'Search for groups'} />
-      </Card>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {mockMessages.map(item => {
-          return this._renderGroup(item);
-        })}
-        <TouchableOpacity>
-          <Card
-            center
-            middle
-            shadow
-            flex={false}
-            row
-            style={{marginHorizontal: '20%'}}>
-            <Icon
-              color={theme.colors.black}
-              name="plus"
-              size={20}
-              style={{marginHorizontal: 10}}
-            />
-            <Text h3>Create a new group</Text>
-          </Card>
-        </TouchableOpacity>
-      </ScrollView>
-    </React.Fragment>
-  );
-};
-
 const CustomActivity = props => {
-  console.log(props)
   return (
     <React.Fragment>
       <Activity
@@ -162,7 +86,6 @@ const CustomActivity = props => {
   );
 };
 
-
 export default class Groups extends Component {
   constructor(props) {
     super(props);
@@ -173,11 +96,11 @@ export default class Groups extends Component {
     firebase
       .auth()
       .currentUser.getIdToken()
-      .then((idToken)=> {
-        console.log(idToken)
+      .then(idToken => {
+        console.log(idToken);
       })
-      .catch((error)=>{
-        console.log(error)
+      .catch(error => {
+        console.log(error);
       });
     const response = null;
   }
@@ -196,8 +119,86 @@ export default class Groups extends Component {
       });
   }
 
+  _renderGroup = item => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          
+          this.props.navigation.navigate('GroupFeed', {
+            groupID: item.groupID,
+          });
+        }}>
+        <Card
+          center
+          row
+          flex={false}
+          shadow
+          space={'between'}
+          style={{paddingHorizontal: '5%', marginVertical: 0}}>
+          <Block flex={false}>
+            <Image
+              resizeMode="contain"
+              source={{
+                uri: item.imageURL,
+              }}
+              style={{
+                width: 50,
+                height: 50,
+                paddingHorizontal: 20,
+                borderRadius: 25,
+                resizeMode: 'contain',
+              }}
+            />
+          </Block>
+          <Block style={{paddingLeft: 20}}>
+            <Text h3 bold>
+              {item.groupname}
+            </Text>
+            <Text blue caption>
+              {item.message}
+            </Text>
+          </Block>
+          <Block flex={false}>
+            <Icon color={theme.colors.primary} name="circle" size={20} />
+          </Block>
+        </Card>
+      </TouchableOpacity>
+    );
+  };
 
-  render() {
+  _renderGroups = () => {
+    return (
+      <React.Fragment>
+        <Card flex={false}>
+          <Input label={'Search for groups'} />
+        </Card>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {mockMessages.map(item => {
+            return this._renderGroup(item);
+          })}
+          <TouchableOpacity>
+            <Card
+              center
+              middle
+              shadow
+              flex={false}
+              row
+              style={{marginHorizontal: '20%'}}>
+              <Icon
+                color={theme.colors.black}
+                name="plus"
+                size={20}
+                style={{marginHorizontal: 10}}
+              />
+              <Text h3>Create a new group</Text>
+            </Card>
+          </TouchableOpacity>
+        </ScrollView>
+      </React.Fragment>
+    );
+  };
+
+  _renderSpecificFeed() {
     return (
       <View style={{flex: 1, paddingTop: '10%'}}>
         {!this.state.loading && (
@@ -216,6 +217,10 @@ export default class Groups extends Component {
         )}
       </View>
     );
+  }
+
+  render() {
+    return <View style={{flex: 1, paddingTop: '10%'}}>{this._renderGroups()}</View>;
   }
 }
 
