@@ -17,6 +17,12 @@ const styles = StyleSheet.create({
 });
 
 class Forgot extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      emailAddress: null,
+    };
+  }
   render() {
     return (
       <KeyboardAvoidingView
@@ -56,8 +62,8 @@ class Forgot extends Component {
                 <Text
                   height={18}
                   color="blue"
-                  onPress={() => navigation.navigate('Register')}>
-                  Sign up
+                  onPress={() => this.props.navigation.navigate('Login')}>
+                  SIGN UP
                 </Text>
               </Text>
             </Block>
@@ -73,18 +79,25 @@ class Forgot extends Component {
       emailAddress: e,
     });
   };
+  
   forgotPassword = yourEmail => {
-    firebase
-      .auth()
-      .sendPasswordResetEmail(yourEmail)
-      .then(function(user) {
-        alert('Please check your email.');
-      })
-      .catch(function(err) {
-        Alert.alert(err, 'Try again!', [{text: 'OK'}], {
-          cancelable: false,
-        });
+    if (!this.state.emailAddress) {
+      Alert.alert('Incomplete details entered ', 'Try again!', [{text: 'OK'}], {
+        cancelable: false,
       });
+    } else {
+      firebase
+        .auth()
+        .sendPasswordResetEmail(yourEmail)
+        .then(function(user) {
+          alert('Please check your email.');
+        })
+        .catch(function(err) {
+          Alert.alert(err, 'Try again!', [{text: 'OK'}], {
+            cancelable: false,
+          });
+        });
+    }
   };
 }
 

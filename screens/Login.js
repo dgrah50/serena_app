@@ -14,15 +14,16 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOnboarding: false,
+      showOnboarding: true,
+      fullName: null,
     };
   }
 
   render() {
     const {navigation} = this.props;
     return this.state.showOnboarding
-      ? this._renderLoginView()
-      : this._renderOnboarding();
+      ? this._renderOnboarding()
+      : this._renderLoginView();
   }
 
   //****** SUB COMPONENTS SECTION
@@ -32,7 +33,7 @@ class Login extends Component {
       <KeyboardAvoidingView
         enabled
         behavior="padding"
-        style={{flex: 1, backgroundColor: theme.colors.black}}
+        style={{flex: 1, backgroundColor: theme.colors.gray3}}
         keyboardVerticalOffset={height * 0.2}>
         {this._renderSerenaHeader()}
         {this._renderButtons()}
@@ -44,45 +45,81 @@ class Login extends Component {
       <Onboarding
         pages={[
           {
-            backgroundColor: '#fff',
+            backgroundColor: theme.colors.gray3,
             image: (
-              <LottieView
-                style={{width: 500}}
-                source={require('../assets/anims/happydude.json')}
-                autoPlay
-                loop
-              />
+              <React.Fragment>
+                <Image
+                  source={require('../assets/images/Base/Logobig.png')}
+                  style={{height: 56, width: 204, marginVertical: '10%'}}
+                />
+                <LottieView
+                  style={{width: width * 0.8}}
+                  source={require('../assets/anims/levitate.json')}
+                  autoPlay
+                  loop
+                />
+              </React.Fragment>
             ),
-            title: 'Simple Messenger UI',
-            subtitle: 'Implemented in React Native',
+            bottomBarColor: theme.colors.gray3,
+            title: (
+              <Text h2 black center>
+                Welcome to Serena
+              </Text>
+            ),
+            subtitle:
+              "Find the perfect Bible verse for you at instantly. Just say what's on your mind.",
           },
           {
-            backgroundColor: '#fff',
+            backgroundColor: theme.colors.gray3,
             image: (
-              <LottieView
-                style={{width: 500}}
-                source={require('../assets/anims/levitate.json')}
-                autoPlay
-                loop
-              />
+              <React.Fragment>
+                <Image
+                  source={require('../assets/images/Base/Logobig.png')}
+                  style={{height: 56, width: 204, marginVertical: '10%'}}
+                />
+                <LottieView
+                  style={{width: width * 0.8}}
+                  source={require('../assets/anims/happydude.json')}
+                  autoPlay
+                  loop
+                />
+              </React.Fragment>
             ),
-            title: 'Welcome',
-            subtitle: 'To Earth',
+            title: (
+              <Text h2 black center>
+                Personalised for You.
+              </Text>
+            ),
+            subtitle:
+              'Serena recommends sermons for you to. Any time. Any place.',
           },
           {
-            backgroundColor: '#fff',
+            backgroundColor: theme.colors.gray3,
             image: (
-              <LottieView
-                style={{width: 500}}
-                source={require('../assets/anims/womanonphone.json')}
-                autoPlay
-                loop
-              />
+              <React.Fragment>
+                <Image
+                  source={require('../assets/images/Base/Logobig.png')}
+                  style={{height: 56, width: 204, marginVertical: '10%'}}
+                />
+                <LottieView
+                  style={{width: width * 0.8}}
+                  source={require('../assets/anims/womanonphone.json')}
+                  autoPlay
+                  loop
+                />
+              </React.Fragment>
             ),
-            title: 'Also',
-            subtitle: 'Mars is nice',
+            title: (
+              <Text h2 black center>
+                Share with friends and family.
+              </Text>
+            ),
+            subtitle:
+              'With Serena you can make groups to share prayers and verses. ',
           },
         ]}
+        onDone={() => this.setState({showOnboarding: false})}
+        onSkip={() => this.setState({showOnboarding: false})}
       />
     );
   }
@@ -99,9 +136,9 @@ class Login extends Component {
             source={require('../assets/images/Base/Logobig.png')}
             style={{height: 56, width: 204, marginVertical: '10%'}}
           />
-          <Text h2 white center>
+          <Text h2 black center>
             Welcome back to Serena. {'\n'} {'\n'}
-            <Text h3 white center>
+            <Text h3 black center>
               Find the right scripture or sermon for you. {'\n'}
               Any time, any place.
             </Text>
@@ -126,7 +163,7 @@ class Login extends Component {
             style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
             {/* <Icon name="facebook-f" size={30} color="#fff" /> */}
             <Text button black>
-              LOG IN
+              LOG IN WITH EMAIL
             </Text>
           </Button>
           <Button
@@ -134,7 +171,7 @@ class Login extends Component {
             onPress={() => this.props.navigation.navigate('Register')}
             style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
             <Text button black>
-              SIGN UP
+              SIGN UP WITH EMAIL
             </Text>
           </Button>
         </Block>
@@ -191,9 +228,26 @@ class Login extends Component {
         .auth()
         .signInWithCredential(credential);
 
-      console.log(JSON.stringify(firebaseUserCredential.user.toJSON()));
+      let firestoreref = firebase
+        .firestore()
+        .collection('users')
+        .doc(firebase.auth().currentUser.uid)
+        .collection('Info');
+      try {
+        await firestoreref.doc('fullName').set({
+          fullname: firebaseUserCredential.user.toJSON().displayName,
+        });
+        await firestoreref.doc('groups').set(
+          {
+            subscribed: firebase.firestore.FieldValue.arrayUnion('Serena'),
+          },
+          {merge: true},
+        );
+      } catch (err) {
+        console.log(err);
+      }
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   }
 
@@ -203,9 +257,8 @@ class Login extends Component {
       cancelable: false,
     });
   }
-  onLoginSuccess() {
-    navigation.navigate('Overview');
-  }
+
+  // }
 }
 
 export default Login;

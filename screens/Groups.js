@@ -193,6 +193,25 @@ export default class Groups extends Component {
               <Text h3>Create a new group</Text>
             </Card>
           </TouchableOpacity>
+          <TouchableOpacity onPress={ () =>{ 
+            firebase.auth().signOut()
+          }}>
+            <Card
+              center
+              middle
+              shadow
+              flex={false}
+              row
+              style={{marginHorizontal: '20%'}}>
+              <Icon
+                color={theme.colors.black}
+                name="plus"
+                size={20}
+                style={{marginHorizontal: 10}}
+              />
+              <Text h3>SIGN OUT</Text>
+            </Card>
+          </TouchableOpacity>
         </ScrollView>
       </React.Fragment>
     );

@@ -8,13 +8,20 @@ import {theme, mocks, time} from '../constants';
 const {height, width} = Dimensions.get('window');
 
 class EmailLogin extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      emailAddress: null,
+      password: null
+    };
+  }
   render() {
     const {navigation} = this.props;
     return (
       <KeyboardAvoidingView
         enabled
         behavior="padding"
-        style={{flex: 1, backgroundColor: theme.colors.black}}
+        style={{flex: 1, backgroundColor: theme.colors.gray3}}
         keyboardVerticalOffset={height * 0.2}>
         {this._renderHeader()}
         {this._renderInputAndButtons()}
@@ -33,8 +40,8 @@ class EmailLogin extends Component {
             label="Email address"
             style={{
               marginBottom: 25,
-              color: theme.colors.white,
-              borderColor: theme.colors.white,
+              color: theme.colors.black,
+              borderColor: theme.colors.black,
             }}
             onChangeTextHandler={this.emailAddressTextHandler}
           />
@@ -44,15 +51,15 @@ class EmailLogin extends Component {
             label="Password"
             style={{
               marginBottom: 25,
-              color: theme.colors.white,
-              borderColor: theme.colors.white,
+              color: theme.colors.black,
+              borderColor: theme.colors.black,
             }}
             onChangeTextHandler={this.passwordTextHandler}
             rightLabel={
               <Text
                 paragraph
                 color="red"
-                onPress={() => navigation.navigate('Forgot')}>
+                onPress={() => this.props.navigation.navigate('Forgot')}>
                 Forgot password?
               </Text>
             }
@@ -63,11 +70,10 @@ class EmailLogin extends Component {
             style={{
               marginBottom: 12,
               width: width * 0.4,
-              backgroundColor: theme.colors.white,
             }}
             onPress={() => this.onLoginPress()}>
-            <Text button black>
-              LOG IN
+            <Text button white>
+              LOG IN WITH EMAIL
             </Text>
           </Button>
           <Text paragraph color="gray">
@@ -75,7 +81,7 @@ class EmailLogin extends Component {
             <Text
               height={18}
               color="blue"
-              onPress={() => navigation.navigate('Register')}>
+              onPress={() => this.props.navigation.navigate('Login')}>
               Sign up
             </Text>
           </Text>
@@ -91,9 +97,9 @@ class EmailLogin extends Component {
           center
           middle
           style={{marginVertical: '10%', height: '30%'}}>
-          <Text h2 white center>
+          <Text h2 black center>
             Log in {'\n'} {'\n'}
-            <Text h3 white center>
+            <Text h3 black center>
               Find the right scripture or sermon for you. {'\n'}
               Any time, any place.
             </Text>
@@ -115,14 +121,23 @@ class EmailLogin extends Component {
     });
   };
   onLoginPress() {
-    this.setState({loading: true});
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(this.state.emailAddress, this.state.password)
-      .catch(err => {
-        console.log(err);
-        this.onLoginFail(err);
+    if (!this.state.emailAddress || !this.state.password) {
+      Alert.alert('Incomplete details entered ', 'Try again!', [{text: 'OK'}], {
+        cancelable: false,
       });
+    } else {
+      this.setState({loading: true});
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(
+          this.state.emailAddress,
+          this.state.password,
+        )
+        .catch(err => {
+          console.log(err);
+          this.onLoginFail(err);
+        });
+    }
   }
   onLoginFail(err) {
     this.setState({err, loading: false});
@@ -132,7 +147,7 @@ class EmailLogin extends Component {
   }
 
   onLoginSuccess() {
-    navigation.navigate('Overview');
+    navigation.navigate('Pray');
   }
 }
 

@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Dimensions,
   TouchableWithoutFeedback,
-  Alert
+  Alert,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import firebase from 'react-native-firebase';
@@ -14,10 +14,16 @@ import * as theme from '../constants/theme';
 const {height} = Dimensions.get('window');
 
 class Register extends Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      emailAddress: null,
+      password: null,
+      name: null,
+    };
+  }
   render() {
     const {navigation} = this.props;
-    const {active} = this.state;
 
     return (
       <KeyboardAwareScrollView
@@ -33,63 +39,6 @@ class Register extends Component {
           <Text h3 style={{marginBottom: 6}}>
             Get started for free
           </Text>
-          <Text paragraph>Free forever. No credit card needed.</Text>
-          {/* <Block row style={{marginHorizontal: 28, marginTop: 40}}>
-            <TouchableWithoutFeedback
-              onPress={() => this.handleType('administrator')}
-              style={active === 'administrator' ? styles.activeBorder : null}>
-              <Block
-                center
-                middle
-                style={[
-                  styles.card,
-                  {marginRight: 20},
-                  active === 'administrator' ? styles.active : null,
-                ]}>
-                {active === 'administrator' ? (
-                  <Block center middle style={styles.check}>
-                    {checkIcon}
-                  </Block>
-                ) : null}
-                <Block center middle style={styles.icon}>
-                  {adminIcon}
-                </Block>
-                <Text h4 style={{marginBottom: 11}}>
-                  Administrator
-                </Text>
-                <Text paragraph center >
-                  Full access to all settings
-                </Text>
-              </Block>
-            </TouchableWithoutFeedback>
-
-            <TouchableWithoutFeedback
-              onPress={() => this.handleType('operator')}
-              style={active === 'operator' ? styles.activeBorder : null}>
-              <Block
-                center
-                middle
-                style={[
-                  styles.card,
-                  active === 'operator' ? styles.active : null,
-                ]}>
-                {active === 'operator' ? (
-                  <Block center middle style={styles.check}>
-                    {checkIcon}
-                  </Block>
-                ) : null}
-                <Block center middle style={styles.icon}>
-                  {operatorIcon}
-                </Block>
-                <Text h4 style={{marginBottom: 11}}>
-                  Operator
-                </Text>
-                <Text paragraph center color="black3">
-                  Service desk and chat permissions
-                </Text>
-              </Block>
-            </TouchableWithoutFeedback>
-          </Block> */}
           <Block center style={{marginTop: 25}}>
             <Input
               full
@@ -114,10 +63,11 @@ class Register extends Component {
 
             <Button
               full
-              style={{marginBottom: 12, width: 100}}
+              shadow
+              style={{marginBottom: 12}}
               onPress={() => this.onSignupPress()}>
               <Text button white>
-                Create Account
+                CREATE ACCOUNT
               </Text>
             </Button>
             <Text paragraph color="gray">
@@ -156,25 +106,42 @@ class Register extends Component {
       name: e,
     });
   };
-  onSignupPress() {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(
-        this.state.emailAddress,
-        this.state.password,
-      )
-      // .then(userCredentials => {
-      //   if (userCredentials.user) {
-      //     userCredentials.user
-      //       .updateProfile({
-      //         displayName: this.state.name,
-      //       })
-      // .then(this.onSignupSuccess.bind(this));
-      // }
-      // })
-      .catch(err => {
-        this.creationFailure(err).bind(this);
+  async onSignupPress() {
+    if (!this.state.emailAddress || !this.state.password || !this.state.name) {
+      Alert.alert('Incomplete details entered ', 'Try again!', [{text: 'OK'}], {
+        cancelable: false,
       });
+    } else {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(
+          this.state.emailAddress,
+          this.state.password,
+        )
+        .then(() => {
+          let firestoreref = firebase
+            .firestore()
+            .collection('users')
+            .doc(firebase.auth().currentUser.uid)
+            .collection('Info');
+          try {
+            firestoreref.doc('fullName').set({
+              fullname: this.state.name,
+            }).then()
+            firestoreref.doc('groups').set(
+              {
+                subscribed: firebase.firestore.FieldValue.arrayUnion('Serena'),
+              },
+              {merge: true},
+            );
+          } catch (err) {
+            console.log(err);
+          }
+        })
+        .catch(err => {
+          this.creationFailure(err).bind(this);
+        });
+    }
   }
   onSignupSuccess() {
     navigation.navigate('Overview');
