@@ -30,33 +30,6 @@ var stream = require('getstream');
 
 const {width} = Dimensions.get('window');
 
-const mockMessages = [
-  {
-    groupname: 'Serena Community',
-    groupID: 'Serena',
-    bio: 'The home of the Serena App',
-    message: 'Welcome to the app!',
-    imageURL:
-      'https://scontent-lhr3-1.xx.fbcdn.net/v/t1.0-9/p960x960/78941335_112769923535574_2271841299319488512_o.jpg?_nc_cat=104&_nc_ohc=d8wUMTvCISgAQlP2eSaGoO6ymrxjEOhNBRLhNHrjA-Hui43zoBs_7hwHQ&_nc_ht=scontent-lhr3-1.xx&oh=42b1f813c1020d4f727b7a147b5936b1&oe=5E715D4B',
-  },
-  {
-    groupname: 'Inspiration Group',
-    message: 'Isaiah 54:16',
-    imageURL: 'https://apprecs.org/ios/images/app-icons/256/ca/565301194.jpg',
-  },
-  {
-    groupname: 'Marriage Support Group',
-    message: 'Isaiah 54:16',
-    imageURL:
-      'https://viviamaridi.com/wp-content/uploads/2019/02/01_marriage_icon.png',
-  },
-  {
-    groupname: 'Net Church Dartford Youth Group',
-    message: 'Isaiah 54:16',
-    imageURL:
-      'https://icon-library.net/images/church-icon-png/church-icon-png-19.jpg',
-  },
-];
 
 const CustomActivity = props => {
   return (
@@ -148,28 +121,13 @@ export default class Groups extends Component {
           shadow
           space={'between'}
           style={{paddingHorizontal: '5%', marginVertical: 0}}>
-          <Block flex={false}>
-            {/* <Image
-              resizeMode="contain"
-              source={{
-                uri: item.imageURL,
-              }}
-              style={{
-                width: 50,
-                height: 50,
-                paddingHorizontal: 20,
-                borderRadius: 25,
-                resizeMode: 'contain',
-              }}
-            /> */}
-          </Block>
           <Block style={{paddingLeft: 20}}>
             <Text h3 bold>
               {item}
             </Text>
           </Block>
           <Block flex={false}>
-            <Icon color={theme.colors.primary} name="circle" size={20} />
+            <Icon color={theme.colors.primary} name="chevron-right" size={20} />
           </Block>
         </Card>
       </TouchableOpacity>
@@ -182,11 +140,15 @@ export default class Groups extends Component {
         <Card flex={false}>
           <Input label={'Search for groups'} />
         </Card>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{paddingTop: 20, marginHorizontal: width*0.05} }>
           {this.state.groups.map((currElement, index) => {
             return this._renderGroup(currElement, index);
           })}
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={() =>   this.props.navigation.navigate('CreateGroup')}
+          >
             <Card
               center
               middle

@@ -1,0 +1,24 @@
+{
+    "files.exclude": {
+        ".buckconfig": true,
+        ".editorconfig": true,
+        ".flowconfig": true,
+        ".git": true,
+        ".gitattributes": true,
+        ".gitignore": true,
+        ".prettierrc.js": true,
+        ".watchmanconfig": true,
+        "**/__tests__": true,
+        "**/.opensource": true,
+        "**/.vscode": true,
+        "**/bin": true,
+        "**/track-player.json": true,
+        "app.json": true,
+        "babel.config.js": true,
+        "metro.config.js": true,
+        "package-lock.json": true,
+        "package.json": true,
+        "README.md": true,
+        "yarn.lock": true
+    }
+}
