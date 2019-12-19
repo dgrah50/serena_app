@@ -5,12 +5,29 @@ import {AccessToken, LoginManager} from 'react-native-fbsdk';
 import {Button, Block, Text, Input} from '../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {theme, mocks, time} from '../constants';
+import Onboarding from 'react-native-onboarding-swiper';
+import LottieView from 'lottie-react-native';
 
 const {height, width} = Dimensions.get('window');
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showOnboarding: false,
+    };
+  }
+
   render() {
     const {navigation} = this.props;
+    return this.state.showOnboarding
+      ? this._renderLoginView()
+      : this._renderOnboarding();
+  }
+
+  //****** SUB COMPONENTS SECTION
+
+  _renderLoginView() {
     return (
       <KeyboardAvoidingView
         enabled
@@ -22,8 +39,54 @@ class Login extends Component {
       </KeyboardAvoidingView>
     );
   }
+  _renderOnboarding() {
+    return (
+      <Onboarding
+        pages={[
+          {
+            backgroundColor: '#fff',
+            image: (
+              <LottieView
+                style={{width: 500}}
+                source={require('../assets/anims/happydude.json')}
+                autoPlay
+                loop
+              />
+            ),
+            title: 'Simple Messenger UI',
+            subtitle: 'Implemented in React Native',
+          },
+          {
+            backgroundColor: '#fff',
+            image: (
+              <LottieView
+                style={{width: 500}}
+                source={require('../assets/anims/levitate.json')}
+                autoPlay
+                loop
+              />
+            ),
+            title: 'Welcome',
+            subtitle: 'To Earth',
+          },
+          {
+            backgroundColor: '#fff',
+            image: (
+              <LottieView
+                style={{width: 500}}
+                source={require('../assets/anims/womanonphone.json')}
+                autoPlay
+                loop
+              />
+            ),
+            title: 'Also',
+            subtitle: 'Mars is nice',
+          },
+        ]}
+      />
+    );
+  }
 
-  //****** SUB COMPONENTS SECTION
   _renderSerenaHeader() {
     return (
       <Block center space={'between'} style={{top: '10%'}}>
@@ -91,40 +154,48 @@ class Login extends Component {
   }
 
   //****** HELPER FUNCTIONS SECTION
- async facebookLogin() {
-  try {
-    const result = await LoginManager.logInWithPermissions([
-      'public_profile',
-      'email',
-    ]);
+  async facebookLogin() {
+    try {
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+      ]);
 
-    if (result.isCancelled) {
-      // handle this however suites the flow of your app
-      // throw new Error('User cancelled request'); 
-      return null
+      if (result.isCancelled) {
+        // handle this however suites the flow of your app
+        // throw new Error('User cancelled request');
+        return null;
+      }
+
+      console.log(
+        `Login success with permissions: ${result.grantedPermissions.toString()}`,
+      );
+
+      // get the access token
+      const data = await AccessToken.getCurrentAccessToken();
+
+      if (!data) {
+        // handle this however suites the flow of your app
+        throw new Error(
+          'Something went wrong obtaining the users access token',
+        );
+      }
+
+      // create a new firebase credential with the token
+      const credential = firebase.auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+
+      // login with credential
+      const firebaseUserCredential = await firebase
+        .auth()
+        .signInWithCredential(credential);
+
+      console.log(JSON.stringify(firebaseUserCredential.user.toJSON()));
+    } catch (e) {
+      console.error(e);
     }
-
-    console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
-
-    // get the access token
-    const data = await AccessToken.getCurrentAccessToken();
-
-    if (!data) {
-      // handle this however suites the flow of your app
-      throw new Error('Something went wrong obtaining the users access token');
-    }
-
-    // create a new firebase credential with the token
-    const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
-
-    // login with credential
-    const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
-
-    console.log(JSON.stringify(firebaseUserCredential.user.toJSON()))
-  } catch (e) {
-    console.error(e);
   }
-}
 
   onLoginFail(err) {
     this.setState({err, loading: false});

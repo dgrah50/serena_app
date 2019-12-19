@@ -66,18 +66,18 @@ export default createBottomTabNavigator(
         ),
       },
     },
-    Notifications: {
-      screen: Notifications,
-      navigationOptions: {
-        tabBarLabel: 'Notifications',
-        tabBarIcon: ({tintColor}) => (
-          <Icon name="bell" size={25} color={tintColor} />
-        ),
-      },
-    },
+    // Notifications: {
+    //   screen: Notifications,
+    //   navigationOptions: {
+    //     tabBarLabel: 'Notifications',
+    //     tabBarIcon: ({tintColor}) => (
+    //       <Icon name="bell" size={25} color={tintColor} />
+    //     ),
+    //   },
+    // },
   },
   {
-    initialRouteName: 'Overview',
+    initialRouteName: 'Pray',
     tabBarComponent: props => <CustomTabBar {...props} />,
     tabBarOptions: {
       activeTintColor: theme.colors.white,

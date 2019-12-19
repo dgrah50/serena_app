@@ -8,16 +8,14 @@ import TrackPlayer, {
   usePlaybackState,
 } from 'react-native-track-player';
 
-
 const mocksong = {
-  title: 'The Only Peace: Part 3',
-  mp3link: '//mp3.sermonaudio.com/download/11301511845/11301511845.mp3',
-  speakerimg:
-    'https://media.sermonaudio.com/gallery/photos/thumbnails/CouchJon-01.PNG',
-  date_uploaded: 'MON 11/30/2015',
-  duration: ' 26 min',
-  author: 'Jon Couch',
-  plays: '140+ ',
+  title: ` `,
+  mp3link: null,
+  speakerimg: null,
+  date_uploaded: null,
+  duration: null,
+  author: null,
+  plays: null,
 };
 
 export default function App(props) {
@@ -26,32 +24,33 @@ export default function App(props) {
   const didMountRef = useRef(false);
 
   useEffect(() => {
-    TrackPlayer.setupPlayer().then(async () => {
-      // Adds a track to the queue
-      let url = currentSongData.mp3link;
-      url = url.replace(
-        '//mp3.sermonaudio.com/download/',
-        'https://mp3.sermonaudio.com/filearea/',
-      );
+    if (currentSongData.mp3link) {
+      TrackPlayer.setupPlayer().then(async () => {
+        // Adds a track to the queue
+        let url = currentSongData.mp3link;
+        url = url.replace(
+          '//mp3.sermonaudio.com/download/',
+          'https://mp3.sermonaudio.com/filearea/',
+        );
 
-      await TrackPlayer.add({
-        id: '1',
-        url: url,
-        title: currentSongData.title,
-        artist: currentSongData.author,
+        await TrackPlayer.add({
+          id: '1',
+          url: url,
+          title: currentSongData.title,
+          artist: currentSongData.author,
+        });
       });
-    });
+    }
   });
 
   useEffect(() => {
-  if (didMountRef.current){
-    TrackPlayer.reset().then(() => {
-      TrackPlayer.play();
-    });
-  } else {
-     didMountRef.current = true;
-  }
-
+    if (didMountRef.current) {
+      TrackPlayer.reset().then(() => {
+        TrackPlayer.play();
+      });
+    } else {
+      didMountRef.current = true;
+    }
   }, [currentSongData]);
 
   return (
@@ -77,7 +76,7 @@ export default function App(props) {
   }
 
   function changeSong(data) {
-    setCurrentSong(data)
+    setCurrentSong(data);
     // .then(() => {
     //   TrackPlayer.reset();
     // })

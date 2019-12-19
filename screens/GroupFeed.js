@@ -25,40 +25,62 @@ import {
   Activity,
   CommentBox,
   CommentList,
+  ReactionIcon,
+  ReactionToggleIcon,
+  ReactionIconBar
 } from 'react-native-activity-feed';
 var stream = require('getstream');
+const HeartIcon = require('../assets/icons/heart.png');
+const HeartIconOutline = require('../assets/icons/heart-outline.png');
+const ReplyIcon = require('../assets/icons/reply.png');
 
 const {width} = Dimensions.get('window');
 
-
 const CustomActivity = props => {
-  return (
-    
-      <Activity
-        {...props}
-        Footer={props => {
-          return (
-            <React.Fragment>
-              <CommentBox
-                onSubmit={text =>
-                  props.onAddReaction('comment', props.activity, {text: text})
-                }
-                avatarProps={{
-                  source: userData => userData.data.profileImage,
-                }}
-                styles={{container: {height: 78}}}
-              />
-              <CommentList
-                CommentItem={({comment}) => <CommentItem comment={comment} />}
-                activityId={activity.id}
-                reactions={activity.latest_reactions}
-              />
-            </React.Fragment>
-          );
-        }}
-      />
+  console.log(props)
+    _onPress = () => {
+      const {
+        activity,
+        reaction,
+        reactionKind,
+        onToggleReaction,
+        onToggleChildReaction,
+      } = this.props;
 
-    
+      if (reaction && onToggleChildReaction) {
+        return onToggleChildReaction(reactionKind, reaction, {}, {});
+      }
+      return onToggleReaction(reactionKind, activity, {}, {});
+    };
+  return (
+    <Activity
+      {...props}
+      Footer={
+        <View style={{paddingBottom: 15, paddingLeft: 15, paddingRight: 15}}>
+          <ReactionIconBar>
+            <ReactionToggleIcon
+              {...props}
+              activeIcon={HeartIcon}
+              inactiveIcon={HeartIconOutline}
+              kind={'like'}
+              counts={props.activity.reaction_counts}
+              width={24}
+              height={24}
+              labelSingle="like"
+              labelPlural="likes"
+              onPress={this._onPress}
+            />
+            <ReactionIcon
+              icon={ReplyIcon}
+              counts={props.activity.reaction_counts}
+              kind={'comment'}
+              width={24}
+              height={24}
+            />
+          </ReactionIconBar>
+        </View>
+      }
+    />
   );
 };
 
@@ -97,7 +119,7 @@ export default class GroupFeed extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, paddingTop: '10%'}}>
+      <View style={styles.welcome}>
         {!this.state.loading && (
           <StreamApp
             apiKey="zgrr2ez3h3yz"

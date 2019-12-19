@@ -140,9 +140,9 @@ export default class Overview extends Component {
                 You're on a 4 day streak, keep it up!
               </Text>
             </Block>
-            <Block row right>
+            {/* <Block row right>
               <Icon name="quote-right" size={42} color="black" />
-            </Block>
+            </Block> */}
           </Block>
         </Card>
       </TouchableOpacity>
@@ -153,7 +153,7 @@ export default class Overview extends Component {
       <Card
         shadow
         style={{
-          margin: 10,
+          marginRight: 30,
           width: 150,
           height: 150,
           padding: 0,
@@ -199,7 +199,7 @@ export default class Overview extends Component {
         center
         middle
         style={{
-          margin: 10,
+          marginRight: 30,
           width: 150,
           height: 150,
           padding: 5,
@@ -240,12 +240,12 @@ export default class Overview extends Component {
         <Text h3 spacing={1} style={{marginVertical: 8}}>
           Recommended For You
         </Text>
-        <Block style={{height: 180}}>
+        <Block>
           <Carousel
             data={mocks.sermons}
             renderItem={this._renderSermon.bind(this)}
             sliderWidth={width}
-            itemWidth={width * 0.4}
+            itemWidth={width * 0.45}
             inactiveSlideScale={1}
             inactiveSlideOpacity={0.8}
             enableMomentum={true}
@@ -273,7 +273,7 @@ export default class Overview extends Component {
               data={this.state.likes}
               renderItem={this._renderVOD.bind(this)}
               sliderWidth={width}
-              itemWidth={width * 0.4}
+              itemWidth={width * 0.45}
               inactiveSlideScale={1}
               inactiveSlideOpacity={0.8}
               enableMomentum={true}
