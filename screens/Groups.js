@@ -92,40 +92,53 @@ export default class Groups extends Component {
     this.state = {
       loading: true,
       token: null,
+      groups: [],
     };
-    firebase
-      .auth()
-      .currentUser.getIdToken()
-      .then(idToken => {
-        console.log(idToken);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+
     const response = null;
   }
 
   componentDidMount() {
-    axios
-      .post(
-        'http://localhost:8000/api/users/token',
-        qs.stringify({content: 'testUserID'}),
-      )
-      .then(res => {
-        this.setState({
-          loading: false,
-          token: res.data,
-        });
+    firebase
+      .auth()
+      .currentUser.getIdToken()
+      .then(idToken => {
+        axios
+          .post(
+            'http://localhost:8000/api/users/token',
+            qs.stringify({content: idToken}),
+          )
+          .then(res => {
+            this.setState({
+              loading: false,
+              token: res.data,
+            });
+          });
+      })
+      .catch(error => {
+        console.log(error);
       });
+
+    let firestoreref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('Info')
+      .doc('groups');
+    firestoreref.get().then(res => {
+      this.setState({
+        groups: res.data().subscribed,
+      });
+    });
   }
 
-  _renderGroup = item => {
+  _renderGroup = (item,idx )=> {
     return (
       <TouchableOpacity
+        key={idx}
         onPress={() => {
-          
           this.props.navigation.navigate('GroupFeed', {
-            groupID: item.groupID,
+            groupID: item,
           });
         }}>
         <Card
@@ -136,7 +149,7 @@ export default class Groups extends Component {
           space={'between'}
           style={{paddingHorizontal: '5%', marginVertical: 0}}>
           <Block flex={false}>
-            <Image
+            {/* <Image
               resizeMode="contain"
               source={{
                 uri: item.imageURL,
@@ -148,14 +161,11 @@ export default class Groups extends Component {
                 borderRadius: 25,
                 resizeMode: 'contain',
               }}
-            />
+            /> */}
           </Block>
           <Block style={{paddingLeft: 20}}>
             <Text h3 bold>
-              {item.groupname}
-            </Text>
-            <Text blue caption>
-              {item.message}
+              {item}
             </Text>
           </Block>
           <Block flex={false}>
@@ -173,8 +183,8 @@ export default class Groups extends Component {
           <Input label={'Search for groups'} />
         </Card>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {mockMessages.map(item => {
-            return this._renderGroup(item);
+          {this.state.groups.map((currElement, index) => {
+            return this._renderGroup(currElement, index);
           })}
           <TouchableOpacity>
             <Card
@@ -193,9 +203,10 @@ export default class Groups extends Component {
               <Text h3>Create a new group</Text>
             </Card>
           </TouchableOpacity>
-          <TouchableOpacity onPress={ () =>{ 
-            firebase.auth().signOut()
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              firebase.auth().signOut();
+            }}>
             <Card
               center
               middle
@@ -239,7 +250,9 @@ export default class Groups extends Component {
   }
 
   render() {
-    return <View style={{flex: 1, paddingTop: '10%'}}>{this._renderGroups()}</View>;
+    return (
+      <View style={{flex: 1, paddingTop: '10%'}}>{this._renderGroups()}</View>
+    );
   }
 }
 
