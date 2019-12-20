@@ -5,14 +5,10 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import firebase from 'react-native-firebase';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Carousel from 'react-native-snap-carousel';
-import {Block, Badge, Card, Text} from '../components';
-import {styles as blockStyles} from '../components/Block';
-import {styles as cardStyles} from '../components/Card';
+import {Block, Card, Text} from '../components';
 import {theme, mocks, time} from '../constants';
 const {width} = Dimensions.get('window');
 
@@ -89,7 +85,7 @@ export default class Overview extends Component {
         });
       })
       .then(() => {
-        console.log(likesarray)
+        console.log(likesarray);
         this.setState({
           likes: likesarray.sort(
             (a, b) => parseFloat(b.time) - parseFloat(a.time),
@@ -98,33 +94,33 @@ export default class Overview extends Component {
       });
   }
 
- timeSince(date) {
+  timeSince(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
 
-  var seconds = Math.floor((new Date() - date) / 1000);
+    var interval = Math.floor(seconds / 31536000);
 
-  var interval = Math.floor(seconds / 31536000);
+    if (interval > 1) {
+      return interval + ' years';
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      return interval + ' months';
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+      return interval + ' days';
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+      return interval + ' hours';
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+      return interval + ' minutes';
+    }
+    return Math.floor(seconds) + ' seconds';
+  }
 
-  if (interval > 1) {
-    return interval + " years";
-  }
-  interval = Math.floor(seconds / 2592000);
-  if (interval > 1) {
-    return interval + " months";
-  }
-  interval = Math.floor(seconds / 86400);
-  if (interval > 1) {
-    return interval + " days";
-  }
-  interval = Math.floor(seconds / 3600);
-  if (interval > 1) {
-    return interval + " hours";
-  }
-  interval = Math.floor(seconds / 60);
-  if (interval > 1) {
-    return interval + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
-}
   //****** SUB COMPONENTS SECTION
   _renderVerseCard() {
     return (
@@ -200,36 +196,21 @@ export default class Overview extends Component {
         middle
         style={{
           marginRight: 30,
-          width: 150,
-          height: 150,
-          padding: 5,
+          width: width * 0.35,
+          height: width * 0.35,
+          padding: 10,
         }}>
-        <Block center>
-          <Text center gray numberOfLines={4}>
+        <Block center space={'between'}>
+          <Text center gray numberOfLines={3}>
             {item.verseText}
             {'\n'}
           </Text>
-          <Text black  center middle>
-             {item.bookText}
-            </Text>
-          <Text black caption center middle>
-            {this.timeSince(serverdate) + " ago"}
+          <Text title bold black center middle>
+            {item.bookText.split(' ').join('\n')}
           </Text>
-        </Block>
-
-        <Block
-          center
-          middle
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            height: '25%',
-            backgroundColor: 'white',
-            borderBottomLeftRadius: theme.sizes.border,
-            borderBottomRightRadius: theme.sizes.border,
-          }}>
-          <Text caption>{item.date}</Text>
+          <Text black light caption center middle>
+            {this.timeSince(serverdate) + ' ago'}
+          </Text>
         </Block>
       </Card>
     );

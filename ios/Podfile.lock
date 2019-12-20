@@ -400,11 +400,14 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - boost-for-react-native
     - BoringSSL-GRPC
     - Crashlytics
     - Fabric
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - FBSDKShareKit
     - Firebase
     - FirebaseABTesting
     - FirebaseAnalytics
@@ -434,10 +437,6 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - Protobuf
-  trunk:
-    - FBSDKCoreKit
-    - FBSDKLoginKit
-    - FBSDKShareKit
 
 EXTERNAL SOURCES:
   BVLinearGradient:

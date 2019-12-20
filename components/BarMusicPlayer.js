@@ -29,11 +29,11 @@ function BarMusicPlayer(props) {
   const iconPlay = playbackState != 'playing' ? 'play-circle' : 'pause-circle';
   const favoriteColor = theme.colors.white;
   const favoriteIcon = 'heart';
-
+  console.log(song);
   // const favoriteColor = favorited ? theme.colors.white : theme.colors.white;
   // const favoriteIcon = favorited ? 'heart' : 'heart-o';
 
-  return (
+  return song.mp3link ? (
     <TouchableOpacity
       activeOpacity={1}
       onPress={() => navigation.navigate('Player')}
@@ -47,20 +47,19 @@ function BarMusicPlayer(props) {
       </TouchableOpacity>
       {song && (
         <Block flex row center middle style={styles.containerSong}>
-          <Text white h3>{`${song.title} · `}</Text>
-          <Text white h3>
-            {song.artist}
-          </Text>
+          <Text center middle white h3>{`${song.title} · ${song.author} `}</Text>
         </Block>
       )}
       <TouchableOpacity
         // activeOpacity={gStyle.activeOpacity}
         hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
         onPress={togglePlay}
-        style={styles.containerIcon}>
+        style={(styles.containerIcon, {justifyContent: 'flex-end'})}>
         <Icon color={theme.colors.white} name={iconPlay} size={28} />
       </TouchableOpacity>
     </TouchableOpacity>
+  ) : (
+    <React.Fragment></React.Fragment>
   );
 }
 
@@ -92,7 +91,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   containerIcon: {
-    width: 50,
+    // width: 50,
   },
   containerSong: {
     overflow: 'hidden',

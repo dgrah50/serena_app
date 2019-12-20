@@ -2,26 +2,22 @@ import React, {useState, useEffect} from 'react';
 import {
   Dimensions,
   Image,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
   View,
-  Easing,
+  TouchableOpacity,
 } from 'react-native';
-import rgba from 'hex-to-rgba';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Block, Badge, Card, Text, Controls} from '../components';
-import {styles as blockStyles} from '../components/Block';
-import {styles as cardStyles} from '../components/Card';
-import {theme, mocks, time, emotions} from '../constants';
+import {Block, Text, Card} from '../components';
+import {theme} from '../constants';
 import TrackPlayer, {
   useProgress,
-  State,
   usePlaybackState,
 } from 'react-native-track-player';
 import Slider from 'react-native-slider';
+import LottieView from 'lottie-react-native';
 
-const {width, height} = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 export default function Player(props) {
   const {navigation, screenProps} = props;
@@ -35,12 +31,24 @@ export default function Player(props) {
       style={{
         width: '100%',
         flex: 1,
-        backgroundColor: theme.colors.black,
+        backgroundColor: theme.colors.gray3,
       }}>
+      <LottieView
+        style={{
+          width: width * 2.3,
+          height: width * 2.3,
+          alignSelf: 'center',
+          position: 'absolute',
+        }}
+        source={require('../assets/anims/wave.json')}
+        autoPlay
+        speed={0.4}
+        loop
+      />
       {_renderHeader()}
       {_renderAlbumArt(currentSongData.speakerimg)}
-      {_renderProgressBar()}
-      {_renderPlayBackControls()}
+      {_renderControlCard()}
+      {_renderFooter()}
     </Block>
   );
 
@@ -53,7 +61,6 @@ export default function Player(props) {
         center
         style={{
           width: '40%',
-          height: '10%',
           flexDirection: 'row',
           marginHorizontal: '10%',
           justifyContent: 'space-between',
@@ -80,38 +87,40 @@ export default function Player(props) {
   function _renderAlbumArt(url) {
     // url = url.replace('{size}', 500).replace('{size}', 500);
     return (
-      <Block
+      <Card
+        shadow
         flex={false}
         style={{
-          width: '100%',
-          height: '50%',
+          backgroundColor: theme.colors.black,
+          marginHorizontal: '5%',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
         <Block
           flex={false}
           style={{
-            alignItems: 'center',
+            alignItems: 'flex-start',
           }}>
           <Image
             style={{
-              width: width * 0.9,
-              height: width * 0.9,
+              width: width * 0.3,
+              height: width * 0.3,
+              shadowColor: 'black',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+
+              elevation: 5,
             }}
             source={{uri: url}}
           />
-
-          <Text left white h2 style={{paddingTop: 20}}>
-            {currentSongData.title}
-          </Text>
-          <Text white title>
-            {currentSongData.author}
-          </Text>
         </Block>
-      </Block>
+      </Card>
     );
   }
-
   function _renderProgressBar() {
     const progress = useProgress();
     const playbackState = usePlaybackState();
@@ -164,32 +173,70 @@ export default function Player(props) {
       </Block>
     );
   }
-
   function _renderHeader() {
     return (
-      <Block
-        flex={false}
-        middle
-        center
-        style={{
-          height: '10%',
-          top: '5%',
-          paddingHorizontal: '5%',
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack(null)}
+      <TouchableOpacity onPress={() => navigation.goBack(null)}>
+        <Card
+          flex={false}
+          center
+          middle
+          shadow
           style={{
-            left: 20,
-            position: 'absolute',
+            marginTop: height * 0.1,
+            marginHorizontal: '5%',
+            backgroundColor: theme.colors.black,
+            flexDirection: 'row',
           }}>
-          <Icon color={theme.colors.white} name="chevron-down" size={20} />
-        </TouchableOpacity>
-        <Text white h3>
+          <Block style={{position: 'absolute', top: 10, left: 10}}>
+            <Icon color={theme.colors.white} name="chevron-down" size={20} />
+          </Block>
+
+          <Text center bold middle h3 white>
+            {currentSongData.title}
+          </Text>
+        </Card>
+      </TouchableOpacity>
+    );
+  }
+  function _renderFooter() {
+    return (
+      <TouchableOpacity onPress={() => navigation.goBack(null)}>
+        <Card
+          flex={false}
+          center
+          middle
+          shadow
+          style={{
+            marginTop: height * 0.1,
+            marginHorizontal: '5%',
+            backgroundColor: theme.colors.black,
+            flexDirection: 'row',
+          }}>
+          <Text center middle h3 white>
+            Powered by Serena
+          </Text>
+        </Card>
+      </TouchableOpacity>
+    );
+  }
+  function _renderControlCard() {
+    return (
+      <Card
+        style={{
+          backgroundColor: theme.colors.black,
+          marginHorizontal: width * 0.05,
+        }}
+        flex={false}
+        shadow>
+        <Text left white h2 style={{paddingTop: 20}}>
           {currentSongData.title}
         </Text>
-      </Block>
+        <Text white title>
+          {currentSongData.author}
+        </Text>
+        {_renderProgressBar()}
+        {_renderPlayBackControls()}
+      </Card>
     );
   }
 

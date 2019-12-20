@@ -20,5 +20,6 @@
         "package.json": true,
         "README.md": true,
         "yarn.lock": true
-    }
+    },
+    "editor.fontSize": 13
 }
