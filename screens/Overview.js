@@ -13,37 +13,7 @@ import {theme, mocks, time} from '../constants';
 const {width} = Dimensions.get('window');
 
 export default class Overview extends Component {
-  static navigationOptions = {
-    headerLeft: (
-      <Block left style={{paddingLeft: 10}}>
-        <Text gray style={theme.fonts.title}>
-          {time.DateNow.weekday}
-          {', '}
-          <Text style={theme.fonts.title}>
-            {time.DateNow.month} {time.DateNow.date}
-          </Text>
-        </Text>
-      </Block>
-    ),
-    headerTitle: (
-      <Image
-        style={{width: 30, height: 30}}
-        source={require('../assets/images/icon.png')}
-      />
-    ),
-    headerRight: (
-      <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('Groups')}>
-        <Block flex={false}>
-          <Image
-            resizeMode="contain"
-            source={require('../assets/images/Icon/Menu.png')}
-            style={{width: 45, height: 18, paddingRight: 40}}
-          />
-        </Block>
-      </TouchableOpacity>
-    ),
-  };
+ 
 
   constructor(props) {
     super(props);

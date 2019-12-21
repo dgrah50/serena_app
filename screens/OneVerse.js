@@ -19,31 +19,7 @@ import {Bars} from 'react-native-loader';
 const {width} = Dimensions.get('window');
 
 export default class OneVerse extends Component {
-  static navigationOptions = {
-    headerLeft: (
-      <Block left style={{paddingLeft: 10}}>
-        <Text gray style={theme.fonts.title}>
-          {time.DateNow.weekday}
-          {', '}
-          <Text style={theme.fonts.title}>
-            {time.DateNow.month} {time.DateNow.date}
-          </Text>
-        </Text>
-      </Block>
-    ),
-    headerRight: (
-      <TouchableOpacity>
-        <Block flex={false}>
-          <Image
-            resizeMode="contain"
-            source={require('../assets/images/Icon/Menu.png')}
-            style={{width: 45, height: 18, paddingRight: 40}}
-          />
-        </Block>
-      </TouchableOpacity>
-    ),
-  };
-
+ 
   constructor(props) {
     super(props);
     this.state = {

@@ -17,7 +17,7 @@ export default function GroupFeed(props) {
   const onpresscomment = (id, act) => {
     props.navigation.navigate('SinglePostScreen', {
       activity: act,
-      feedGroup: act.feedGroup,
+      feedGroup: props.navigation.getParam('groupID'),
     });
   };
   const CustomActivity = props => {
