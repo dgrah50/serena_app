@@ -1,12 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   Image,
   StyleSheet,
-  View,
   TouchableOpacity,
 } from 'react-native';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Block, Text, Card} from '../components';
 import {theme} from '../constants';
@@ -22,7 +20,6 @@ const {height, width} = Dimensions.get('window');
 export default function Player(props) {
   const {navigation, screenProps} = props;
   const {currentSongData} = screenProps;
-  const [favorited, setFavorited] = useState(false);
   const playbackState = usePlaybackState();
   const iconPlay = playbackState != 'playing' ? 'play-circle' : 'pause-circle';
 

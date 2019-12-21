@@ -8,6 +8,7 @@ import Overview from '../screens/Overview';
 import OneVerse from '../screens/OneVerse';
 import Groups from '../screens/Groups';
 import GroupFeed from '../screens/GroupFeed';
+import SinglePostScreen from '../screens/SinglePostScreen';
 import CreateGroup from '../screens/CreateGroup';
 import Notifications from '../screens/Notifications';
 import Fetch from '../screens/Fetch';
@@ -53,6 +54,9 @@ export default createBottomTabNavigator(
           },
           GroupFeed: {
             screen: GroupFeed,
+          },
+          SinglePostScreen: {
+            screen: SinglePostScreen,
           },
           CreateGroup: {
             screen: CreateGroup,
