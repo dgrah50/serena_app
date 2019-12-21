@@ -17,6 +17,7 @@ const {width} = Dimensions.get('window');
 function BarMusicPlayer(props) {
   const playbackState = usePlaybackState();
 
+
   function togglePlay() {
     if (playbackState == 'playing') {
       TrackPlayer.pause();
@@ -29,7 +30,6 @@ function BarMusicPlayer(props) {
   const iconPlay = playbackState != 'playing' ? 'play-circle' : 'pause-circle';
   const favoriteColor = theme.colors.white;
   const favoriteIcon = 'heart';
-  console.log(song);
   // const favoriteColor = favorited ? theme.colors.white : theme.colors.white;
   // const favoriteIcon = favorited ? 'heart' : 'heart-o';
 
