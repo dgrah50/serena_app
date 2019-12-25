@@ -19,6 +19,7 @@ export default function App(props) {
   const [currentSongData, setCurrentSong] = useState(mocksong);
   const [StreamToken, setStreamToken] = useState(null);
   const [tabBarVisible, showTabBar] = useState(false);
+  const [recommendedVerses, setRecs] = useState(null);
   const didMountRef = useRef(false);
   useEffect(() => {
     if (currentSongData.mp3link) {
@@ -57,9 +58,22 @@ export default function App(props) {
         qs.stringify({content: firebase.auth().currentUser.uid}),
       )
       .then(res => {
-        console.log(res.data)
         setStreamToken(res.data);
       });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .post(
+        'http://localhost:8000/api/verses/recs',
+        qs.stringify({content: firebase.auth().currentUser.uid}),
+      )
+      .then(res => {
+        console.log(res.data)
+        setRecs(res.data);
+      }).catch((err)=>{
+        console.log(err)
+      })
   }, []);
 
   return (
@@ -69,7 +83,8 @@ export default function App(props) {
         screenProps={{
           currentSongData,
           StreamToken,
-          changeSong: changeSong,
+          recommendedVerses,
+          changeSong: setCurrentSong,
           setToggleTabBar: setToggleTabBar,
         }}
       />
@@ -85,28 +100,6 @@ export default function App(props) {
     }
   }
 
-  function changeSong(data) {
-    setCurrentSong(data);
-    // .then(() => {
-    //   TrackPlayer.reset();
-    // })
-    // .then(() => {
-    //   let url = currentSongData.mp3link;
-    //   url = url.replace(
-    //     '//mp3.sermonaudio.com/download/',
-    //     'https://mp3.sermonaudio.com/filearea/',
-    //   );
-    //   TrackPlayer.add({
-    //     id: '1',
-    //     url: url,
-    //     title: currentSongData.title,
-    //     artist: currentSongData.author,
-    //   });
-    // })
-    // .then(() => {
-    //   TrackPlayer.play();
-    // });
-  }
 }
 
 const styles = StyleSheet.create({

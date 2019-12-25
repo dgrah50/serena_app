@@ -5,18 +5,16 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  View,
   Share,
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Block, Badge, Card, Text} from '../components';
-import {styles as blockStyles} from '../components/Block';
-import {styles as cardStyles} from '../components/Card';
-import {theme, mocks, time} from '../constants';
+import {Block, Card, Text} from '../components';
+
+import {theme} from '../constants';
 import {Bars} from 'react-native-loader';
 
-const {width} = Dimensions.get('window');
+
 
 export default class OneVerse extends Component {
  
@@ -29,7 +27,6 @@ export default class OneVerse extends Component {
   }
 
   componentDidMount() {
-    let query = this.props.navigation.getParam('response').keyword;
     this.setState({
       sermons: this.props.navigation.getParam('response').sermons.current,
     });

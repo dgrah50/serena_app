@@ -3,19 +3,12 @@ import axios from 'axios';
 import qs from 'qs';
 import {
   Dimensions,
-  Image,
-  ScrollView,
   StyleSheet,
-  TouchableOpacity,
-  View,
   KeyboardAvoidingView,
 } from 'react-native';
 import rgba from 'hex-to-rgba';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import {Block, Button, Badge, Card, Text, Input} from '../components';
-import {styles as blockStyles} from '../components/Block';
-import {styles as cardStyles} from '../components/Card';
 import {theme, mocks, time} from '../constants';
 import firebase from 'react-native-firebase';
 
@@ -77,6 +70,22 @@ export default class CreateGroup extends Component {
           backgroundColor: theme.colors.gray3,
         }}
         keyboardVerticalOffset={height * 0.2}>
+        <Block center row middle flex={false} style={{height: height * 0.15}}>
+          <Icon
+            onPress={() => {
+              props.navigation.goBack();
+            }}
+            style={{position: 'absolute', left: 20}}
+            hitSlo
+            name="chevron-left"
+            size={25}
+            color="black"
+          />
+
+          <Text center middle h2 black>
+            Create a Group
+          </Text>
+        </Block>
         {this._renderInputAndButtons()}
       </KeyboardAvoidingView>
     );
@@ -88,7 +97,6 @@ export default class CreateGroup extends Component {
       <Block center style={{marginTop: 44}}>
         <Input
           full
-          email
           label="Group Name"
           style={{
             marginBottom: 25,
@@ -99,7 +107,6 @@ export default class CreateGroup extends Component {
         />
         <Input
           full
-          password
           label="Group Description"
           style={{
             marginBottom: 25,
@@ -137,10 +144,15 @@ export default class CreateGroup extends Component {
     });
   };
 
-  onLoginPress() {
+  createNewGroup() {
     let firestoreref = firebase.firestore().collection('groups');
-    firestoreref.get().then(res => {
-      console.log(res.data());
+    firestoreref.get().then(snapshot => {
+          console.log(snapshot.docs)
+      // if (res.data.indexOf(this.state.groupName) >= 0) {
+      //   Alert.alert(err, 'Try again!', [{text: 'OK'}], {
+      //     cancelable: false,
+      //   });
+      // }
     });
   }
 }

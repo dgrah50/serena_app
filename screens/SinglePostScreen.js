@@ -10,7 +10,7 @@ import {
   LikeList,
   LikeButton,
   CommentBox,
-  CommentItem
+  CommentItem,
 } from 'react-native-activity-feed';
 const {height, width} = Dimensions.get('window');
 import Icon from 'react-native-vector-icons/FontAwesome';

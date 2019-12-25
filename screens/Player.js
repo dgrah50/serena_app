@@ -30,7 +30,7 @@ export default function Player(props) {
         flex: 1,
         backgroundColor: theme.colors.gray3,
       }}>
-      <LottieView
+      {/* <LottieView
         style={{
           width: width * 2.3,
           height: width * 2.3,
@@ -41,7 +41,7 @@ export default function Player(props) {
         autoPlay
         speed={0.4}
         loop
-      />
+      /> */}
       {_renderHeader()}
       {_renderAlbumArt(currentSongData.speakerimg)}
       {_renderControlCard()}
@@ -65,17 +65,17 @@ export default function Player(props) {
           alignSelf: 'center',
         }}>
         <TouchableOpacity>
-          <Icon color={theme.colors.white} name="step-backward" size={30} />
+          <Icon color={theme.colors.black} name="step-backward" size={30} />
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {
             togglePlay();
           }}>
-          <Icon color={theme.colors.white} name={iconPlay} size={60} />
+          <Icon color={theme.colors.black} name={iconPlay} size={60} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Icon color={theme.colors.white} name="step-forward" size={30} />
+          <Icon color={theme.colors.black} name="step-forward" size={30} />
         </TouchableOpacity>
       </Block>
     );
@@ -88,7 +88,7 @@ export default function Player(props) {
         shadow
         flex={false}
         style={{
-          backgroundColor: theme.colors.black,
+          backgroundColor: theme.colors.gray4,
           marginHorizontal: '5%',
           justifyContent: 'center',
           alignItems: 'center',
@@ -151,17 +151,17 @@ export default function Player(props) {
           value={progress.position}
           minimumTrackTintColor={theme.colors.gray4}
           maximumTrackTintColor={theme.colors.gray}
-          thumbTintColor={theme.colors.white}
+          thumbTintColor={theme.colors.black}
           onSlidingComplete={(value: number) => TrackPlayer.seekTo(value)}
         />
 
         <Block row space={'between'} flex={false}>
           {playbackState != 'buffering' && playbackState != 'loading' && (
             <React.Fragment>
-              <Text caption white>
+              <Text caption black>
                 {convertToMinutes(progress.position)}
               </Text>
-              <Text caption white>
+              <Text caption black>
                 {convertToMinutes(progress.duration)}
               </Text>
             </React.Fragment>
@@ -181,14 +181,14 @@ export default function Player(props) {
           style={{
             marginTop: height * 0.1,
             marginHorizontal: '5%',
-            backgroundColor: theme.colors.black,
+            backgroundColor: theme.colors.gray4,
             flexDirection: 'row',
           }}>
-          <Block style={{position: 'absolute', top: 10, left: 10}}>
-            <Icon color={theme.colors.white} name="chevron-down" size={20} />
+          <Block style={{position: 'absolute', top: 10, left: 10, margin:10}}>
+            <Icon color={theme.colors.black} name="chevron-down" size={20} />
           </Block>
 
-          <Text center bold middle h3 white>
+          <Text center bold middle h3 black>
             {currentSongData.title}
           </Text>
         </Card>
@@ -206,10 +206,10 @@ export default function Player(props) {
           style={{
             marginTop: height * 0.1,
             marginHorizontal: '5%',
-            backgroundColor: theme.colors.black,
+            backgroundColor: theme.colors.gray4,
             flexDirection: 'row',
           }}>
-          <Text center middle h3 white>
+          <Text center middle h3 black>
             Powered by Serena
           </Text>
         </Card>
@@ -220,15 +220,15 @@ export default function Player(props) {
     return (
       <Card
         style={{
-          backgroundColor: theme.colors.black,
+          backgroundColor: theme.colors.gray4,
           marginHorizontal: width * 0.05,
         }}
         flex={false}
         shadow>
-        <Text left white h2 style={{paddingTop: 20}}>
+        <Text center middle black h3 style={{paddingTop: 20}}>
           {currentSongData.title}
         </Text>
-        <Text white title>
+        <Text black title center middle>
           {currentSongData.author}
         </Text>
         {_renderProgressBar()}
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'black',
   },
   slider: {
     marginTop: -12,

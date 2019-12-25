@@ -9,12 +9,10 @@ import {
 import firebase from 'react-native-firebase';
 import Carousel from 'react-native-snap-carousel';
 import {Block, Card, Text} from '../components';
-import {theme, mocks, time} from '../constants';
+import {theme, mocks} from '../constants';
 const {width} = Dimensions.get('window');
 
 export default class Overview extends Component {
- 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -115,46 +113,53 @@ export default class Overview extends Component {
     );
   }
   _renderSermon({item, index}) {
+    const changeSong = this.props.screenProps.changeSong;
     return (
-      <Card
-        shadow
-        style={{
-          marginRight: 30,
-          width: 150,
-          height: 150,
-          padding: 0,
+      <TouchableOpacity
+        onPress={() => {
+          this.props.navigation.navigate('Player', {
+            sermon: item,
+          });
+          changeSong(item);
         }}>
-        <Image
+        <Card
+          shadow
           style={{
-            width: '100%',
-            height: '100%',
-            borderRadius: theme.sizes.border,
-          }}
-          resizeMode="cover"
-          source={{
-            uri: item.speaker.albumArtURL
-              .replace('{size}', 200)
-              .replace('{size}', 200),
-          }}
-        />
-        <Block
-          center
-          middle
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            width: '100%',
-            height: '25%',
-            paddingHorizontal: '10%',
-            backgroundColor: 'white',
-            borderBottomLeftRadius: theme.sizes.border,
-            borderBottomRightRadius: theme.sizes.border,
+            marginRight: 30,
+            width: 150,
+            height: 150,
+            padding: 0,
           }}>
-          <Text black center caption>
-            {item.fullTitle}
-          </Text>
-        </Block>
-      </Card>
+          <Image
+            style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: theme.sizes.border,
+            }}
+            resizeMode="cover"
+            source={{
+              uri: item.speakerimg,
+            }}
+          />
+          <Block
+            center
+            middle
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              width: '100%',
+              height: '25%',
+              paddingHorizontal: '10%',
+              backgroundColor: 'white',
+              borderBottomLeftRadius: theme.sizes.border,
+              borderBottomRightRadius: theme.sizes.border,
+            }}>
+            <Text black center caption>
+              {item.title}
+            </Text>
+          </Block>
+        </Card>
+      </TouchableOpacity>
     );
   }
   _renderVOD({item, index}) {
@@ -186,6 +191,8 @@ export default class Overview extends Component {
     );
   }
   _renderRecommendations() {
+    const sermonRecs = this.props.screenProps.recommendedVerses.sermons
+      .nextrecs;
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>
@@ -193,7 +200,7 @@ export default class Overview extends Component {
         </Text>
         <Block>
           <Carousel
-            data={mocks.sermons}
+            data={sermonRecs}
             renderItem={this._renderSermon.bind(this)}
             sliderWidth={width}
             itemWidth={width * 0.45}
@@ -285,15 +292,5 @@ const styles = StyleSheet.create({
     marginVertical: theme.sizes.base,
     marginHorizontal: theme.sizes.base * 2,
     height: 1,
-  },
-  // vertical line
-  vLine: {
-    marginVertical: theme.sizes.base / 2,
-    width: 1,
-  },
-  navbar: {
-    position: 'absolute',
-    width: width,
-    bottom: '5%',
   },
 });
