@@ -5,14 +5,12 @@ import {
   Dimensions,
   StyleSheet,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
-import rgba from 'hex-to-rgba';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Block, Button, Badge, Card, Text, Input} from '../components';
-import {theme, mocks, time} from '../constants';
+import {Block, Button, Text, Input} from '../components';
+import {theme} from '../constants';
 import firebase from 'react-native-firebase';
-
-var stream = require('getstream');
 
 const {height, width} = Dimensions.get('window');
 
@@ -22,58 +20,18 @@ export default class CreateGroup extends Component {
     this.state = {
       groupName: null,
       groupDesc: null,
+      creationResult: null,
     };
   }
 
-  componentDidMount() {
-    firebase
-      .auth()
-      .currentUser.getIdToken()
-      .then(idToken => {
-        axios
-          .post(
-            'http://localhost:8000/api/users/token',
-            qs.stringify({content: idToken}),
-          )
-          .then(res => {
-            this.setState({
-              loading: false,
-              token: res.data,
-            });
-          });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-    let firestoreref = firebase
-      .firestore()
-      .collection('users')
-      .doc(firebase.auth().currentUser.uid)
-      .collection('Info')
-      .doc('groups');
-    firestoreref.get().then(res => {
-      this.setState({
-        groups: res.data().subscribed,
-      });
-    });
-  }
 
   render() {
     return (
-      <KeyboardAvoidingView
-        enabled
-        behavior="padding"
-        style={{
-          flex: 1,
-          paddingTop: height * 0.2,
-          backgroundColor: theme.colors.gray3,
-        }}
-        keyboardVerticalOffset={height * 0.2}>
-        <Block center row middle flex={false} style={{height: height * 0.15}}>
+      <Block style={styles.home}>
+        <Block center row middle flex={false}>
           <Icon
             onPress={() => {
-              props.navigation.goBack();
+              this.props.navigation.goBack();
             }}
             style={{position: 'absolute', left: 20}}
             hitSlo
@@ -87,7 +45,7 @@ export default class CreateGroup extends Component {
           </Text>
         </Block>
         {this._renderInputAndButtons()}
-      </KeyboardAvoidingView>
+      </Block>
     );
   }
 
@@ -108,6 +66,7 @@ export default class CreateGroup extends Component {
         <Input
           full
           label="Group Description"
+          multiline={true}
           style={{
             marginBottom: 25,
             color: theme.colors.black,
@@ -145,19 +104,51 @@ export default class CreateGroup extends Component {
   };
 
   createNewGroup() {
-    let firestoreref = firebase.firestore().collection('groups');
-    firestoreref.get().then(snapshot => {
-          console.log(snapshot.docs)
-      // if (res.data.indexOf(this.state.groupName) >= 0) {
-      //   Alert.alert(err, 'Try again!', [{text: 'OK'}], {
-      //     cancelable: false,
-      //   });
-      // }
-    });
+    if (!this.state.groupName || !this.state.groupDesc) {
+      Alert.alert('Incomplete details entered ', 'Try again!', [{text: 'OK'}], {
+        cancelable: false,
+      });
+    }
+    axios
+      .post(
+        'http://localhost:8000/api/groups/create',
+        qs.stringify({
+          userID: firebase.auth().currentUser.uid.toString(),
+          groupName: this.state.groupName,
+          groupDesc: this.state.groupDesc,
+        }),
+      )
+      .then(res => {
+        console.log(res);
+        if (res.data == 'group already exists') {
+          Alert.alert('Group already exists', 'Try again!', [{text: 'OK'}], {
+            cancelable: false,
+          });
+        } else if (res.data == 'Success') {
+          Alert.alert(
+            'Group created',
+            'Success',
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  this.props.navigation.navigate('Groups');
+                },
+              },
+            ],
+            {
+              cancelable: false,
+            },
+          );
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 }
 const styles = StyleSheet.create({
-  welcome: {
+  home: {
     paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
