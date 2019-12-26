@@ -1,7 +1,8 @@
-import React, {Component, useRef, useState} from 'react';
-import {Dimensions, StyleSheet, View, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import {Text, Block} from '../components';
 import {theme} from '../constants';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   StreamApp,
   FlatFeed,
@@ -10,6 +11,7 @@ import {
   Activity,
   ReactionIcon,
 } from 'react-native-activity-feed';
+import firebase from 'react-native-firebase';
 const ReplyIcon = require('../assets/icons/chat.png');
 const {height, width} = Dimensions.get('window');
 
@@ -51,6 +53,19 @@ export default function GroupFeed(props) {
     );
   };
 
+  const [bio, setBio] = useState(null);
+
+  useEffect(() => {
+    let firestoreref = firebase
+      .firestore()
+      .collection('groups')
+      .doc(props.navigation.getParam('groupID'));
+
+    firestoreref.get().then(res => {
+      setBio(res.data().bio);
+    });
+  }, []);
+
   return (
     <View style={styles.welcome}>
       <StreamApp
@@ -58,9 +73,19 @@ export default function GroupFeed(props) {
         appId="65075"
         token={props.screenProps.StreamToken}>
         <Block center middle flex={false} style={{height: height * 0.15}}>
-          <Text center middle h2 black>
+          <Icon
+            onPress={() => {
+              props.navigation.goBack();
+            }}
+            style={{position: 'absolute', left: 20}}
+            name="chevron-left"
+            size={25}
+            color="black"
+          />
+          <Text center middle h2 black style={{paddingBottom:20}}>
             {props.navigation.getParam('groupID')}
           </Text>
+          <Text>{bio}</Text>
         </Block>
         <View>
           <StatusUpdateForm

@@ -84,7 +84,8 @@ export default class Groups extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, paddingTop: '10%'}}>{this._renderGroups()}</View>
+      <View style={{flex: 1, paddingTop: '10%'}}>
+      {this._renderGroups()}</View>
     );
   }
 
@@ -152,10 +153,12 @@ export default class Groups extends Component {
             onChangeTextHandler={this.searchGroupHandler}
           />
         </Card>
+        <Block style={{paddingLeft: 20}}>
+          <Text h3>Your Serena Groups</Text>
+        </Block>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{
-            paddingTop: 20,
             marginHorizontal: width * 0.05,
           }}>
           {this.state.searching

@@ -34,7 +34,6 @@ export default class CreateGroup extends Component {
               this.props.navigation.goBack();
             }}
             style={{position: 'absolute', left: 20}}
-            hitSlo
             name="chevron-left"
             size={25}
             color="black"
