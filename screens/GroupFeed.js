@@ -60,7 +60,6 @@ export default function GroupFeed(props) {
       .firestore()
       .collection('groups')
       .doc(props.navigation.getParam('groupID'));
-
     firestoreref.get().then(res => {
       setBio(res.data().bio);
     });

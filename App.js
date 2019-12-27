@@ -52,28 +52,33 @@ export default function App(props) {
   }, [currentSongData]);
 
   useEffect(() => {
-    axios
-      .post(
-        'http://localhost:8000/api/users/token',
-        qs.stringify({content: firebase.auth().currentUser.uid}),
-      )
-      .then(res => {
-        setStreamToken(res.data);
-      });
+    if (firebase.auth().currentUser) {
+      axios
+        .post(
+          'http://localhost:8000/api/users/token',
+          qs.stringify({content: firebase.auth().currentUser.uid}),
+        )
+        .then(res => {
+          setStreamToken(res.data);
+        });
+    }
   }, []);
 
   useEffect(() => {
-    axios
-      .post(
-        'http://localhost:8000/api/verses/recs',
-        qs.stringify({content: firebase.auth().currentUser.uid}),
-      )
-      .then(res => {
-        console.log(res.data)
-        setRecs(res.data);
-      }).catch((err)=>{
-        console.log(err)
-      })
+    if (firebase.auth().currentUser) {
+      axios
+        .post(
+          'http://localhost:8000/api/verses/recs',
+          qs.stringify({content: firebase.auth().currentUser.uid}),
+        )
+        .then(res => {
+          console.log(res.data);
+          setRecs(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
@@ -99,7 +104,6 @@ export default function App(props) {
       showTabBar(true);
     }
   }
-
 }
 
 const styles = StyleSheet.create({

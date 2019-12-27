@@ -9,7 +9,7 @@ import {
 import firebase from 'react-native-firebase';
 import Carousel from 'react-native-snap-carousel';
 import {Block, Card, Text} from '../components';
-import {theme, mocks} from '../constants';
+import {theme} from '../constants';
 const {width} = Dimensions.get('window');
 
 export default class Overview extends Component {
@@ -191,8 +191,12 @@ export default class Overview extends Component {
     );
   }
   _renderRecommendations() {
-    const sermonRecs = this.props.screenProps.recommendedVerses.sermons
-      .nextrecs;
+    const sermonRecs = null;
+    try {
+      sermonRecs = this.props.screenProps.recommendedVerses.sermons.nextrecs;
+    } catch (error) {
+      console.log(error);
+    }
     return (
       <Block>
         <Text h3 spacing={1} style={{marginVertical: 8}}>

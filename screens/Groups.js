@@ -85,7 +85,9 @@ export default class Groups extends Component {
   render() {
     return (
       <View style={{flex: 1, paddingTop: '10%'}}>
-      {this._renderGroups()}</View>
+        {this._renderGroups()}
+        {this._renderLogoutButton()}
+      </View>
     );
   }
 
