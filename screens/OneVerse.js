@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  Dimensions,
   Image,
   ScrollView,
   StyleSheet,
@@ -10,11 +9,8 @@ import {
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Block, Card, Text} from '../components';
-
 import {theme} from '../constants';
 import {Bars} from 'react-native-loader';
-
-
 
 export default class OneVerse extends Component {
  
@@ -110,9 +106,9 @@ export default class OneVerse extends Component {
       <TouchableOpacity
         key={idx}
         onPress={() => {
-        //   this.props.navigation.navigate('Player', {
-        //     sermon: item,
-        //   });
+          this.props.navigation.navigate('Player', {
+            sermon: item,
+          });
           changeSong(item);
         }}>
         <Card shadow center middle style={{height: 100}}>

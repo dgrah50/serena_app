@@ -9,21 +9,12 @@ import {
   Easing,
 } from 'react-native';
 import {RNChipView} from 'react-native-chip-view';
-import rgba from 'hex-to-rgba';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import qs from 'qs';
 import Voice from 'react-native-voice';
-import {
-  Block,
-  Badge,
-  Card,
-  Text,
-  AnimatedCircularProgress,
-} from '../components';
-import {styles as blockStyles} from '../components/Block';
-import {styles as cardStyles} from '../components/Card';
-import {theme, mocks, time, emotions} from '../constants';
+import {Block, Card, Text, AnimatedCircularProgress} from '../components';
+import {theme, time, emotions} from '../constants';
 
 const {width} = Dimensions.get('window');
 
@@ -37,6 +28,7 @@ export default class Fetch extends Component {
       ringVisible: false,
       toggleText: false,
       results: [],
+      EmojiEmotion: null,
     };
     Voice.onSpeechStart = this.onSpeechStart;
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
@@ -111,21 +103,53 @@ export default class Fetch extends Component {
       <Card shadow>
         <Block center middle>
           <Text h3> How are you feeling? </Text>
-          <ScrollView horizontal={true}>
-            {['😀', '😡', '😔', '😨'].map(topic => {
-              return (
-                <Block style={{padding: 5}} key={topic}>
-                  <RNChipView
-                    onPress={() => {
-                      this.apiCall(topic);
-                    }}
-                    title={topic}
-                    avatar={false}
-                  />
-                </Block>
-              );
-            })}
-          </ScrollView>
+          {this.state.EmojiEmotion ? (
+            <React.Fragment>
+              <ScrollView horizontal={true}>
+                {emotions.emotions[this.state.EmojiEmotion].map(
+                  (topic, idx) => {
+                    return (
+                      <Block style={{padding: 5}} key={topic}>
+                        <RNChipView
+                          onPress={() => {
+                            this.apiCall(topic);
+                          }}
+                          title={topic}
+                          avatar={false}
+                        />
+                      </Block>
+                    );
+                  },
+                )}
+              </ScrollView>
+              <Icon
+                name={'times-circle'}
+                size={30}
+                color={theme.colors.gray2}
+                onPress={() => {
+                  this.setState({EmojiEmotion: null});
+                }}
+              />
+            </React.Fragment>
+          ) : (
+            <ScrollView horizontal={true}>
+              {['😀', '😡', '😔', '😨'].map((topic, idx) => {
+                return (
+                  <Block style={{padding: 5}} key={topic}>
+                    <RNChipView
+                      onPress={() => {
+                        this.setState({
+                          EmojiEmotion: Object.keys(emotions.emotions)[idx],
+                        });
+                      }}
+                      title={topic}
+                      avatar={false}
+                    />
+                  </Block>
+                );
+              })}
+            </ScrollView>
+          )}
         </Block>
       </Card>
     );

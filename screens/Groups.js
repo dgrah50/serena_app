@@ -155,7 +155,7 @@ export default class Groups extends Component {
             onChangeTextHandler={this.searchGroupHandler}
           />
         </Card>
-        <Block style={{paddingLeft: 20}}>
+        <Block flex={false} style={{paddingLeft: 20}}>
           <Text h3>Your Serena Groups</Text>
         </Block>
         <ScrollView

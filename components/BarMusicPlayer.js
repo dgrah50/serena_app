@@ -1,16 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, TouchableOpacity, View, Dimensions} from 'react-native';
+import {StyleSheet, TouchableOpacity,  Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Block, Badge, Card, Text} from './';
-import {styles as blockStyles} from './Block';
-import {styles as cardStyles} from './Card';
-import {theme, mocks, time} from '../constants';
-import TrackPlayer, {
-  useProgress,
-  State,
-  usePlaybackState,
-} from 'react-native-track-player';
+import {Block,Text} from './';
+import {theme,} from '../constants';
+import TrackPlayer, {State, usePlaybackState} from 'react-native-track-player';
 
 const {width} = Dimensions.get('window');
 
@@ -18,7 +12,7 @@ function BarMusicPlayer(props) {
   const playbackState = usePlaybackState();
 
   function togglePlay() {
-    if (playbackState == 'playing') {
+    if (State[playbackState] == 'Playing') {
       TrackPlayer.pause();
     } else {
       TrackPlayer.play();
@@ -26,13 +20,14 @@ function BarMusicPlayer(props) {
   }
 
   const {navigation, song} = props;
-  const iconPlay = playbackState != 'playing' ? 'play-circle' : 'pause-circle';
-  const favoriteColor = theme.colors.white;
+  const iconPlay =
+    State[playbackState] != 'Playing' ? 'play-circle' : 'pause-circle';
+  const favoriteColor = theme.colors.white
   const favoriteIcon = 'heart';
   // const favoriteColor = favorited ? theme.colors.white : theme.colors.white;
   // const favoriteIcon = favorited ? 'heart' : 'heart-o';
 
-  console.log(props)
+
 
   return song.mp3link ? (
     <TouchableOpacity
@@ -47,13 +42,19 @@ function BarMusicPlayer(props) {
         <Icon color={favoriteColor} name={favoriteIcon} size={20} />
       </TouchableOpacity>
       {song && (
-        <Block row center middle style={styles.containerSong}>
+        <Block  center middle style={styles.containerSong}>
           <Text
             center
             middle
             white
-            h3
-            numberOfLines={1}>{`${song.title} · ${song.author} `}</Text>
+            title
+            numberOfLines={1}>{`${song.title}`}</Text>
+          <Text
+            center
+            middle
+            white
+            title
+            numberOfLines={1}>{`${song.author} `}</Text>
         </Block>
       )}
       <TouchableOpacity
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
   containerSong: {
     overflow: 'hidden',
     width: width - 100,
+    paddingHorizontal: 20
   },
   device: {
     color: theme.colors.primary,

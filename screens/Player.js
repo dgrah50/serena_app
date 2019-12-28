@@ -6,6 +6,7 @@ import {theme} from '../constants';
 import TrackPlayer, {
   useProgress,
   usePlaybackState,
+  State,
 } from 'react-native-track-player';
 import Slider from 'react-native-slider';
 import LottieView from 'lottie-react-native';
@@ -16,29 +17,17 @@ export default function Player(props) {
   const {navigation, screenProps} = props;
   const {currentSongData} = screenProps;
   const playbackState = usePlaybackState();
-  const iconPlay = playbackState != 'playing' ? 'play-circle' : 'pause-circle';
+  const iconPlay =
+    State[playbackState] != 'Playing' ? 'play-circle' : 'pause-circle';
 
   return (
     <Block
       style={{
         width: '100%',
         flex: 1,
-        backgroundColor: theme.colors.gray3,
+        backgroundColor: theme.colors.gray2,
       }}>
-      {/* <LottieView
-        style={{
-          width: width * 2.3,
-          height: width * 2.3,
-          alignSelf: 'center',
-          position: 'absolute',
-        }}
-        source={require('../assets/anims/wave.json')}
-        autoPlay
-        speed={0.4}
-        loop
-      /> */}
       {_renderHeader()}
-      {_renderAlbumArt(currentSongData.speakerimg)}
       {_renderControlCard()}
       {_renderFooter()}
     </Block>
@@ -51,68 +40,28 @@ export default function Player(props) {
         flex={false}
         middle
         center
+        space={"between"}
         style={{
-          width: '40%',
           flexDirection: 'row',
-          marginHorizontal: '10%',
-          justifyContent: 'space-between',
-          alignContent: 'center',
-          alignSelf: 'center',
+          marginHorizontal: '10%'
         }}>
         <TouchableOpacity>
-          <Icon color={theme.colors.black} name="step-backward" size={30} />
+          <Icon color={theme.colors.black} name="step-backward" size={40} />
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {
             togglePlay();
           }}>
-          <Icon color={theme.colors.black} name={iconPlay} size={60} />
+          <Icon color={theme.colors.black} name={iconPlay} size={80} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Icon color={theme.colors.black} name="step-forward" size={30} />
+          <Icon color={theme.colors.black} name="step-forward" size={40} />
         </TouchableOpacity>
       </Block>
     );
   }
 
-  function _renderAlbumArt(url) {
-    // url = url.replace('{size}', 500).replace('{size}', 500);
-    return (
-      <Card
-        shadow
-        flex={false}
-        style={{
-          backgroundColor: theme.colors.gray4,
-          marginHorizontal: '5%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Block
-          flex={false}
-          style={{
-            alignItems: 'flex-start',
-          }}>
-          <Image
-            style={{
-              width: width * 0.3,
-              height: width * 0.3,
-              shadowColor: 'black',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-
-              elevation: 5,
-            }}
-            source={{uri: url}}
-          />
-        </Block>
-      </Card>
-    );
-  }
   function _renderProgressBar() {
     const progress = useProgress();
     const playbackState = usePlaybackState();
@@ -147,20 +96,21 @@ export default function Player(props) {
           minimumTrackTintColor={theme.colors.gray4}
           maximumTrackTintColor={theme.colors.gray}
           thumbTintColor={theme.colors.black}
-          onSlidingComplete={(value)=> TrackPlayer.seekTo(value)}
+          onSlidingComplete={value => TrackPlayer.seekTo(value)}
         />
 
         <Block row space={'between'} flex={false}>
-          {playbackState != 'buffering' && playbackState != 'loading' && (
-            <React.Fragment>
-              <Text caption black>
-                {convertToMinutes(progress.position)}
-              </Text>
-              <Text caption black>
-                {convertToMinutes(progress.duration)}
-              </Text>
-            </React.Fragment>
-          )}
+          {State[playbackState] != 'Buffering' &&
+            State[playbackState] != 'loading' && (
+              <React.Fragment>
+                <Text caption black>
+                  {convertToMinutes(progress.position)}
+                </Text>
+                <Text caption black>
+                  {convertToMinutes(progress.duration)}
+                </Text>
+              </React.Fragment>
+            )}
         </Block>
       </Block>
     );
@@ -182,10 +132,11 @@ export default function Player(props) {
           <Block style={{position: 'absolute', top: 10, left: 10, margin: 10}}>
             <Icon color={theme.colors.black} name="chevron-down" size={20} />
           </Block>
-
-          <Text center bold middle h3 black>
-            {currentSongData.title}
-          </Text>
+          <Block style={{paddingHorizontal:15}}>
+            <Text center bold middle h3 black>
+              {currentSongData.title}
+            </Text>
+          </Block>
         </Card>
       </TouchableOpacity>
     );
@@ -218,8 +169,26 @@ export default function Player(props) {
           backgroundColor: theme.colors.gray4,
           marginHorizontal: width * 0.05,
         }}
-        flex={false}
+        middle
         shadow>
+        <Block flex={false} center middle>
+          <Image
+            style={{
+              width: width * 0.3,
+              height: width * 0.3,
+              shadowColor: 'black',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+
+              elevation: 5,
+            }}
+            source={{uri: currentSongData.speakerimg}}
+          />
+        </Block>
         <Text center middle black h3 style={{paddingTop: 20}}>
           {currentSongData.title}
         </Text>
@@ -234,7 +203,7 @@ export default function Player(props) {
 
   //****** HELPER FUNCTONS SECTION
   function togglePlay() {
-    if (playbackState == 'playing') {
+    if (State[playbackState] == 'Playing') {
       TrackPlayer.pause();
     } else {
       TrackPlayer.play();
@@ -253,11 +222,6 @@ const styles = StyleSheet.create({
     marginVertical: theme.sizes.base * 2,
     marginHorizontal: theme.sizes.base * 2,
     height: 1,
-  },
-  // vertical line
-  vLine: {
-    marginVertical: theme.sizes.base / 2,
-    width: 1,
   },
   progressTrack: {
     height: 2,
