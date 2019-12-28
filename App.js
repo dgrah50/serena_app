@@ -2,7 +2,10 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 import firebase from 'react-native-firebase';
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, {
+  useTrackPlayerEvents,
+  TrackPlayerEvents,
+} from 'react-native-track-player';
 import axios from 'axios';
 import qs from 'qs';
 const mocksong = {
@@ -21,9 +24,13 @@ export default function App(props) {
   const [tabBarVisible, showTabBar] = useState(false);
   const [recommendedVerses, setRecs] = useState(null);
   const didMountRef = useRef(false);
+
+
+  
   useEffect(() => {
     if (currentSongData.mp3link) {
-      TrackPlayer.setupPlayer().then(async () => {
+      TrackPlayer.setupPlayer()
+      .then(async () => {
         // Adds a track to the queue
         let url = currentSongData.mp3link;
         url = url.replace(

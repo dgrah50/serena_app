@@ -1,10 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {Dimensions, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Block, Text, Card} from '../components';
 import {theme} from '../constants';
@@ -152,7 +147,7 @@ export default function Player(props) {
           minimumTrackTintColor={theme.colors.gray4}
           maximumTrackTintColor={theme.colors.gray}
           thumbTintColor={theme.colors.black}
-          onSlidingComplete={(value: number) => TrackPlayer.seekTo(value)}
+          onSlidingComplete={(value)=> TrackPlayer.seekTo(value)}
         />
 
         <Block row space={'between'} flex={false}>
@@ -184,7 +179,7 @@ export default function Player(props) {
             backgroundColor: theme.colors.gray4,
             flexDirection: 'row',
           }}>
-          <Block style={{position: 'absolute', top: 10, left: 10, margin:10}}>
+          <Block style={{position: 'absolute', top: 10, left: 10, margin: 10}}>
             <Icon color={theme.colors.black} name="chevron-down" size={20} />
           </Block>
 

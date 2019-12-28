@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "183695750491",
+    "firebase_url": "https://serena-f9216.firebaseio.com",
+    "project_id": "serena-f9216",
+    "storage_bucket": "serena-f9216.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:183695750491:android:9ab72c22f3a92bcde2d67e",
+        "android_client_info": {
+          "package_name": "com.serenaltd.serena"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "183695750491-s1vbk06fr7ilk0vi9la3sn96958b0u7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-AKFJWIrqXnBIZpSqAphugrorBp_W98E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "183695750491-s1vbk06fr7ilk0vi9la3sn96958b0u7a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "183695750491-cq2crce5lo9v6tt73u0okbvb9nmsfgto.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.serenaltd.serena"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

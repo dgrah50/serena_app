@@ -17,7 +17,6 @@ const {width} = Dimensions.get('window');
 function BarMusicPlayer(props) {
   const playbackState = usePlaybackState();
 
-
   function togglePlay() {
     if (playbackState == 'playing') {
       TrackPlayer.pause();
@@ -33,6 +32,8 @@ function BarMusicPlayer(props) {
   // const favoriteColor = favorited ? theme.colors.white : theme.colors.white;
   // const favoriteIcon = favorited ? 'heart' : 'heart-o';
 
+  console.log(props)
+
   return song.mp3link ? (
     <TouchableOpacity
       activeOpacity={1}
@@ -46,8 +47,13 @@ function BarMusicPlayer(props) {
         <Icon color={favoriteColor} name={favoriteIcon} size={20} />
       </TouchableOpacity>
       {song && (
-        <Block flex row center middle style={styles.containerSong}>
-          <Text center middle white h3>{`${song.title} · ${song.author} `}</Text>
+        <Block row center middle style={styles.containerSong}>
+          <Text
+            center
+            middle
+            white
+            h3
+            numberOfLines={1}>{`${song.title} · ${song.author} `}</Text>
         </Block>
       )}
       <TouchableOpacity

@@ -110,9 +110,9 @@ export default class OneVerse extends Component {
       <TouchableOpacity
         key={idx}
         onPress={() => {
-          this.props.navigation.navigate('Player', {
-            sermon: item,
-          });
+        //   this.props.navigation.navigate('Player', {
+        //     sermon: item,
+        //   });
           changeSong(item);
         }}>
         <Card shadow center middle style={{height: 100}}>
