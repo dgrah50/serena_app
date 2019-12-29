@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, View, SafeAreaView} from 'react-native';
+import {Dimensions, StyleSheet, View, Alert} from 'react-native';
 import {Text, Block} from '../components';
 import {theme} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -54,6 +54,87 @@ export default function GroupFeed(props) {
     );
   };
 
+  const leaveGroup = () => {
+    Alert.alert(
+      'Do you want to leave the group?',
+      '',
+      [
+        {
+          text: 'Leave',
+          onPress: () => {
+            leaveGroupLogic()
+          },
+        },
+        {
+          text: 'Cancel',
+        },
+      ],
+      {
+        cancelable: false,
+      },
+    );
+  };
+
+  const leaveGroupLogic = () => {
+    let firestoreref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('Info')
+      .doc('groups');
+    firestoreref
+      .update({
+        subscribed: firebase.firestore.FieldValue.arrayRemove(
+          props.navigation.getParam('groupID'),
+        ),
+      })
+      .then(() => {
+        props.navigation.navigate('Groups');
+      });
+  };
+
+  const _renderHeader = () => {
+    return (
+      <LinearGradient
+        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        style={{
+          height: height * 0.2,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Icon
+          onPress={() => {
+            props.navigation.goBack();
+          }}
+          style={{position: 'absolute', left: 20}}
+          name="chevron-left"
+          size={25}
+          color="black"
+        />
+        <Block
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text center middle h2 black style={{paddingBottom: 20}}>
+            {props.navigation.getParam('groupID')}
+          </Text>
+          <Text>{bio}</Text>
+        </Block>
+
+        <Icon
+          onPress={() => {
+            leaveGroup();
+          }}
+          style={{position: 'absolute', right: 20}}
+          name="sign-out"
+          size={25}
+          color="black"
+        />
+      </LinearGradient>
+    );
+  };
+
   const [bio, setBio] = useState(null);
 
   useEffect(() => {
@@ -61,30 +142,20 @@ export default function GroupFeed(props) {
       .firestore()
       .collection('groups')
       .doc(props.navigation.getParam('groupID'));
-    firestoreref.get().then(res => {
-      setBio(res.data().bio);
-    });
+
+    firestoreref
+      .get()
+      .then(res => {
+        setBio(res.data().bio);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }, []);
 
   return (
     <View style={styles.welcome}>
-      <LinearGradient
-        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
-        style={{height: height * 0.20, justifyContent:"center",alignItems:"center"}}>
-          <Icon
-            onPress={() => {
-              props.navigation.goBack();
-            }}
-            style={{position: 'absolute', left: 20}}
-            name="chevron-left"
-            size={25}
-            color="black"
-          />
-          <Text center middle h2 black style={{paddingBottom: 20}}>
-            {props.navigation.getParam('groupID')}
-          </Text>
-          <Text>{bio}</Text>
-      </LinearGradient>
+      {_renderHeader()}
 
       <StreamApp
         apiKey="zgrr2ez3h3yz"
