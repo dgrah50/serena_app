@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import LinearGradient from 'react-native-linear-gradient';
 import {Block, Card, Text} from '../components';
 import {theme} from '../constants';
 import {Bars} from 'react-native-loader';
@@ -30,12 +31,14 @@ export default class OneVerse extends Component {
 
   render() {
     return (
-      <Block style={styles.welcome}>
+      <LinearGradient
+        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        style={styles.welcome}>
         {this._renderVerseCard()}
         <Block>
           {this.state.sermons ? this._renderSermons() : this._renderSpinner()}
         </Block>
-      </Block>
+      </LinearGradient>
     );
   }
 
@@ -211,6 +214,7 @@ const styles = StyleSheet.create({
     paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
     backgroundColor: theme.colors.gray4,
+    flex:1,
   },
   // horizontal line
   hLine: {

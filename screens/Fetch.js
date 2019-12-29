@@ -15,6 +15,8 @@ import qs from 'qs';
 import Voice from 'react-native-voice';
 import {Block, Card, Text, AnimatedCircularProgress} from '../components';
 import {theme, time, emotions} from '../constants';
+import LinearGradient from 'react-native-linear-gradient';
+
 
 const {width} = Dimensions.get('window');
 
@@ -61,13 +63,18 @@ export default class Fetch extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <LinearGradient
+        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        style={{
+          width: '100%',
+          flex: 1,
+        }}>
         <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
           {this._renderMicRing()}
           {this._renderTopicChips()}
           {this._renderEmotionChips()}
         </ScrollView>
-      </React.Fragment>
+      </LinearGradient>
     );
   }
 
@@ -260,7 +267,6 @@ const styles = StyleSheet.create({
   welcome: {
     paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
-    backgroundColor: theme.colors.gray4,
   },
   // horizontal line
   hLine: {

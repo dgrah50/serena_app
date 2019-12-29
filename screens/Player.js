@@ -9,7 +9,7 @@ import TrackPlayer, {
   State,
 } from 'react-native-track-player';
 import Slider from 'react-native-slider';
-import LottieView from 'lottie-react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const {height, width} = Dimensions.get('window');
 
@@ -21,16 +21,16 @@ export default function Player(props) {
     State[playbackState] != 'Playing' ? 'play-circle' : 'pause-circle';
 
   return (
-    <Block
+    <LinearGradient
+      colors={['rgba(76, 102, 159, 0.6)', '#7D7EB1']}
       style={{
         width: '100%',
         flex: 1,
-        backgroundColor: theme.colors.gray2,
       }}>
       {_renderHeader()}
       {_renderControlCard()}
       {_renderFooter()}
-    </Block>
+    </LinearGradient>
   );
 
   //****** SUB COMPONENTS SECTION
@@ -40,10 +40,11 @@ export default function Player(props) {
         flex={false}
         middle
         center
-        space={"between"}
+        space={'between'}
         style={{
+          bottom:0,
           flexDirection: 'row',
-          marginHorizontal: '10%'
+          marginHorizontal: '10%',
         }}>
         <TouchableOpacity>
           <Icon color={theme.colors.black} name="step-backward" size={40} />
@@ -132,13 +133,50 @@ export default function Player(props) {
           <Block style={{position: 'absolute', top: 10, left: 10, margin: 10}}>
             <Icon color={theme.colors.black} name="chevron-down" size={20} />
           </Block>
-          <Block style={{paddingHorizontal:15}}>
+          <Block style={{paddingHorizontal: 15}}>
             <Text center bold middle h3 black>
               {currentSongData.title}
             </Text>
           </Block>
         </Card>
       </TouchableOpacity>
+    );
+  }
+  function _renderControlCard() {
+    return (
+      <Card
+        style={{
+          backgroundColor: theme.colors.gray4,
+          marginHorizontal: width * 0.05,
+          padding: 0,
+        }}
+        middle
+        shadow>
+        <Block flex={false} center middle>
+          <Image
+            style={{
+              width: width * 0.3,
+              height: width * 0.3,
+              shadowColor: 'black',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+            }}
+            source={{uri: currentSongData.speakerimg}}
+          />
+        </Block>
+        <Text center middle black h3 style={{paddingTop: 20}}>
+          {currentSongData.title}
+        </Text>
+        <Text black title center middle>
+          {currentSongData.author}
+        </Text>
+        {_renderProgressBar()}
+        {_renderPlayBackControls()}
+      </Card>
     );
   }
   function _renderFooter() {
@@ -160,44 +198,6 @@ export default function Player(props) {
           </Text>
         </Card>
       </TouchableOpacity>
-    );
-  }
-  function _renderControlCard() {
-    return (
-      <Card
-        style={{
-          backgroundColor: theme.colors.gray4,
-          marginHorizontal: width * 0.05,
-        }}
-        middle
-        shadow>
-        <Block flex={false} center middle>
-          <Image
-            style={{
-              width: width * 0.3,
-              height: width * 0.3,
-              shadowColor: 'black',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-
-              elevation: 5,
-            }}
-            source={{uri: currentSongData.speakerimg}}
-          />
-        </Block>
-        <Text center middle black h3 style={{paddingTop: 20}}>
-          {currentSongData.title}
-        </Text>
-        <Text black title center middle>
-          {currentSongData.author}
-        </Text>
-        {_renderProgressBar()}
-        {_renderPlayBackControls()}
-      </Card>
     );
   }
 
@@ -224,12 +224,12 @@ const styles = StyleSheet.create({
     height: 1,
   },
   progressTrack: {
-    height: 2,
+    height: 10,
     borderRadius: 1,
   },
   progressThumb: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
     borderRadius: 10,
     backgroundColor: 'black',
   },

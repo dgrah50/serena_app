@@ -6,8 +6,10 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import firebase from 'react-native-firebase';
+import firebase from 'react-native-firebase'
 import Carousel from 'react-native-snap-carousel';
+import LinearGradient from 'react-native-linear-gradient';
+
 import {Block, Card, Text} from '../components';
 import {theme} from '../constants';
 const {width} = Dimensions.get('window');
@@ -17,18 +19,26 @@ export default class Overview extends Component {
     super(props);
     this.state = {
       likes: [],
+      sermonRecs: null,
     };
     this.fetchLikes();
   }
 
   render() {
     return (
-      <ScrollView style={styles.home} showsVerticalScrollIndicator={false}>
-        {this._renderVerseCard()}
-        <Block color="gray3" style={styles.hLine} />
-        {this._renderRecommendations()}
-        {this._renderFavourites()}
-      </ScrollView>
+      <LinearGradient
+        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        style={{
+          width: '100%',
+          flex: 1,
+        }}>
+        <ScrollView style={styles.home} showsVerticalScrollIndicator={false}>
+          {this._renderVerseCard()}
+          <Block color="gray3" style={styles.hLine} />
+          {this._renderRecommendations()}
+          {this._renderFavourites()}
+        </ScrollView>
+      </LinearGradient>
     );
   }
 
@@ -130,7 +140,7 @@ export default class Overview extends Component {
             height: 150,
             padding: 0,
           }}>
-          <Image
+          {/* <Image
             style={{
               width: '100%',
               height: '100%',
@@ -140,23 +150,42 @@ export default class Overview extends Component {
             source={{
               uri: item.speakerimg,
             }}
+          /> */}
+          <Image
+            source={require('../assets/images/icon.png')}
+            style={{height: '50%', width: '100%', marginVertical: '10%'}}
+            resizeMode="contain"
           />
           <Block
+            space={'between'}
             center
-            middle
+            row
             style={{
               position: 'absolute',
               bottom: 0,
               width: '100%',
               height: '25%',
-              paddingHorizontal: '10%',
+              paddingHorizontal: '5%',
               backgroundColor: 'white',
               borderBottomLeftRadius: theme.sizes.border,
               borderBottomRightRadius: theme.sizes.border,
             }}>
-            <Text black center caption>
-              {item.title}
-            </Text>
+            <Image
+              style={{
+                width: '25%',
+                height: '100%',
+                borderRadius: theme.sizes.border,
+              }}
+              resizeMode="contain"
+              source={{
+                uri: item.speakerimg,
+              }}
+            />
+            <Block center style={{width: '75%'}}>
+              <Text black center caption>
+                {item.title}
+              </Text>
+            </Block>
           </Block>
         </Card>
       </TouchableOpacity>
@@ -191,20 +220,22 @@ export default class Overview extends Component {
     );
   }
   _renderRecommendations() {
-    const sermonRecs = null;
     try {
-      sermonRecs = this.props.screenProps.recommendedVerses.sermons.nextrecs;
+      this.setState({
+        sermonRecs: this.props.screenProps.recommendedVerses.sermons.nextrecs,
+      });
     } catch (error) {
       console.log(error);
     }
+
     return (
       <Block>
-        <Text h3 spacing={1} style={{marginVertical: 8}}>
+        <Text h3 white spacing={1} style={{marginVertical: 8}}>
           Recommended For You
         </Text>
         <Block>
           <Carousel
-            data={sermonRecs}
+            data={this.state.sermonRecs}
             renderItem={this._renderSermon.bind(this)}
             sliderWidth={width}
             itemWidth={width * 0.45}
@@ -225,7 +256,7 @@ export default class Overview extends Component {
   _renderFavourites() {
     return (
       <Block>
-        <Text h3 spacing={1} style={{marginVertical: 8}}>
+        <Text h3 white spacing={1} style={{marginVertical: 8}}>
           Your Favourite Verses
         </Text>
 
@@ -289,7 +320,6 @@ const styles = StyleSheet.create({
   home: {
     paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
-    backgroundColor: theme.colors.gray4,
   },
   // horizontal line
   hLine: {

@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {Block, Card, Text, Input} from '../components';
 import {theme} from '../constants';
 import firebase from 'react-native-firebase';
+import LinearGradient from 'react-native-linear-gradient';
 const Fuse = require('fuse.js');
 const {width} = Dimensions.get('window');
 
@@ -84,10 +85,16 @@ export default class Groups extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, paddingTop: '10%'}}>
+      <LinearGradient
+        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        style={{
+          width: '100%',
+          flex: 1,
+          paddingTop:"10%"
+        }}>
         {this._renderGroups()}
         {this._renderLogoutButton()}
-      </View>
+      </LinearGradient>
     );
   }
 
@@ -141,7 +148,7 @@ export default class Groups extends Component {
   _renderGroups = () => {
     return (
       <React.Fragment>
-        <Card flex={false}>
+        <Card style flex={false}>
           <Input
             label={'Search for groups'}
             onFocus={() => this.setState({searching: true})}
@@ -155,7 +162,7 @@ export default class Groups extends Component {
             onChangeTextHandler={this.searchGroupHandler}
           />
         </Card>
-        <Block flex={false} style={{paddingLeft: 20}}>
+        <Block flex={false} white style={{paddingLeft: 20}}>
           <Text h3>Your Serena Groups</Text>
         </Block>
         <ScrollView

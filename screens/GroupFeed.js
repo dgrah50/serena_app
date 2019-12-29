@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View, SafeAreaView} from 'react-native';
 import {Text, Block} from '../components';
 import {theme} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,6 +11,7 @@ import {
   Activity,
   ReactionIcon,
 } from 'react-native-activity-feed';
+import LinearGradient from 'react-native-linear-gradient';
 import firebase from 'react-native-firebase';
 const ReplyIcon = require('../assets/icons/chat.png');
 const {height, width} = Dimensions.get('window');
@@ -67,11 +68,9 @@ export default function GroupFeed(props) {
 
   return (
     <View style={styles.welcome}>
-      <StreamApp
-        apiKey="zgrr2ez3h3yz"
-        appId="65075"
-        token={props.screenProps.StreamToken}>
-        <Block center middle flex={false} style={{height: height * 0.15}}>
+      <LinearGradient
+        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        style={{height: height * 0.20, justifyContent:"center",alignItems:"center"}}>
           <Icon
             onPress={() => {
               props.navigation.goBack();
@@ -81,11 +80,16 @@ export default function GroupFeed(props) {
             size={25}
             color="black"
           />
-          <Text center middle h2 black style={{paddingBottom:20}}>
+          <Text center middle h2 black style={{paddingBottom: 20}}>
             {props.navigation.getParam('groupID')}
           </Text>
           <Text>{bio}</Text>
-        </Block>
+      </LinearGradient>
+
+      <StreamApp
+        apiKey="zgrr2ez3h3yz"
+        appId="65075"
+        token={props.screenProps.StreamToken}>
         <View>
           <StatusUpdateForm
             feedGroup="groups"

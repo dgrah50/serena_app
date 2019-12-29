@@ -76,7 +76,7 @@ export default function App(props) {
       axios
         .post(
           'http://localhost:8000/api/verses/recs',
-          qs.stringify({content: firebase.auth().currentUser.uid}),
+          qs.stringify({userID: firebase.auth().currentUser.uid}),
         )
         .then(res => {
           console.log(res.data);
