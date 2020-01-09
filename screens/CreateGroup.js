@@ -15,6 +15,15 @@ import firebase from 'react-native-firebase';
 const {height, width} = Dimensions.get('window');
 
 export default class CreateGroup extends Component {
+  static navigationOptions = {
+    title: 'Create Group',
+    headerStyle: {
+      backgroundColor: theme.colors.gray3,
+    },
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -24,28 +33,8 @@ export default class CreateGroup extends Component {
     };
   }
 
-
   render() {
-    return (
-      <Block style={styles.home}>
-        <Block center row middle flex={false}>
-          <Icon
-            onPress={() => {
-              this.props.navigation.goBack();
-            }}
-            style={{position: 'absolute', left: 20}}
-            name="chevron-left"
-            size={25}
-            color="black"
-          />
-
-          <Text center middle h2 black>
-            Create a Group
-          </Text>
-        </Block>
-        {this._renderInputAndButtons()}
-      </Block>
-    );
+    return <Block style={styles.home}>{this._renderInputAndButtons()}</Block>;
   }
 
   //****** SUB COMPONENTS SECTION

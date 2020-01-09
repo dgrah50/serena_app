@@ -10,7 +10,7 @@ import Groups from '../screens/Groups';
 import GroupFeed from '../screens/GroupFeed';
 import SinglePostScreen from '../screens/SinglePostScreen';
 import CreateGroup from '../screens/CreateGroup';
-import Notifications from '../screens/Notifications';
+import Profile from '../screens/Profile';
 import Fetch from '../screens/Fetch';
 
 export default createBottomTabNavigator(
@@ -63,7 +63,6 @@ export default createBottomTabNavigator(
           },
         },
         {
-          headerMode: 'none',
           initialRouteName: 'Groups',
         },
       ),
@@ -74,15 +73,33 @@ export default createBottomTabNavigator(
         ),
       },
     },
-    // Notifications: {
-    //   screen: Notifications,
-    //   navigationOptions: {
-    //     tabBarLabel: 'Notifications',
-    //     tabBarIcon: ({tintColor}) => (
-    //       <Icon name="bell" size={25} color={tintColor} />
-    //     ),
-    //   },
-    // },
+    Profile: {
+      screen: createStackNavigator(
+        {
+          Profile: {
+            screen: Profile,
+          },
+          GroupFeed: {
+            screen: GroupFeed,
+          },
+          SinglePostScreen: {
+            screen: SinglePostScreen,
+          },
+          CreateGroup: {
+            screen: CreateGroup,
+          },
+        },
+        {
+          initialRouteName: 'Profile',
+        },
+      ),
+      navigationOptions: {
+        tabBarLabel: 'Profile',
+        tabBarIcon: ({tintColor}) => (
+          <Icon name="comments" size={25} color={tintColor} />
+        ),
+      },
+    },
   },
   {
     initialRouteName: 'Pray',

@@ -286,6 +286,8 @@ PODS:
   - react-native-fbsdk/Share (1.1.1):
     - FBSDKShareKit (= 5.8)
     - React
+  - react-native-image-picker (1.1.0):
+    - React
   - react-native-music-control (0.10.7):
     - React
   - react-native-track-player (2.0.0-rc13):
@@ -315,6 +317,8 @@ PODS:
     - React-Core (= 0.60.5)
   - React-RCTWebSocket (0.60.5):
     - React-Core (= 0.60.5)
+  - rn-fetch-blob (0.12.0):
+    - React-Core
   - RNFirebase (5.5.6):
     - Firebase/Core
     - React
@@ -375,6 +379,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-music-control (from `../node_modules/react-native-music-control`)
   - react-native-track-player (from `../node_modules/react-native-track-player`)
   - react-native-voice (from `../node_modules/react-native-voice`)
@@ -388,6 +393,7 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-RCTWebSocket (from `../node_modules/react-native/Libraries/WebSocket`)
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNFirebase (from `../node_modules/react-native-firebase/ios`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -469,6 +475,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-fbsdk:
     :path: "../node_modules/react-native-fbsdk"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-music-control:
     :path: "../node_modules/react-native-music-control"
   react-native-track-player:
@@ -495,6 +503,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   React-RCTWebSocket:
     :path: "../node_modules/react-native/Libraries/WebSocket"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNFirebase:
     :path: "../node_modules/react-native-firebase/ios"
   RNGestureHandler:
@@ -568,6 +578,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 90ad2f9db09513fc763bc757fdc3c4ff8bde2a30
   React-jsinspector: e08662d1bf5b129a3d556eb9ea343a3f40353ae4
   react-native-fbsdk: b94a83971c496a35803f38b921aec6d637ba07b5
+  react-native-image-picker: 3637d63fef7e32a230141ab4660d3ceb773c824f
   react-native-music-control: 74b1f7d03b781aa38557d706ca4650ff1c96095a
   react-native-track-player: 6c2c2f163534bb6d6b5fea68959b3641f70718dd
   react-native-voice: 0253a5cde07d9c675463e36f7e668a76b0825de4
@@ -581,6 +592,7 @@ SPEC CHECKSUMS:
   React-RCTText: b074d89033583d4f2eb5faf7ea2db3a13c7553a2
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNFirebase: ac0de8b24c6f91ae9459575491ed6a77327619c6
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
   RNReanimated: 1b52415c4302f198cb581282a0166690bad62c43

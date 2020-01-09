@@ -15,6 +15,14 @@ const Fuse = require('fuse.js');
 const {width} = Dimensions.get('window');
 
 export default class Groups extends Component {
+  static navigationOptions = {
+    title: 'Groups',
+    headerTransparent: true,
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -90,7 +98,7 @@ export default class Groups extends Component {
         style={{
           width: '100%',
           flex: 1,
-          paddingTop:"10%"
+          paddingTop: '15%',
         }}>
         {this._renderGroups()}
         {this._renderLogoutButton()}
@@ -148,7 +156,7 @@ export default class Groups extends Component {
   _renderGroups = () => {
     return (
       <React.Fragment>
-        <Card style flex={false}>
+        <Card style style={{backgroundColor: 'rgba(0,0,0,0)'}} flex={false}>
           <Input
             label={'Search for groups'}
             onFocus={() => this.setState({searching: true})}
@@ -162,7 +170,7 @@ export default class Groups extends Component {
             onChangeTextHandler={this.searchGroupHandler}
           />
         </Card>
-        <Block flex={false} white style={{paddingLeft: 20}}>
+        <Block flex={false} white style={{paddingLeft: 20, paddingBottom: 20}}>
           <Text h3>Your Serena Groups</Text>
         </Block>
         <ScrollView

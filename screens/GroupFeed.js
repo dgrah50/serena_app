@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, View, Alert} from 'react-native';
+import {Dimensions, StyleSheet, View, Alert, ViewComponent} from 'react-native';
 import {Text, Block} from '../components';
 import {theme} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,10 +13,33 @@ import {
 } from 'react-native-activity-feed';
 import LinearGradient from 'react-native-linear-gradient';
 import firebase from 'react-native-firebase';
+const stream = require('getstream');
 const ReplyIcon = require('../assets/icons/chat.png');
 const {height, width} = Dimensions.get('window');
 
 export default function GroupFeed(props) {
+  GroupFeed.navigationOptions = {
+    title: props.navigation.getParam('groupID'),
+    headerStyle: {
+      position: 'absolute',
+      backgroundColor: theme.colors.gray3,
+      zIndex: 100,
+    },
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+    headerRight: (
+      <Icon
+        onPress={() => {
+          leaveGroup();
+        }}
+        style={{position: 'absolute', right: 20}}
+        name="sign-out"
+        size={25}
+        color="black"
+      />
+    ),
+  };
   const onpresscomment = (id, act) => {
     props.navigation.navigate('SinglePostScreen', {
       activity: act,
@@ -62,7 +85,7 @@ export default function GroupFeed(props) {
         {
           text: 'Leave',
           onPress: () => {
-            leaveGroupLogic()
+            leaveGroupLogic();
           },
         },
         {
@@ -93,48 +116,6 @@ export default function GroupFeed(props) {
       });
   };
 
-  const _renderHeader = () => {
-    return (
-      <LinearGradient
-        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
-        style={{
-          height: height * 0.2,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Icon
-          onPress={() => {
-            props.navigation.goBack();
-          }}
-          style={{position: 'absolute', left: 20}}
-          name="chevron-left"
-          size={25}
-          color="black"
-        />
-        <Block
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text center middle h2 black style={{paddingBottom: 20}}>
-            {props.navigation.getParam('groupID')}
-          </Text>
-          <Text>{bio}</Text>
-        </Block>
-
-        <Icon
-          onPress={() => {
-            leaveGroup();
-          }}
-          style={{position: 'absolute', right: 20}}
-          name="sign-out"
-          size={25}
-          color="black"
-        />
-      </LinearGradient>
-    );
-  };
-
   const [bio, setBio] = useState(null);
 
   useEffect(() => {
@@ -155,13 +136,15 @@ export default function GroupFeed(props) {
 
   return (
     <View style={styles.welcome}>
-      {_renderHeader()}
-
       <StreamApp
         apiKey="zgrr2ez3h3yz"
         appId="65075"
         token={props.screenProps.StreamToken}>
         <View>
+          <Block center middle flex={false} style={{padding: 5}}>
+            <Text bold h3>{bio}</Text>
+          </Block>
+
           <StatusUpdateForm
             feedGroup="groups"
             userId={props.navigation.getParam('groupID')}

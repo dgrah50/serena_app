@@ -25,12 +25,9 @@ export default function App(props) {
   const [recommendedVerses, setRecs] = useState(null);
   const didMountRef = useRef(false);
 
-
-  
   useEffect(() => {
     if (currentSongData.mp3link) {
-      TrackPlayer.setupPlayer()
-      .then(async () => {
+      TrackPlayer.setupPlayer().then(async () => {
         // Adds a track to the queue
         let url = currentSongData.mp3link;
         url = url.replace(
@@ -81,6 +78,26 @@ export default function App(props) {
         .then(res => {
           console.log(res.data);
           setRecs(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("effect")
+    if (firebase.auth().currentUser) {
+      axios
+        .post(
+          'http://localhost:8000/api/users/create',
+          qs.stringify({
+            userID: firebase.auth().currentUser.uid,
+            userName: 'Dayan Graham',
+          }),
+        )
+        .then(res => {
+          console.log(res.data);
         })
         .catch(err => {
           console.log(err);

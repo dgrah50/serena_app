@@ -18,7 +18,15 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 export default function SinglePostScreen(props) {
   const activity = props.navigation.getParam('activity');
   const feedGroup = props.navigation.getParam('feedGroup');
-
+  SinglePostScreen.navigationOptions = {
+    title: 'Comments',
+    headerStyle: {
+      backgroundColor: theme.colors.gray3,
+    },
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
   const CustomActivity = props => {
     return (
       <React.Fragment>
@@ -66,22 +74,7 @@ export default function SinglePostScreen(props) {
         appId="65075"
         style={styles.welcome}
         token={props.screenProps.StreamToken}>
-        <Block center row middle flex={false} style={{height: height * 0.15}}>
-          <Icon
-            onPress={() => {
-              props.navigation.goBack();
-            }}
-            style={{position: 'absolute', left: 20}}
-            hitSlo
-            name="chevron-left"
-            size={25}
-            color="black"
-          />
 
-          <Text center middle h2 black>
-            Comments
-          </Text>
-        </Block>
         <SinglePost
           activity={activity}
           Activity={CustomActivity}
