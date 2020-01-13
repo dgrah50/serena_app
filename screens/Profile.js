@@ -5,30 +5,26 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import {Text, Block, Input,Button} from '../components';
+import {Text, Card, Input, Button} from '../components';
 import {theme} from '../constants';
 import firebase from 'react-native-firebase';
-import RNFetchBlob from 'rn-fetch-blob';
+import LinearGradient from 'react-native-linear-gradient';
+
 const stream = require('getstream');
 const {height, width} = Dimensions.get('window');
 import ImagePicker from 'react-native-image-picker';
-const fs = RNFetchBlob.fs;
-window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
-window.Blob = RNFetchBlob.polyfill.Blob;
-window.fetch = new RNFetchBlob.polyfill.Fetch({
-  auto: true,
-  binaryContentTypes: ['image/', 'video/', 'audio/', 'foo/'],
-}).build();
+import ImageResizer from 'react-native-image-resizer';
+import {ThemeColors} from 'react-navigation';
+
 export default class Profile extends Component {
   static navigationOptions = {
     title: 'Edit Profile',
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-    headerStyle: {
-      backgroundColor: theme.colors.gray3,
-    },
+    headerTransparent: true,
   };
 
   constructor(props) {
@@ -36,6 +32,7 @@ export default class Profile extends Component {
     this.state = {
       bio: null,
       name: null,
+      profileImage: null,
     };
   }
 
@@ -50,9 +47,20 @@ export default class Profile extends Component {
       .get()
       .then(StreamUser => {
         console.log(StreamUser.data);
+        if (StreamUser.data.name == 'Unknown') {
+          Alert.alert(
+            'Please enter your name before you use Groups.',
+            ' ',
+            [{text: 'OK'}],
+            {
+              cancelable: false,
+            },
+          );
+        }
         this.setState({
           name: StreamUser.data.name,
           bio: StreamUser.data.bio,
+          profileImage: StreamUser.data.profileImage,
         });
       })
       .catch(err => {
@@ -69,6 +77,7 @@ export default class Profile extends Component {
       client.user(firebase.auth().currentUser.uid).update({
         name: this.state.name,
         bio: this.state.bio,
+        profileImage: this.state.profileImage,
       });
     }
   }
@@ -116,34 +125,58 @@ export default class Profile extends Component {
 
   uploadPhoto = () => {
     this.uploadPhotoFromGallery()
-      .then(photo =>
-        this.uploadImageToFirebase(photo.uri, 'image/jpeg', photo.fileName),
-      )
-      .then(resultURL =>
-        firebase.auth().currentUser.updateProfile({
-          photoURL: resultURL,
-        }),
-      )
-      .then(() => {
+      .then(photo => {
+        return ImageResizer.createResizedImage(photo.uri, 400, 400, 'JPEG', 50);
+      })
+      .then(photo => {
+        return this.uploadImageToFirebase(photo.uri, 'image/jpeg', photo.name);
+      })
+      .then(resultURL => {
+        console.log(resultURL);
+        client.user(firebase.auth().currentUser.uid).update({
+          name: this.state.name,
+          bio: this.state.bio,
+          profileImage: resultURL,
+        });
         this.setState({
-          photoURL: firebase.auth().currentUser.photoURL,
+          profileImage: resultURL,
         });
       })
-      .catch(console.error);
+      .catch(error => console.log(error));
   };
 
   render() {
     return (
-      <Block center style={styles.welcome}>
-        <Image
-          source={require('../assets/images/avatar.jpeg')}
+      <LinearGradient
+        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        style={styles.welcome}>
+        <TouchableOpacity
           style={{
-            height: height * 0.2,
-            width: height * 0.2,
-            borderRadius: height * 0.1,
+            alignItems: 'center',
           }}
-        />
-        <TouchableOpacity onPress={this.uploadPhoto}>
+          onPress={this.uploadPhoto}>
+          {this.state.profileImage ? (
+            <Image
+              source={{
+                uri: this.state.profileImage,
+              }}
+              style={{
+                height: height * 0.2,
+                width: height * 0.2,
+                borderRadius: height * 0.1,
+              }}
+            />
+          ) : (
+            <Image
+              source={require('../assets/images/avatar.jpeg')}
+              style={{
+                height: height * 0.2,
+                width: height * 0.2,
+                borderRadius: height * 0.1,
+              }}
+            />
+          )}
+
           <Text h3 blue>
             Change Profile Picture
           </Text>
@@ -154,9 +187,10 @@ export default class Profile extends Component {
           label="Name"
           defaultValue={this.state.name != 'Unknown' ? this.state.name : null}
           style={{
+            backgroundColor: theme.colors.white,
             marginBottom: 25,
             color: theme.colors.black,
-            borderColor: theme.colors.black,
+            borderColor: theme.colors.white,
           }}
           onChangeTextHandler={this.nameHandler}
         />
@@ -167,8 +201,9 @@ export default class Profile extends Component {
           multiline={true}
           style={{
             marginBottom: 25,
+            backgroundColor: theme.colors.white,
             color: theme.colors.black,
-            borderColor: theme.colors.black,
+            borderColor: theme.colors.white,
             height: height * 0.2,
           }}
           onChangeTextHandler={this.bioHandler}
@@ -184,31 +219,41 @@ export default class Profile extends Component {
             UPDATE PROFILE
           </Text>
         </Button>
-      </Block>
+
+        {this._renderLogoutButton()}
+      </LinearGradient>
     );
   }
+  _renderLogoutButton = () => {
+    return (
+      <Button
+        center
+        middle
+        shadow
+        flex={false}
+        row
+        style={{
+          marginBottom: 12,
+          width: width * 0.4,
+          bottom: 0,
+        }}
+        onPress={() => {
+          console.log('hello');
+          firebase.auth().signOut();
+        }}>
+        <Text button white>
+          SIGN OUT
+        </Text>
+      </Button>
+    );
+  };
 }
 
 const styles = StyleSheet.create({
   welcome: {
     flex: 1,
-    height: 500,
-    backgroundColor: theme.colors.gray3,
-  },
-  // horizontal line
-  hLine: {
-    marginVertical: theme.sizes.base * 2,
-    marginHorizontal: theme.sizes.base * 2,
-    height: 1,
-  },
-  // vertical line
-  vLine: {
-    marginVertical: theme.sizes.base / 2,
-    width: 1,
-  },
-  endTrip: {
-    position: 'absolute',
-    width: width,
-    bottom: 0,
+    paddingTop: '20%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

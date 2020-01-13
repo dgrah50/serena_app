@@ -96,7 +96,7 @@ export default createBottomTabNavigator(
       navigationOptions: {
         tabBarLabel: 'Profile',
         tabBarIcon: ({tintColor}) => (
-          <Icon name="comments" size={25} color={tintColor} />
+          <Icon name="user" size={25} color={tintColor} />
         ),
       },
     },

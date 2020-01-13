@@ -2,10 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 import firebase from 'react-native-firebase';
-import TrackPlayer, {
-  useTrackPlayerEvents,
-  TrackPlayerEvents,
-} from 'react-native-track-player';
+import TrackPlayer from 'react-native-track-player';
 import axios from 'axios';
 import qs from 'qs';
 const mocksong = {
@@ -20,10 +17,22 @@ const mocksong = {
 
 export default function App(props) {
   const [currentSongData, setCurrentSong] = useState(mocksong);
+  const [authTokenSet, setAuthTokenStatus] = useState(false);
   const [StreamToken, setStreamToken] = useState(null);
   const [tabBarVisible, showTabBar] = useState(false);
   const [recommendedVerses, setRecs] = useState(null);
   const didMountRef = useRef(false);
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        user.getIdToken().then(function(idToken) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
+          setAuthTokenStatus(true);
+        });
+      }
+    });
+  });
 
   useEffect(() => {
     if (currentSongData.mp3link) {
@@ -56,24 +65,28 @@ export default function App(props) {
   }, [currentSongData]);
 
   useEffect(() => {
-    if (firebase.auth().currentUser) {
+    if (authTokenSet) {
       axios
         .post(
-          'http://localhost:8000/api/users/token',
-          qs.stringify({content: firebase.auth().currentUser.uid}),
+          'http://ec2-3-133-129-208.us-east-2.compute.amazonaws.com:8000/api/users/token',
+          qs.stringify({
+            content: firebase.auth().currentUser.uid,
+          }),
         )
         .then(res => {
           setStreamToken(res.data);
         });
     }
-  }, []);
+  }, [authTokenSet]);
 
   useEffect(() => {
-    if (firebase.auth().currentUser) {
+    if (authTokenSet) {
       axios
         .post(
-          'http://localhost:8000/api/verses/recs',
-          qs.stringify({userID: firebase.auth().currentUser.uid}),
+          'http://ec2-3-133-129-208.us-east-2.compute.amazonaws.com:8000/api/verses/recs',
+          qs.stringify({
+            userID: firebase.auth().currentUser.uid,
+          }),
         )
         .then(res => {
           console.log(res.data);
@@ -83,27 +96,7 @@ export default function App(props) {
           console.log(err);
         });
     }
-  }, []);
-
-  useEffect(() => {
-    console.log("effect")
-    if (firebase.auth().currentUser) {
-      axios
-        .post(
-          'http://localhost:8000/api/users/create',
-          qs.stringify({
-            userID: firebase.auth().currentUser.uid,
-            userName: 'Dayan Graham',
-          }),
-        )
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-  }, []);
+  }, [authTokenSet]);
 
   return (
     <View style={styles.container}>

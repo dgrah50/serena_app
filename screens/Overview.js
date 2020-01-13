@@ -68,6 +68,7 @@ export default class Overview extends Component {
           likes: likesarray.sort(
             (a, b) => parseFloat(b.time) - parseFloat(a.time),
           ),
+          sermonRecs: this.props.screenProps.recommendedVerses.sermons.nextrecs
         });
       });
   }
@@ -101,6 +102,18 @@ export default class Overview extends Component {
 
   //****** SUB COMPONENTS SECTION
   _renderVerseCard() {
+    let today = new Date();
+    let hour = today.getHours()
+    let period = null
+    if (5 < hour && hour < 12 ){
+       period = "morning"
+    } else if (12 < hour  &&  hour < 17 ){
+       period = 'afternoon';
+    } else if (17 < hour && hour < 20 ){
+       period = 'evening';
+    } else {
+      period = 'night';
+    }
     return (
       <TouchableOpacity
         activeOpacity={0.8}
@@ -109,9 +122,9 @@ export default class Overview extends Component {
           <Block>
             <Block center>
               <Text h3 style={{marginVertical: 8}}>
-                Good evening, Dayan. How are you feeling today? {'\n'}
-                {'\n'}
-                You're on a 4 day streak, keep it up!
+                Good {period}! How are you feeling today? {'\n'}
+                {/* {'\n'}
+                You're on a 4 day streak, keep it up! */}
               </Text>
             </Block>
             {/* <Block row right>
@@ -136,57 +149,56 @@ export default class Overview extends Component {
           shadow
           style={{
             marginRight: 30,
-            width: 150,
-            height: 150,
+            width: width * 0.35,
+            height: width * 0.35,
             padding: 0,
+            borderBottomLeftRadius: theme.sizes.border,
+            borderBottomRightRadius: theme.sizes.border,
           }}>
-          {/* <Image
+          <LinearGradient
+            colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
             style={{
               width: '100%',
-              height: '100%',
+              flex: 1,
               borderRadius: theme.sizes.border,
-            }}
-            resizeMode="cover"
-            source={{
-              uri: item.speakerimg,
-            }}
-          /> */}
-          <Image
-            source={require('../assets/images/icon.png')}
-            style={{height: '50%', width: '100%', marginVertical: '10%'}}
-            resizeMode="contain"
-          />
-          <Block
-            space={'between'}
-            center
-            row
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              width: '100%',
-              height: '25%',
-              paddingHorizontal: '5%',
-              backgroundColor: 'white',
-              borderBottomLeftRadius: theme.sizes.border,
-              borderBottomRightRadius: theme.sizes.border,
             }}>
             <Image
-              style={{
-                width: '25%',
-                height: '100%',
-                borderRadius: theme.sizes.border,
-              }}
+              source={require('../assets/images/icon.png')}
+              style={{height: '50%', width: '100%', marginVertical: '10%'}}
               resizeMode="contain"
-              source={{
-                uri: item.speakerimg,
-              }}
             />
-            <Block center style={{width: '75%'}}>
-              <Text black center caption>
-                {item.title}
-              </Text>
+            <Block
+              space={'between'}
+              center
+              row
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                width: '100%',
+                height: '25%',
+                paddingHorizontal: '5%',
+                backgroundColor: 'white',
+                borderBottomLeftRadius: theme.sizes.border,
+                borderBottomRightRadius: theme.sizes.border,
+              }}>
+              <Image
+                style={{
+                  width: '25%',
+                  height: '100%',
+                  borderRadius: theme.sizes.border,
+                }}
+                resizeMode="contain"
+                source={{
+                  uri: item.speakerimg,
+                }}
+              />
+              <Block center style={{width: '75%'}}>
+                <Text black center caption numberOfLines={2}>
+                  {item.title}
+                </Text>
+              </Block>
             </Block>
-          </Block>
+          </LinearGradient>
         </Card>
       </TouchableOpacity>
     );
@@ -220,19 +232,12 @@ export default class Overview extends Component {
     );
   }
   _renderRecommendations() {
-    try {
-      this.setState({
-        sermonRecs: this.props.screenProps.recommendedVerses.sermons.nextrecs,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-
     return (
       <Block>
         <Text h3 white spacing={1} style={{marginVertical: 8}}>
           Recommended For You
         </Text>
+        {(this.state.sermonRecs) && (
         <Block>
           <Carousel
             data={this.state.sermonRecs}
@@ -250,6 +255,7 @@ export default class Overview extends Component {
             }}
           />
         </Block>
+        )}
       </Block>
     );
   }

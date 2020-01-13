@@ -15,7 +15,9 @@ import qs from 'qs';
 import Voice from 'react-native-voice';
 import {Block, Card, Text, AnimatedCircularProgress} from '../components';
 import {theme, time, emotions} from '../constants';
+import firebase from 'react-native-firebase';
 import LinearGradient from 'react-native-linear-gradient';
+
 
 
 const {width} = Dimensions.get('window');
@@ -34,6 +36,16 @@ export default class Fetch extends Component {
     };
     Voice.onSpeechStart = this.onSpeechStart;
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
+    // firebase.auth().onAuthStateChanged(function(user) {
+    //   if (user) {
+    //     user.getIdToken().then(function(idToken) {
+    //       console.log(idToken)
+    //       axios.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
+    //       return idToken;
+    //     });
+    //   }
+    // });
+    
   }
 
   static navigationOptions = {
@@ -165,9 +177,7 @@ export default class Fetch extends Component {
     return (
       <Card shadow>
         <Block center middle>
-          <Text h3>
-            How are you feeling, Dayan? Hold the mic button to speak.
-          </Text>
+          <Text h3>How are you feeling? Hold the mic button to speak.</Text>
           <AnimatedCircularProgress
             onAnimationComplete={() => {
               // console.log('animation done');
@@ -202,7 +212,10 @@ export default class Fetch extends Component {
   apiCall(query) {
     this.setState({fetched: false});
     axios
-      .post('http://localhost:8000/api/verses', qs.stringify({content: query}))
+      .post(
+        'http://ec2-3-133-129-208.us-east-2.compute.amazonaws.com:8000/api/verses',
+        qs.stringify({content: query}),
+      )
       .then(response => {
         this.setState({
           fetched: true,

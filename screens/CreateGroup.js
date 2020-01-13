@@ -91,19 +91,27 @@ export default class CreateGroup extends Component {
     });
   };
 
-  createNewGroup() {
+  async createNewGroup() {
     if (!this.state.groupName || !this.state.groupDesc) {
       Alert.alert('Incomplete details entered ', 'Try again!', [{text: 'OK'}], {
         cancelable: false,
       });
     }
+    const jwtToken = await firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        user.getIdToken().then(function(idToken) {
+          return idToken;
+        });
+      }
+    });
     axios
       .post(
-        'http://localhost:8000/api/groups/create',
+        'http://ec2-3-133-129-208.us-east-2.compute.amazonaws.com:8000/api/groups/create',
         qs.stringify({
           userID: firebase.auth().currentUser.uid.toString(),
           groupName: this.state.groupName,
           groupDesc: this.state.groupDesc,
+          headers: {authorization: `Bearer ${token}`},
         }),
       )
       .then(res => {

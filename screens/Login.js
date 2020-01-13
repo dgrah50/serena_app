@@ -162,7 +162,7 @@ class Login extends Component {
             onPress={() => this.props.navigation.navigate('EmailLogin')}
             style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
             {/* <Icon name="facebook-f" size={30} color="#fff" /> */}
-            <Text button black>
+            <Text button black center middle>
               LOG IN WITH EMAIL
             </Text>
           </Button>
@@ -170,7 +170,7 @@ class Login extends Component {
             shadow
             onPress={() => this.props.navigation.navigate('Register')}
             style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
-            <Text button black>
+            <Text button black center middle >
               SIGN UP WITH EMAIL
             </Text>
           </Button>
@@ -181,7 +181,7 @@ class Login extends Component {
             onPress={() => this.facebookLogin()}
             style={{width: width * 0.8, backgroundColor: '#3b5998'}}>
             {/* <Icon name="facebook-f" size={30} color="#fff" /> */}
-            <Text button white>
+            <Text button white center middle>
               CONTINUE WITH FACEBOOK
             </Text>
           </Button>

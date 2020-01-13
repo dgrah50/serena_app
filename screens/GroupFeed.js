@@ -21,20 +21,28 @@ export default function GroupFeed(props) {
   GroupFeed.navigationOptions = {
     title: props.navigation.getParam('groupID'),
     headerStyle: {
-      position: 'absolute',
       backgroundColor: theme.colors.gray3,
-      zIndex: 100,
     },
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-    headerRight: (
+    headerRight: inGroup ? (
       <Icon
         onPress={() => {
           leaveGroup();
         }}
         style={{position: 'absolute', right: 20}}
         name="sign-out"
+        size={25}
+        color="black"
+      />
+    ) : (
+      <Icon
+        onPress={() => {
+          joinGroup();
+        }}
+        style={{position: 'absolute', right: 20}}
+        name="user-plus"
         size={25}
         color="black"
       />
@@ -77,6 +85,27 @@ export default function GroupFeed(props) {
     );
   };
 
+  const joinGroup = () => {
+    Alert.alert(
+      'Do you want to join this the group?',
+      '',
+      [
+        {
+          text: 'Join',
+          onPress: () => {
+            joinGroupLogic();
+          },
+        },
+        {
+          text: 'Cancel',
+        },
+      ],
+      {
+        cancelable: false,
+      },
+    );
+  };
+
   const leaveGroup = () => {
     Alert.alert(
       'Do you want to leave the group?',
@@ -98,6 +127,23 @@ export default function GroupFeed(props) {
     );
   };
 
+  const joinGroupLogic = () => {
+    let firestoreref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('Info')
+      .doc('groups');
+    firestoreref
+      .update({
+        subscribed: firebase.firestore.FieldValue.arrayUnion(
+          props.navigation.getParam('groupID'),
+        ),
+      })
+      .then(() => {
+        props.navigation.navigate('Groups');
+      });
+  };
   const leaveGroupLogic = () => {
     let firestoreref = firebase
       .firestore()
@@ -117,17 +163,46 @@ export default function GroupFeed(props) {
   };
 
   const [bio, setBio] = useState(null);
+  const [inGroup, setInGroup] = useState(false);
 
   useEffect(() => {
     let firestoreref = firebase
       .firestore()
       .collection('groups')
       .doc(props.navigation.getParam('groupID'));
-
     firestoreref
       .get()
       .then(res => {
         setBio(res.data().bio);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    let firestoreref2 = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('Info')
+      .doc('groups');
+    firestoreref2.get().then(res => {
+      setInGroup(
+        res.data().subscribed.includes(props.navigation.getParam('groupID')),
+      );
+    });
+
+    client = stream.connect(
+      'zgrr2ez3h3yz',
+      props.screenProps.StreamToken,
+      '65075',
+    );
+    client
+      .user(firebase.auth().currentUser.uid)
+      .get()
+      .then(StreamUser => {
+        if (StreamUser.data.name == 'Unknown') {
+          props.navigation.navigate('Profile');
+        }
       })
       .catch(err => {
         console.log(err);
@@ -142,7 +217,9 @@ export default function GroupFeed(props) {
         token={props.screenProps.StreamToken}>
         <View>
           <Block center middle flex={false} style={{padding: 5}}>
-            <Text bold h3>{bio}</Text>
+            <Text bold h3>
+              {bio}
+            </Text>
           </Block>
 
           <StatusUpdateForm

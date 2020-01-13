@@ -101,7 +101,6 @@ export default class Groups extends Component {
           paddingTop: '15%',
         }}>
         {this._renderGroups()}
-        {this._renderLogoutButton()}
       </LinearGradient>
     );
   }
@@ -204,24 +203,7 @@ export default class Groups extends Component {
     );
   };
 
-  _renderLogoutButton = () => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          firebase.auth().signOut();
-        }}>
-        <Card
-          center
-          middle
-          shadow
-          flex={false}
-          row
-          style={{marginHorizontal: '20%'}}>
-          <Text h3>SIGN OUT</Text>
-        </Card>
-      </TouchableOpacity>
-    );
-  };
+
 
   searchGroupHandler = e => {
     if (!this.state.searching) {

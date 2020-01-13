@@ -288,6 +288,8 @@ PODS:
     - React
   - react-native-image-picker (1.1.0):
     - React
+  - react-native-image-resizer (1.1.0):
+    - React
   - react-native-music-control (0.10.7):
     - React
   - react-native-track-player (2.0.0-rc13):
@@ -380,6 +382,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-music-control (from `../node_modules/react-native-music-control`)
   - react-native-track-player (from `../node_modules/react-native-track-player`)
   - react-native-voice (from `../node_modules/react-native-voice`)
@@ -477,6 +480,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fbsdk"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-image-resizer:
+    :path: "../node_modules/react-native-image-resizer"
   react-native-music-control:
     :path: "../node_modules/react-native-music-control"
   react-native-track-player:
@@ -579,6 +584,7 @@ SPEC CHECKSUMS:
   React-jsinspector: e08662d1bf5b129a3d556eb9ea343a3f40353ae4
   react-native-fbsdk: b94a83971c496a35803f38b921aec6d637ba07b5
   react-native-image-picker: 3637d63fef7e32a230141ab4660d3ceb773c824f
+  react-native-image-resizer: 9dfb844937574db849fd18a56d8e6c607b0a31d8
   react-native-music-control: 74b1f7d03b781aa38557d706ca4650ff1c96095a
   react-native-track-player: 6c2c2f163534bb6d6b5fea68959b3641f70718dd
   react-native-voice: 0253a5cde07d9c675463e36f7e668a76b0825de4
