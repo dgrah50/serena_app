@@ -148,7 +148,7 @@ export default class Profile extends Component {
   render() {
     return (
       <LinearGradient
-        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        colors={['rgba(76, 102, 159, 0.8)', 'rgba(76, 102, 159, 0.8)']}
         style={styles.welcome}>
         <TouchableOpacity
           style={{

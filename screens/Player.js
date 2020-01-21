@@ -22,7 +22,7 @@ export default function Player(props) {
 
   return (
     <LinearGradient
-      colors={['rgba(76, 102, 159, 0.6)', '#7D7EB1']}
+      colors={['rgba(76, 102, 159, 1)', '#7D7EB1']}
       style={{
         width: '100%',
         flex: 1,

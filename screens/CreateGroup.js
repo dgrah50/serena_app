@@ -106,7 +106,7 @@ export default class CreateGroup extends Component {
     });
     axios
       .post(
-        'http://ec2-3-133-129-208.us-east-2.compute.amazonaws.com:8000/api/groups/create',
+        'https://serenaengine333.co.uk/api/groups/create',
         qs.stringify({
           userID: firebase.auth().currentUser.uid.toString(),
           groupName: this.state.groupName,

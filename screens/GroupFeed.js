@@ -26,27 +26,6 @@ export default function GroupFeed(props) {
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-    headerRight: inGroup ? (
-      <Icon
-        onPress={() => {
-          leaveGroup();
-        }}
-        style={{position: 'absolute', right: 20}}
-        name="sign-out"
-        size={25}
-        color="black"
-      />
-    ) : (
-      <Icon
-        onPress={() => {
-          joinGroup();
-        }}
-        style={{position: 'absolute', right: 20}}
-        name="user-plus"
-        size={25}
-        color="black"
-      />
-    ),
   };
   const onpresscomment = (id, act) => {
     props.navigation.navigate('SinglePostScreen', {
@@ -163,7 +142,7 @@ export default function GroupFeed(props) {
   };
 
   const [bio, setBio] = useState(null);
-  const [inGroup, setInGroup] = useState(false);
+  const [inGroup, setInGroup] = useState(null);
 
   useEffect(() => {
     let firestoreref = firebase
@@ -215,11 +194,33 @@ export default function GroupFeed(props) {
         apiKey="zgrr2ez3h3yz"
         appId="65075"
         token={props.screenProps.StreamToken}>
-        <View>
+        <View style={{paddingVertical:20}}>
           <Block center middle flex={false} style={{padding: 5}}>
             <Text bold h3>
               {bio}
             </Text>
+
+            {inGroup ? (
+              <Icon
+                onPress={() => {
+                  leaveGroup();
+                }}
+                style={{position: 'absolute', right: 20}}
+                name="sign-out"
+                size={25}
+                color="black"
+              />
+            ) : (
+              <Icon
+                onPress={() => {
+                  joinGroup();
+                }}
+                style={{position: 'absolute', right: 20}}
+                name="user-plus"
+                size={25}
+                color="black"
+              />
+            )}
           </Block>
 
           <StatusUpdateForm

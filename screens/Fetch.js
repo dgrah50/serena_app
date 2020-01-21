@@ -76,7 +76,7 @@ export default class Fetch extends Component {
   render() {
     return (
       <LinearGradient
-        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        colors={['rgba(76, 102, 159, 1)', 'rgba(76, 102, 159, 1)']}
         style={{
           width: '100%',
           flex: 1,
@@ -213,7 +213,7 @@ export default class Fetch extends Component {
     this.setState({fetched: false});
     axios
       .post(
-        'http://ec2-3-133-129-208.us-east-2.compute.amazonaws.com:8000/api/verses',
+        'https://serenaengine333.co.uk/api/verses',
         qs.stringify({content: query}),
       )
       .then(response => {

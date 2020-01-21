@@ -94,7 +94,7 @@ export default class Groups extends Component {
   render() {
     return (
       <LinearGradient
-        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        colors={['rgba(76, 102, 159, 1)', 'rgba(76, 102, 159, 1)']}
         style={{
           width: '100%',
           flex: 1,

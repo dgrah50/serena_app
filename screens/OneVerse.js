@@ -32,7 +32,7 @@ export default class OneVerse extends Component {
   render() {
     return (
       <LinearGradient
-        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        colors={['rgba(76, 102, 159, 1)', 'rgba(76, 102, 159, 1)']}
         style={styles.welcome}>
         {this._renderVerseCard()}
         <Block>

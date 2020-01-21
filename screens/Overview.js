@@ -27,7 +27,7 @@ export default class Overview extends Component {
   render() {
     return (
       <LinearGradient
-        colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+        colors={['rgba(76, 102, 159, 1)', 'rgba(76, 102, 159, 1)']}
         style={{
           width: '100%',
           flex: 1,
@@ -156,7 +156,7 @@ export default class Overview extends Component {
             borderBottomRightRadius: theme.sizes.border,
           }}>
           <LinearGradient
-            colors={['rgba(76, 102, 159, 0.4)', 'rgba(76, 102, 159, 0.8)']}
+            colors={['rgba(76, 102, 159, 0.8)', 'rgba(76, 102, 159, 0.8)']}
             style={{
               width: '100%',
               flex: 1,

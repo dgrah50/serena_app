@@ -68,7 +68,7 @@ export default function App(props) {
     if (authTokenSet) {
       axios
         .post(
-          'http://ec2-3-133-129-208.us-east-2.compute.amazonaws.com:8000/api/users/token',
+          'https://serenaengine333.co.uk/api/users/token',
           qs.stringify({
             content: firebase.auth().currentUser.uid,
           }),
@@ -83,7 +83,7 @@ export default function App(props) {
     if (authTokenSet) {
       axios
         .post(
-          'http://ec2-3-133-129-208.us-east-2.compute.amazonaws.com:8000/api/verses/recs',
+          'https://serenaengine333.co.uk/api/verses/recs',
           qs.stringify({
             userID: firebase.auth().currentUser.uid,
           }),
