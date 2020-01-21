@@ -59,18 +59,18 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>For taking a photo.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Description of why you require the use of the microphone</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Description of why you require the use of the speech recognition</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>For choosing a photo.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>For taking a photo.</string>
+	<string>Serena uses the microphone for voice search.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>For saving a photo.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>For choosing a photo.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Serena uses speech recognition for voice search.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Rubik-Black.ttf</string>
@@ -114,8 +114,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

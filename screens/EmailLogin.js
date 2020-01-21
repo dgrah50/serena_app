@@ -141,7 +141,8 @@ class EmailLogin extends Component {
   }
   onLoginFail(err) {
     this.setState({err, loading: false});
-    Alert.alert(err, 'Try again!', [{text: 'OK'}], {
+    console.log(err)
+    Alert.alert(err.toString(), 'Try again!', [{text: 'OK'}], {
       cancelable: false,
     });
   }

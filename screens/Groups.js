@@ -13,6 +13,7 @@ import firebase from 'react-native-firebase';
 import LinearGradient from 'react-native-linear-gradient';
 const Fuse = require('fuse.js');
 const {width} = Dimensions.get('window');
+const stream = require('getstream');
 
 export default class Groups extends Component {
   static navigationOptions = {
@@ -110,9 +111,26 @@ export default class Groups extends Component {
       <TouchableOpacity
         key={idx}
         onPress={() => {
-          this.props.navigation.navigate('GroupFeed', {
-            groupID: item,
-          });
+          client = stream.connect(
+            'zgrr2ez3h3yz',
+            this.props.screenProps.StreamToken,
+            '65075',
+          );
+          client
+            .user(firebase.auth().currentUser.uid)
+            .get()
+            .then(StreamUser => {
+              if (StreamUser.data.name == 'Unknown') {
+                this.props.navigation.navigate('Profile');
+              } else {
+                this.props.navigation.navigate('GroupFeed', {
+                  groupID: item,
+                });
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
         }}>
         <Card
           center
@@ -202,8 +220,6 @@ export default class Groups extends Component {
       </React.Fragment>
     );
   };
-
-
 
   searchGroupHandler = e => {
     if (!this.state.searching) {

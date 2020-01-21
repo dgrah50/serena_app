@@ -13,7 +13,6 @@ import {
 } from 'react-native-activity-feed';
 import LinearGradient from 'react-native-linear-gradient';
 import firebase from 'react-native-firebase';
-const stream = require('getstream');
 const ReplyIcon = require('../assets/icons/chat.png');
 const {height, width} = Dimensions.get('window');
 
@@ -169,23 +168,6 @@ export default function GroupFeed(props) {
         res.data().subscribed.includes(props.navigation.getParam('groupID')),
       );
     });
-
-    client = stream.connect(
-      'zgrr2ez3h3yz',
-      props.screenProps.StreamToken,
-      '65075',
-    );
-    client
-      .user(firebase.auth().currentUser.uid)
-      .get()
-      .then(StreamUser => {
-        if (StreamUser.data.name == 'Unknown') {
-          props.navigation.navigate('Profile');
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
   }, []);
 
   return (

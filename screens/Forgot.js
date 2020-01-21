@@ -93,7 +93,7 @@ class Forgot extends Component {
           alert('Please check your email.');
         })
         .catch(function(err) {
-          Alert.alert(err, 'Try again!', [{text: 'OK'}], {
+          Alert.alert(err.toString(), 'Try again!', [{text: 'OK'}], {
             cancelable: false,
           });
         });

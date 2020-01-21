@@ -53,7 +53,7 @@ class Login extends Component {
                   style={{height: 56, width: 204, marginVertical: '10%'}}
                 />
                 <LottieView
-                  style={{width: width * 0.8}}
+                  style={{width: width * 0.6}}
                   source={require('../assets/anims/levitate.json')}
                   autoPlay
                   loop
@@ -62,6 +62,7 @@ class Login extends Component {
             ),
             bottomBarColor: theme.colors.gray3,
             title: (
+
               <Text h2 black center>
                 Welcome to Serena
               </Text>
@@ -78,7 +79,7 @@ class Login extends Component {
                   style={{height: 56, width: 204, marginVertical: '10%'}}
                 />
                 <LottieView
-                  style={{width: width * 0.8}}
+                  style={{width: width * 0.6}}
                   source={require('../assets/anims/happydude.json')}
                   autoPlay
                   loop
@@ -102,7 +103,7 @@ class Login extends Component {
                   style={{height: 56, width: 204, marginVertical: '10%'}}
                 />
                 <LottieView
-                  style={{width: width * 0.8}}
+                  style={{width: width * 0.6}}
                   source={require('../assets/anims/womanonphone.json')}
                   autoPlay
                   loop
@@ -253,7 +254,7 @@ class Login extends Component {
 
   onLoginFail(err) {
     this.setState({err, loading: false});
-    Alert.alert(err, 'Try again!', [{text: 'OK'}], {
+    Alert.alert(err.toString(), 'Try again!', [{text: 'OK'}], {
       cancelable: false,
     });
   }
