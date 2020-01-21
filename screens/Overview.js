@@ -19,12 +19,47 @@ export default class Overview extends Component {
     super(props);
     this.state = {
       likes: [],
-      sermonRecs: null,
+      sermonRecs: [
+        {
+          title: 'So Many Reasons to Love The Lord Jesus Christ',
+          mp3link:
+            '//mp3.sermonaudio.com/download/112512158135/112512158135.mp3',
+          speakerimg:
+            'https://media.sermonaudio.com/gallery/photos/thumbnails/mikeallison-01.PNG',
+          author: 'Mike Allison',
+          plays: '160+ ',
+          duration: ' 36 min',
+          date_uploaded: 'SUN 11/25/2012',
+        },
+        {
+          title: 'The Enemies of the Cross.',
+          mp3link:
+            '//mp3.sermonaudio.com/download/1213091951010/1213091951010.mp3',
+          speakerimg:
+            'https://media.sermonaudio.com/gallery/photos/thumbnails/cranston-01.PNG',
+          author: 'Rev. Reginald Cranston',
+          plays: '140+ ',
+          duration: ' 48 min',
+          date_uploaded: 'SUN 12/13/2009',
+        },
+        {
+          title: 'Restore Fatherhood',
+          mp3link:
+            '//mp3.sermonaudio.com/download/617121927576/617121927576.mp3',
+          speakerimg:
+            'https://media.sermonaudio.com/gallery/photos/thumbnails/jasonyoung-01.PNG',
+          author: 'Jason Young',
+          plays: '3,860+ ',
+          duration: ' 65 min',
+          date_uploaded: 'SUN 06/17/2012',
+        },
+      ],
     };
     this.fetchLikes();
   }
 
   render() {
+
     return (
       <LinearGradient
         colors={['rgba(76, 102, 159, 1)', 'rgba(76, 102, 159, 1)']}
