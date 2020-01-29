@@ -1,6 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
+import {FluidNavigator} from 'react-navigation-fluid-transitions';
 import {theme, mocks, time} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomTabBar from '../components/CustomTabBar';
@@ -32,7 +33,7 @@ export default createBottomTabNavigator(
             screen: Fetch,
           },
           HomeFeed: {
-            screen: createStackNavigator(
+            screen: FluidNavigator(
               {
                 HomeFeed: {
                   screen: HomeFeed,

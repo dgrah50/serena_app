@@ -65,6 +65,7 @@
     "react-native-voice": "^0.3.0",
     "react-navigation": "^4.0.10",
     "react-navigation-drawer": "^2.2.2",
+    "react-navigation-fluid-transitions": "^0.3.2",
     "react-navigation-stack": "^1.9.0",
     "react-navigation-tabs": "^2.5.6",
     "rn-fetch-blob": "github:joltup/rn-fetch-blob#master",

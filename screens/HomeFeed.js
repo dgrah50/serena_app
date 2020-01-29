@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {Block, Card, Text} from '../components';
 import {theme} from '../constants';
 import {Bars} from 'react-native-loader';
+import {Transition} from 'react-navigation-fluid-transitions';
 
 export default class HomeFeed extends Component {
   constructor(props) {
@@ -58,52 +59,66 @@ export default class HomeFeed extends Component {
     }
 
     return (
-      <ImageBackground
-        style={{width: '100%'}}
-        imageStyle={{borderRadius: 25}}
-        resizeMode="center"
-        source={require('../assets/images/hand.jpg')}>
-        <Block flex={false} style={{padding: 10}}>
-          <Block flex={false}>
-            <Block flex={false} center>
-              <Text h2 white style={{marginVertical: 8}}>
-                {verses[0].verse}
-              </Text>
+      <TouchableOpacity
+        onPress={() => {
+          this.props.navigation.navigate('Detail', {verse: verses[0]});
+        }}>
+        <Transition shared="hands">
+          <ImageBackground
+            style={{width: '100%'}}
+            imageStyle={{borderRadius: 25}}
+            source={require('../assets/images/hand.jpg')}>
+            <Block flex={false} style={{padding: 10}}>
+              <Block flex={false}>
+                <Block flex={false} center>
+                  <Transition shared="versetext">
+                    <Text h2 white style={{marginVertical: 8}}>
+                      {verses[0].verse}
+                    </Text>
+                  </Transition>
+                </Block>
+                <Block flex={false} center>
+                  <Transition shared="booktext">
+                    <Text h3 white style={{marginVertical: 8}}>
+                      {verses[0].bookname}
+                    </Text>
+                  </Transition>
+                </Block>
+              </Block>
+              <Block flex={false} row middle space={'between'}>
+                <Transition shared="likebutton">
+                  <TouchableOpacity>
+                    <Icon.Button
+                      name="heart"
+                      backgroundColor={theme.colors.accent}
+                      onPress={() =>
+                        this.addToFavourites(
+                          verses[0].verse,
+                          verses[0].bookname,
+                          verses[0].osis,
+                        )
+                      }>
+                      Like
+                    </Icon.Button>
+                  </TouchableOpacity>
+                </Transition>
+                <Transition shared="sharebutton">
+                  <TouchableOpacity>
+                    <Icon.Button
+                      name="share-alt"
+                      backgroundColor={theme.colors.share}
+                      onPress={() =>
+                        this.onShare(verses[0].verse + ' ' + verses[0].bookname)
+                      }>
+                      Share
+                    </Icon.Button>
+                  </TouchableOpacity>
+                </Transition>
+              </Block>
             </Block>
-            <Block flex={false} center>
-              <Text h3 white style={{marginVertical: 8}}>
-                {verses[0].bookname}
-              </Text>
-            </Block>
-          </Block>
-          <Block flex={false} row middle space={'between'}>
-            <TouchableOpacity>
-              <Icon.Button
-                name="heart"
-                backgroundColor={theme.colors.accent}
-                onPress={() =>
-                  this.addToFavourites(
-                    verses[0].verse,
-                    verses[0].bookname,
-                    verses[0].osis,
-                  )
-                }>
-                Like
-              </Icon.Button>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Icon.Button
-                name="share-alt"
-                backgroundColor={theme.colors.share}
-                onPress={() =>
-                  this.onShare(verses[0].verse + ' ' + verses[0].bookname)
-                }>
-                Share
-              </Icon.Button>
-            </TouchableOpacity>
-          </Block>
-        </Block>
-      </ImageBackground>
+          </ImageBackground>
+        </Transition>
+      </TouchableOpacity>
     );
   }
   _renderItem(item, idx) {
