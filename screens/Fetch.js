@@ -8,7 +8,7 @@ import {
   View,
   Easing,
   Keyboard,
-  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {RNChipView} from 'react-native-chip-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -21,6 +21,7 @@ import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
 import SliderEntry from '../components/SliderEntry';
+import * as Animatable from 'react-native-animatable';
 
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 
@@ -48,6 +49,7 @@ export default class Fetch extends Component {
     //   }
     // });
   }
+  handleViewRef = ref => (this.view = ref);
 
   static navigationOptions = {
     headerLeft: (
@@ -76,22 +78,32 @@ export default class Fetch extends Component {
 
   render() {
     return (
-      <LinearGradient
-        colors={['#7645C1', '#3023AE']}
-        style={styles.welcome}
-        showsVerticalScrollIndicator={false}>
-        <Block
-          flex={false}
-          center
-          middle
-          style={{ width: '100%', height: '75%'}}>
-          {this.state.showMicButton && this._renderMicRing()}
-          {this.state.showMicButton && this._renderKeyboardButton()}
-          {!this.state.showMicButton && this._renderTypedPrayerInput()}
-          {this._renderEmotionChips()}
-        </Block>
-        <Block>{this._renderPraylist()}</Block>
-      </LinearGradient>
+      <TouchableWithoutFeedback
+        style={{width: '100%', flex: 1}}
+        onPress={() => {
+          if (!this.state.showMicButton) {
+            this.showMic();
+          }
+        }}>
+        <LinearGradient
+          colors={['#7645C1', '#3023AE']}
+          style={styles.welcome}
+          showsVerticalScrollIndicator={false}>
+          <View
+            style={{
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '75%',
+            }}>
+            {this._renderMicRing()}
+            {this.state.showMicButton && this._renderKeyboardButton()}
+            {!this.state.showMicButton && this._renderTypedPrayerInput()}
+            {this._renderEmotionChips()}
+          </View>
+          <Block>{this._renderPraylist()}</Block>
+        </LinearGradient>
+      </TouchableWithoutFeedback>
     );
   }
 
@@ -130,7 +142,10 @@ export default class Fetch extends Component {
               showsHorizontalScrollIndicator={false}>
               {emotions.emotions[this.state.EmojiEmotion].map((topic, idx) => {
                 return (
-                  <Block style={{padding: 5}} key={topic}>
+                  <Animatable.View
+                    animation={'fadeInRight'}
+                    style={{paddingHorizontal: 5}}
+                    key={topic}>
                     <RNChipView
                       onPress={() => {
                         this.apiCall(topic);
@@ -138,24 +153,31 @@ export default class Fetch extends Component {
                       title={topic}
                       avatar={false}
                     />
-                  </Block>
+                  </Animatable.View>
                 );
               })}
             </ScrollView>
-            <Icon
-              name={'times-circle'}
-              size={30}
-              color={theme.colors.gray2}
-              onPress={() => {
-                this.setState({EmojiEmotion: null});
-              }}
-            />
+            <Animatable.View
+              animation={'fadeIn'}
+              style={{justifyContent: 'center', alignItems: 'center'}}>
+              <Icon
+                name={'times-circle'}
+                size={30}
+                color={theme.colors.gray2}
+                onPress={() => {
+                  this.setState({EmojiEmotion: null});
+                }}
+              />
+            </Animatable.View>
           </React.Fragment>
         ) : (
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {['😀', '😡', '😔', '😨'].map((topic, idx) => {
               return (
-                <Block style={{padding: 5}} key={topic}>
+                <Animatable.View
+                  style={{padding: 5}}
+                  key={topic}
+                  animation={'fadeInLeft'}>
                   <RNChipView
                     onPress={() => {
                       this.setState({
@@ -165,7 +187,7 @@ export default class Fetch extends Component {
                     title={topic}
                     avatar={false}
                   />
-                </Block>
+                </Animatable.View>
               );
             })}
           </ScrollView>
@@ -173,9 +195,23 @@ export default class Fetch extends Component {
       </View>
     );
   }
+
+  fadeIn = {
+    from: {
+      opacity: 1,
+    },
+    to: {
+      opacity: 0,
+    },
+  };
   _renderMicRing() {
     return (
-      <Block center middle flex={false} style={{marginBottom:"10%"}}>
+      <Animatable.View
+        ref={this.handleViewRef}
+        center
+        middle
+        flex={false}
+        style={{marginBottom: '10%'}}>
         <AnimatedCircularProgress
           onAnimationComplete={() => {
             // console.log('animation done');
@@ -184,7 +220,7 @@ export default class Fetch extends Component {
           tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
           {fill => this._renderMicButton()}
         </AnimatedCircularProgress>
-      </Block>
+      </Animatable.View>
     );
   }
   _renderMicButton() {
@@ -296,7 +332,7 @@ export default class Fetch extends Component {
     ];
 
     return (
-      <Block  flex={false} >
+      <Block flex={false}>
         <Carousel
           data={ENTRIES1}
           renderItem={this._renderItem.bind(this)}
@@ -328,7 +364,7 @@ export default class Fetch extends Component {
 
   //****** HELPER FUNCTIONS SECTION
   apiCall(query) {
-    console.log("calling api")
+    console.log('calling api');
     this.setState({fetched: false});
     axios
       .post(
@@ -395,11 +431,43 @@ export default class Fetch extends Component {
     }
   }
   hideMic() {
+    this.view.animate({
+      0: {
+        opacity: 1,
+        // scale: 1,
+      },
+      0.5: {
+        opacity: 0.5,
+        // scale: 0.3,
+        height: 50,
+      },
+      1: {
+        opacity: 0,
+        // scale: 0,
+        height: 0,
+      },
+    });
     this.setState({
       showMicButton: false,
     });
   }
   showMic() {
+    this.view.animate({
+      0: {
+        opacity: 0,
+        height: 0,
+      },
+      0.5: {
+        opacity: 0.5,
+        // scale: 0.3,
+        height: 50,
+      },
+      1: {
+        opacity: 1,
+        // scale: 0,
+        height: 125,
+      },
+    });
     Keyboard.dismiss;
     this.setState({
       showMicButton: true,
