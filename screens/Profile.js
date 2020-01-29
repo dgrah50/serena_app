@@ -10,7 +10,6 @@ import {
 import {Text, Card, Input, Button} from '../components';
 import {theme} from '../constants';
 import firebase from 'react-native-firebase';
-import LinearGradient from 'react-native-linear-gradient';
 
 const stream = require('getstream');
 const {height, width} = Dimensions.get('window');
@@ -147,9 +146,7 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <LinearGradient
-        colors={['rgba(76, 102, 159, 0.8)', 'rgba(76, 102, 159, 0.8)']}
-        style={styles.welcome}>
+      <View style={styles.welcome}>
         <TouchableOpacity
           style={{
             alignItems: 'center',
@@ -176,10 +173,17 @@ export default class Profile extends Component {
               }}
             />
           )}
-
-          <Text h3 blue>
-            Change Profile Picture
-          </Text>
+          <Button
+          onPress={this.uploadPhoto}
+            shadow
+            style={{
+              marginVertical: 12,
+              width: width * 0.5,
+            }}>
+            <Text button white>
+              CHANGE PROFILE PICTURE
+            </Text>
+          </Button>
         </TouchableOpacity>
 
         <Input
@@ -212,7 +216,7 @@ export default class Profile extends Component {
           shadow
           style={{
             marginBottom: 12,
-            width: width * 0.4,
+            width: width * 0.5,
           }}
           onPress={() => this.setNameAndBio()}>
           <Text button white>
@@ -221,7 +225,7 @@ export default class Profile extends Component {
         </Button>
 
         {this._renderLogoutButton()}
-      </LinearGradient>
+      </View>
     );
   }
   _renderLogoutButton = () => {
@@ -234,7 +238,7 @@ export default class Profile extends Component {
         row
         style={{
           marginBottom: 12,
-          width: width * 0.4,
+          width: width * 0.5,
           bottom: 0,
         }}
         onPress={() => {
@@ -252,8 +256,10 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   welcome: {
     flex: 1,
+    paddingBottom: '20%',
     paddingTop: '20%',
     alignItems: 'center',
     justifyContent: 'space-between',
+    backgroundColor: theme.colors.bg
   },
 });

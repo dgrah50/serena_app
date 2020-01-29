@@ -5,13 +5,16 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import firebase from 'react-native-firebase'
+import firebase from 'react-native-firebase';
 import Carousel from 'react-native-snap-carousel';
-import LinearGradient from 'react-native-linear-gradient';
-
+import axios from 'axios';
+import {RNChipView} from 'react-native-chip-view';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import qs from 'qs';
 import {Block, Card, Text} from '../components';
-import {theme} from '../constants';
+import {theme, emotions} from '../constants';
 const {width} = Dimensions.get('window');
 
 export default class Overview extends Component {
@@ -54,26 +57,28 @@ export default class Overview extends Component {
           date_uploaded: 'SUN 06/17/2012',
         },
       ],
+      dailyVerse: null,
     };
     this.fetchLikes();
+    this.fetchDailyVerse();
   }
 
   render() {
-
     return (
-      <LinearGradient
-        colors={['rgba(76, 102, 159, 1)', 'rgba(76, 102, 159, 1)']}
+      <View
         style={{
           width: '100%',
           flex: 1,
+          backgroundColor: theme.colors.bg,
+          justifyContent: 'space-between',
         }}>
         <ScrollView style={styles.home} showsVerticalScrollIndicator={false}>
-          {this._renderVerseCard()}
-          <Block color="gray3" style={styles.hLine} />
+          {this._renderEmotionChips()}
+          {this._renderTopicChips()}
           {this._renderRecommendations()}
-          {this._renderFavourites()}
+          {/* {this._renderFavourites()} */}
         </ScrollView>
-      </LinearGradient>
+      </View>
     );
   }
 
@@ -103,7 +108,7 @@ export default class Overview extends Component {
           likes: likesarray.sort(
             (a, b) => parseFloat(b.time) - parseFloat(a.time),
           ),
-          sermonRecs: this.props.screenProps.recommendedVerses.sermons.nextrecs
+          sermonRecs: this.props.screenProps.recommendedVerses.sermons.nextrecs,
         });
       });
   }
@@ -135,17 +140,51 @@ export default class Overview extends Component {
     return Math.floor(seconds) + ' seconds';
   }
 
+  fetchDailyVerse() {
+    axios.get('https://beta.ourmanna.com/api/v1/get/?format=text').then(res => {
+      console.log(res.data);
+    });
+  }
+
+  apiCall(query) {
+    this.setState({fetched: false});
+    axios
+      .post(
+        'https://serenaengine333.co.uk/api/verses',
+        // 'http://localhost:8000/api/verses',
+        qs.stringify({content: query}),
+      )
+      .then(response => {
+        this.setState({
+          fetched: true,
+        });
+        this.props.navigation.navigate('HomeFeed', {
+          response: response.data,
+        });
+      })
+      .catch(error => {
+        this.setState({
+          fetched: true,
+          verse: {
+            verseText:
+              "Oops! We couldn't find a result for that one, could you rephrase that?",
+          },
+        });
+        console.log(error);
+      });
+  }
+
   //****** SUB COMPONENTS SECTION
-  _renderVerseCard() {
+  _renderTopCardOLD() {
     let today = new Date();
-    let hour = today.getHours()
-    let period = null
-    if (5 < hour && hour < 12 ){
-       period = "morning"
-    } else if (12 < hour  &&  hour < 17 ){
-       period = 'afternoon';
-    } else if (17 < hour && hour < 20 ){
-       period = 'evening';
+    let hour = today.getHours();
+    let period = null;
+    if (5 < hour && hour < 12) {
+      period = 'morning';
+    } else if (12 < hour && hour < 17) {
+      period = 'afternoon';
+    } else if (17 < hour && hour < 20) {
+      period = 'evening';
     } else {
       period = 'night';
     }
@@ -170,6 +209,89 @@ export default class Overview extends Component {
       </TouchableOpacity>
     );
   }
+
+  _renderTopicChips() {
+    return (
+      <Card shadow>
+        <Block center middle>
+          <Text h3> What does the Bible say about... </Text>
+          <ScrollView horizontal={true}>
+            {emotions.topicList.map(topic => {
+              return (
+                <Block style={{padding: 5}} key={topic}>
+                  <RNChipView
+                    onPress={() => {
+                      this.apiCall(topic);
+                    }}
+                    title={topic}
+                    avatar={false}
+                  />
+                </Block>
+              );
+            })}
+          </ScrollView>
+        </Block>
+      </Card>
+    );
+  }
+  //To be implemented. Each emoji needs to map to a sub emotion
+  //List of sub emotions is given in emotions.emotions
+  _renderEmotionChips() {
+    return (
+      <Card shadow>
+        <Block center middle>
+          <Text h3> How are you feeling? </Text>
+          {this.state.EmojiEmotion ? (
+            <React.Fragment>
+              <ScrollView horizontal={true}>
+                {emotions.emotions[this.state.EmojiEmotion].map(
+                  (topic, idx) => {
+                    return (
+                      <Block style={{padding: 5}} key={topic}>
+                        <RNChipView
+                          onPress={() => {
+                            this.apiCall(topic);
+                          }}
+                          title={topic}
+                          avatar={false}
+                        />
+                      </Block>
+                    );
+                  },
+                )}
+              </ScrollView>
+              <Icon
+                name={'times-circle'}
+                size={30}
+                color={theme.colors.gray2}
+                onPress={() => {
+                  this.setState({EmojiEmotion: null});
+                }}
+              />
+            </React.Fragment>
+          ) : (
+            <ScrollView horizontal={true}>
+              {['😀', '😡', '😔', '😨'].map((topic, idx) => {
+                return (
+                  <Block style={{padding: 5}} key={topic}>
+                    <RNChipView
+                      onPress={() => {
+                        this.setState({
+                          EmojiEmotion: Object.keys(emotions.emotions)[idx],
+                        });
+                      }}
+                      title={topic}
+                      avatar={false}
+                    />
+                  </Block>
+                );
+              })}
+            </ScrollView>
+          )}
+        </Block>
+      </Card>
+    );
+  }
   _renderSermon({item, index}) {
     const changeSong = this.props.screenProps.changeSong;
     return (
@@ -190,16 +312,20 @@ export default class Overview extends Component {
             borderBottomLeftRadius: theme.sizes.border,
             borderBottomRightRadius: theme.sizes.border,
           }}>
-          <LinearGradient
-            colors={['rgba(76, 102, 159, 0.8)', 'rgba(76, 102, 159, 0.8)']}
+          <View
             style={{
               width: '100%',
               flex: 1,
               borderRadius: theme.sizes.border,
+              backgroundColor: theme.colors.bg,
             }}>
             <Image
               source={require('../assets/images/icon.png')}
-              style={{height: '50%', width: '100%', marginVertical: '10%'}}
+              style={{
+                height: '50%',
+                width: '100%',
+                marginVertical: '10%',
+              }}
               resizeMode="contain"
             />
             <Block
@@ -233,7 +359,7 @@ export default class Overview extends Component {
                 </Text>
               </Block>
             </Block>
-          </LinearGradient>
+          </View>
         </Card>
       </TouchableOpacity>
     );
@@ -241,55 +367,63 @@ export default class Overview extends Component {
   _renderVOD({item, index}) {
     const serverdate = new Date(item.time);
     return (
-      <Card
-        shadow
-        center
-        middle
-        style={{
-          marginRight: 30,
-          width: width * 0.35,
-          height: width * 0.35,
-          padding: 10,
+      <TouchableOpacity
+        onPress={() => {
+          this.props.navigation.navigate('HomeFeed', {
+            response: {
+              verses: [{verse: item.verseText, bookname: item.bookText}],
+              sermons: null,
+            },
+          });
         }}>
-        <Block center space={'between'}>
-          <Text center gray numberOfLines={3}>
-            {item.verseText}
-            {'\n'}
-          </Text>
-          <Text title bold black center middle>
-            {item.bookText.split(' ').join('\n')}
-          </Text>
-          <Text black light caption center middle>
-            {this.timeSince(serverdate) + ' ago'}
-          </Text>
-        </Block>
-      </Card>
+        <Card
+          shadow
+          style={{
+            marginRight: 30,
+            width: width * 0.35,
+            height: width * 0.35,
+            padding: 10,
+          }}>
+          <Block center space={'between'}>
+            <Text center gray numberOfLines={2}>
+              {item.verseText}
+              {'\n'}
+            </Text>
+            <Text title bold black center middle>
+              {item.bookText.split(' ').join('\n')}
+            </Text>
+            <Text black light caption center middle>
+              {this.timeSince(serverdate) + ' ago'}
+            </Text>
+          </Block>
+        </Card>
+      </TouchableOpacity>
     );
   }
   _renderRecommendations() {
     return (
       <Block>
-        <Text h3 white spacing={1} style={{marginVertical: 8}}>
+        <Text h3 black spacing={1} style={{marginVertical: 8}}>
           Recommended For You
         </Text>
-        {(this.state.sermonRecs) && (
-        <Block>
-          <Carousel
-            data={this.state.sermonRecs}
-            renderItem={this._renderSermon.bind(this)}
-            sliderWidth={width}
-            itemWidth={width * 0.45}
-            inactiveSlideScale={1}
-            inactiveSlideOpacity={0.8}
-            enableMomentum={true}
-            activeSlideAlignment={'start'}
-            activeAnimationType={'spring'}
-            activeAnimationOptions={{
-              friction: 4,
-              tension: 40,
-            }}
-          />
-        </Block>
+        {this.state.sermonRecs && (
+          <Block>
+            <Carousel
+              data={this.state.sermonRecs}
+              renderItem={this._renderSermon.bind(this)}
+              sliderWidth={width}
+              itemWidth={width * 0.45}
+              inactiveSlideScale={1}
+              inactiveSlideOpacity={0.8}
+              enableMomentum={true}
+              activeSlideAlignment={'start'}
+              activeAnimationType={'spring'}
+              activeAnimationOptions={{
+                friction: 4,
+                tension: 40,
+              }}
+            />
+          </Block>
         )}
       </Block>
     );
@@ -297,12 +431,12 @@ export default class Overview extends Component {
   _renderFavourites() {
     return (
       <Block>
-        <Text h3 white spacing={1} style={{marginVertical: 8}}>
+        <Text h3 black spacing={1} style={{marginVertical: 8}}>
           Your Favourite Verses
         </Text>
 
         {!(this.state.likes.length == 0) ? (
-          <Block style={{height: 180}}>
+          <Block>
             <Carousel
               data={this.state.likes}
               renderItem={this._renderVOD.bind(this)}
@@ -348,7 +482,7 @@ export default class Overview extends Component {
             bottom: 0,
             width: '100%',
             height: '25%',
-            backgroundColor: 'white',
+            backgroundColor: 'black',
             borderBottomLeftRadius: theme.sizes.border,
             borderBottomRightRadius: theme.sizes.border,
           }}></Block>

@@ -176,7 +176,7 @@ export default function GroupFeed(props) {
         apiKey="zgrr2ez3h3yz"
         appId="65075"
         token={props.screenProps.StreamToken}>
-        <View style={{paddingVertical:20}}>
+        <View style={{paddingVertical: 20}}>
           <Block center middle flex={false} style={{padding: 5}}>
             <Text bold h3>
               {bio}

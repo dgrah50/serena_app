@@ -7,20 +7,22 @@ import {
   TouchableOpacity,
   View,
   Easing,
+  Keyboard,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {RNChipView} from 'react-native-chip-view';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import qs from 'qs';
 import Voice from 'react-native-voice';
 import {Block, Card, Text, AnimatedCircularProgress} from '../components';
 import {theme, time, emotions} from '../constants';
-import firebase from 'react-native-firebase';
+import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import LinearGradient from 'react-native-linear-gradient';
+import Carousel from 'react-native-snap-carousel';
+import SliderEntry from '../components/SliderEntry';
 
-
-
-const {width} = Dimensions.get('window');
+const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 
 export default class Fetch extends Component {
   constructor(props) {
@@ -45,7 +47,6 @@ export default class Fetch extends Component {
     //     });
     //   }
     // });
-    
   }
 
   static navigationOptions = {
@@ -76,16 +77,20 @@ export default class Fetch extends Component {
   render() {
     return (
       <LinearGradient
-        colors={['rgba(76, 102, 159, 1)', 'rgba(76, 102, 159, 1)']}
-        style={{
-          width: '100%',
-          flex: 1,
-        }}>
-        <ScrollView style={styles.welcome} showsVerticalScrollIndicator={false}>
-          {this._renderMicRing()}
-          {this._renderTopicChips()}
+        colors={['#7645C1', '#3023AE']}
+        style={styles.welcome}
+        showsVerticalScrollIndicator={false}>
+        <Block
+          flex={false}
+          center
+          middle
+          style={{ width: '100%', height: '75%'}}>
+          {this.state.showMicButton && this._renderMicRing()}
+          {this.state.showMicButton && this._renderKeyboardButton()}
+          {!this.state.showMicButton && this._renderTypedPrayerInput()}
           {this._renderEmotionChips()}
-        </ScrollView>
+        </Block>
+        <Block>{this._renderPraylist()}</Block>
       </LinearGradient>
     );
   }
@@ -93,73 +98,42 @@ export default class Fetch extends Component {
   //****** SUB COMPONENTS SECTION
   _renderTopicChips() {
     return (
-      <Card shadow>
-        <Block center middle>
-          <Text h3> What does the Bible say about... </Text>
-          <ScrollView horizontal={true}>
-            {emotions.topicList.map(topic => {
-              return (
-                <Block style={{padding: 5}} key={topic}>
-                  <RNChipView
-                    onPress={() => {
-                      this.apiCall(topic);
-                    }}
-                    title={topic}
-                    avatar={false}
-                  />
-                </Block>
-              );
-            })}
-          </ScrollView>
-        </Block>
-      </Card>
+      <Block center middle>
+        <Text h3> What does the Bible say about... </Text>
+        <ScrollView horizontal={true}>
+          {emotions.topicList.map(topic => {
+            return (
+              <Block style={{padding: 5}} key={topic}>
+                <RNChipView
+                  onPress={() => {
+                    this.apiCall(topic);
+                  }}
+                  title={topic}
+                  avatar={false}
+                />
+              </Block>
+            );
+          })}
+        </ScrollView>
+      </Block>
     );
   }
   //To be implemented. Each emoji needs to map to a sub emotion
   //List of sub emotions is given in emotions.emotions
   _renderEmotionChips() {
     return (
-      <Card shadow>
-        <Block center middle>
-          <Text h3> How are you feeling? </Text>
-          {this.state.EmojiEmotion ? (
-            <React.Fragment>
-              <ScrollView horizontal={true}>
-                {emotions.emotions[this.state.EmojiEmotion].map(
-                  (topic, idx) => {
-                    return (
-                      <Block style={{padding: 5}} key={topic}>
-                        <RNChipView
-                          onPress={() => {
-                            this.apiCall(topic);
-                          }}
-                          title={topic}
-                          avatar={false}
-                        />
-                      </Block>
-                    );
-                  },
-                )}
-              </ScrollView>
-              <Icon
-                name={'times-circle'}
-                size={30}
-                color={theme.colors.gray2}
-                onPress={() => {
-                  this.setState({EmojiEmotion: null});
-                }}
-              />
-            </React.Fragment>
-          ) : (
-            <ScrollView horizontal={true}>
-              {['😀', '😡', '😔', '😨'].map((topic, idx) => {
+      <View center middle style={{height: '20%', marginTop: '5%'}}>
+        {this.state.EmojiEmotion ? (
+          <React.Fragment>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              {emotions.emotions[this.state.EmojiEmotion].map((topic, idx) => {
                 return (
                   <Block style={{padding: 5}} key={topic}>
                     <RNChipView
                       onPress={() => {
-                        this.setState({
-                          EmojiEmotion: Object.keys(emotions.emotions)[idx],
-                        });
+                        this.apiCall(topic);
                       }}
                       title={topic}
                       avatar={false}
@@ -168,27 +142,49 @@ export default class Fetch extends Component {
                 );
               })}
             </ScrollView>
-          )}
-        </Block>
-      </Card>
+            <Icon
+              name={'times-circle'}
+              size={30}
+              color={theme.colors.gray2}
+              onPress={() => {
+                this.setState({EmojiEmotion: null});
+              }}
+            />
+          </React.Fragment>
+        ) : (
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {['😀', '😡', '😔', '😨'].map((topic, idx) => {
+              return (
+                <Block style={{padding: 5}} key={topic}>
+                  <RNChipView
+                    onPress={() => {
+                      this.setState({
+                        EmojiEmotion: Object.keys(emotions.emotions)[idx],
+                      });
+                    }}
+                    title={topic}
+                    avatar={false}
+                  />
+                </Block>
+              );
+            })}
+          </ScrollView>
+        )}
+      </View>
     );
   }
   _renderMicRing() {
     return (
-      <Card shadow>
-        <Block center middle>
-          <Text h3>How are you feeling? Hold the mic button to speak.</Text>
-          <AnimatedCircularProgress
-            onAnimationComplete={() => {
-              // console.log('animation done');
-            }}
-            ref={ref => (this.circularProgress = ref)}
-            tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
-            {fill => this._renderMicButton()}
-          </AnimatedCircularProgress>
-          <Text h3>{this.state.typedText}</Text>
-        </Block>
-      </Card>
+      <Block center middle flex={false} style={{marginBottom:"10%"}}>
+        <AnimatedCircularProgress
+          onAnimationComplete={() => {
+            // console.log('animation done');
+          }}
+          ref={ref => (this.circularProgress = ref)}
+          tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
+          {fill => this._renderMicButton()}
+        </AnimatedCircularProgress>
+      </Block>
     );
   }
   _renderMicButton() {
@@ -197,30 +193,154 @@ export default class Fetch extends Component {
         hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
         onPressIn={this.setRingOn.bind(this)}
         onPressOut={this.stopListen.bind(this)}>
-        <View
-          style={[
-            styles.buttonStyle,
-            {backgroundColor: 'rgba(255, 255, 255, 0.8)'},
-          ]}>
-          <Icon name={'microphone'} size={60} color={'#5692D0'} />
+        <View style={[styles.buttonStyle]}>
+          <Icon name={'microphone'} size={60} color={'#5334B8'} />
         </View>
       </TouchableOpacity>
     );
   }
 
+  _renderKeyboardButton() {
+    return (
+      <TouchableOpacity
+        hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
+        onPress={this.hideMic.bind(this)}>
+        <View style={[styles.buttonStyleMini]}>
+          <Icon name={'keyboard'} size={30} color={'#5334B8'} />
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  _renderTypedPrayerInput() {
+    return (
+      <AutoGrowingTextInput
+        style={[
+          styles.growingPrayerInput,
+          this.state.showMicButton ? {marginBottom: 100} : {marginBottom: 0},
+        ]}
+        placeholder={'Type your prayer'}
+        placeholderTextColor={'rgba(255, 255, 255, 0.8)'}
+        ref={typedText => {
+          this.prayInputField = typedText;
+        }}
+        selectTextOnFocus={false}
+        autoFocus={true}
+        multiline={true}
+        blurOnSubmit={false}
+        minHeight={45}
+        underlineColorAndroid="transparent"
+        onKeyPress={this.onKeyPress.bind(this)}
+        onChangeText={typedText => this.setState({typedText})}
+        value={this.state.typedText}
+        onFocus={this.hideMic.bind(this)}
+        onEndEditing={this.showMic.bind(this)}
+        onSubmitEditing={this.showMic.bind(this)}
+      />
+    );
+  }
+
+  _renderPraylist = () => {
+    let ENTRIES1 = [
+      {
+        title: 'Favourites',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
+        // illustration: require('../../assets/piusLBG.png')
+      },
+      {
+        title: 'Love',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
+      },
+      {
+        title: 'Strength',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
+      },
+      {
+        title: 'Fear',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/2154354/elephant.jpg',
+      },
+      {
+        title: 'Anxiety',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
+      },
+      {
+        title: 'Faith',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
+      },
+      {
+        title: 'Healing',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
+      },
+      {
+        title: 'Hope',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
+      },
+      {
+        title: 'Marriage',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
+      },
+      {
+        title: 'More Soon...',
+        illustration:
+          'https://cdn.dribbble.com/users/288987/screenshots/3342177/fox-tale.jpg',
+      },
+    ];
+
+    return (
+      <Block  flex={false} >
+        <Carousel
+          data={ENTRIES1}
+          renderItem={this._renderItem.bind(this)}
+          sliderWidth={WIDTH}
+          itemWidth={WIDTH * 0.4}
+          inactiveSlideScale={1}
+          inactiveSlideOpacity={1}
+          enableMomentum={true}
+          activeSlideAlignment={'start'}
+          activeAnimationType={'spring'}
+          activeAnimationOptions={{
+            friction: 4,
+            tension: 40,
+          }}
+        />
+      </Block>
+    );
+  };
+
+  _renderItem({item, index}) {
+    return (
+      <SliderEntry
+        data={item}
+        even={(index + 1) % 2 === 0}
+        navigation={this.props.navigation}
+      />
+    );
+  }
+
   //****** HELPER FUNCTIONS SECTION
   apiCall(query) {
+    console.log("calling api")
     this.setState({fetched: false});
     axios
       .post(
         'https://serenaengine333.co.uk/api/verses',
+        // 'http://localhost:8000/api/verses',
         qs.stringify({content: query}),
       )
       .then(response => {
         this.setState({
           fetched: true,
         });
-        this.props.navigation.navigate('OneVerse', {
+        this.props.navigation.navigate('HomeFeed', {
           response: response.data,
         });
       })
@@ -274,27 +394,60 @@ export default class Fetch extends Component {
       console.error(e);
     }
   }
+  hideMic() {
+    this.setState({
+      showMicButton: false,
+    });
+  }
+  showMic() {
+    Keyboard.dismiss;
+    this.setState({
+      showMicButton: true,
+    });
+    if (this.state.typedText != '') {
+      this.apiCall(this.state.typedText);
+    }
+  }
+  onKeyPress = ({nativeEvent}) => {
+    if (nativeEvent.key === 'Enter') {
+      this.showMic();
+    }
+  };
 }
 
 const styles = StyleSheet.create({
   welcome: {
     paddingTop: 2 * theme.sizes.padding,
-    paddingHorizontal: theme.sizes.padding,
+    width: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
-  // horizontal line
-  hLine: {
-    marginVertical: theme.sizes.base * 2,
-    marginHorizontal: theme.sizes.base * 2,
-    height: 1,
+  buttonStyle: {
+    width: 125,
+    height: 125,
+    borderRadius: 62.5,
+    backgroundColor: theme.colors.gray,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  // vertical line
-  vLine: {
-    marginVertical: theme.sizes.base / 2,
-    width: 1,
+  buttonStyleMini: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: theme.colors.gray,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  endTrip: {
-    position: 'absolute',
-    width: width,
+  growingPrayerInput: {
+    width: '90%',
+    fontSize: 20,
+    zIndex: 2,
+    textAlign: 'center',
+    position: Platform.OS === 'ios' ? 'relative' : 'absolute',
+    color: 'rgba(255, 255, 255, 1)',
     bottom: 0,
+    alignSelf: 'center',
+    textAlignVertical: 'bottom',
   },
 });

@@ -94,15 +94,15 @@ export default class Groups extends Component {
 
   render() {
     return (
-      <LinearGradient
-        colors={['rgba(76, 102, 159, 1)', 'rgba(76, 102, 159, 1)']}
+      <View
         style={{
           width: '100%',
           flex: 1,
           paddingTop: '15%',
+          backgroundColor: theme.colors.bg
         }}>
         {this._renderGroups()}
-      </LinearGradient>
+      </View>
     );
   }
 
@@ -188,7 +188,7 @@ export default class Groups extends Component {
           />
         </Card>
         <Block flex={false} white style={{paddingLeft: 20, paddingBottom: 20}}>
-          <Text h3>Your Serena Groups</Text>
+          <Text h3 white>Your Serena Groups</Text>
         </Block>
         <ScrollView
           showsVerticalScrollIndicator={false}

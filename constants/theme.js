@@ -9,14 +9,15 @@ const colors = {
   gray2: '#D8D8D8',
   gray3: '#F0F0F0',
   gray4: '#F7F8FA',
-  blue: '#24a0ed'
+  blue: '#24a0ed',
+  bg: '#D8D8D8',
 };
 
 const sizes = {
   // global sizes
   base: 16,
   font: 14,
-  border: 15,
+  border: 10,
   padding: 25,
 
   // font sizes

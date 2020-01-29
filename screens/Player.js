@@ -1,15 +1,21 @@
 import React, {useState} from 'react';
-import {Dimensions, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Block, Text, Card} from '../components';
 import {theme} from '../constants';
+import Spinner from 'react-native-spinkit';
 import TrackPlayer, {
   useProgress,
   usePlaybackState,
   State,
 } from 'react-native-track-player';
 import Slider from 'react-native-slider';
-import LinearGradient from 'react-native-linear-gradient';
 
 const {height, width} = Dimensions.get('window');
 
@@ -21,49 +27,24 @@ export default function Player(props) {
     State[playbackState] != 'Playing' ? 'play-circle' : 'pause-circle';
 
   return (
-    <LinearGradient
-      colors={['rgba(76, 102, 159, 1)', '#7D7EB1']}
+    <View
       style={{
         width: '100%',
-        flex: 1,
+        height: '60%',
+        bottom: 0,
+        position: 'absolute',
+        borderTopLeftRadius: theme.sizes.border,
+        borderTopRightRadius: theme.sizes.border,
+        backgroundColor: theme.colors.white,
       }}>
       {_renderHeader()}
       {_renderControlCard()}
-      {_renderFooter()}
-    </LinearGradient>
+      {/* {_renderFooter()} */}
+    </View>
   );
 
   //****** SUB COMPONENTS SECTION
   function _renderPlayBackControls() {
-    return (
-      <Block
-        flex={false}
-        middle
-        center
-        space={'between'}
-        style={{
-          bottom:0,
-          flexDirection: 'row',
-          marginHorizontal: '10%',
-        }}>
-        <TouchableOpacity>
-          <Icon color={theme.colors.black} name="step-backward" size={40} />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            togglePlay();
-          }}>
-          <Icon color={theme.colors.black} name={iconPlay} size={80} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Icon color={theme.colors.black} name="step-forward" size={40} />
-        </TouchableOpacity>
-      </Block>
-    );
-  }
-
-  function _renderProgressBar() {
     const progress = useProgress();
     const playbackState = usePlaybackState();
 
@@ -85,68 +66,98 @@ export default function Player(props) {
       return ret;
     }
 
-    return (
-      <Block flex={false} style={{paddingHorizontal: '5%'}}>
-        <Slider
-          // style={styles.slider}
-          trackStyle={styles.progress}
-          thumbStyle={styles.progressThumb}
-          maximumValue={progress.duration}
-          minimumValue={0}
-          value={progress.position}
-          minimumTrackTintColor={theme.colors.gray4}
-          maximumTrackTintColor={theme.colors.gray}
-          thumbTintColor={theme.colors.black}
-          onSlidingComplete={value => TrackPlayer.seekTo(value)}
-        />
-
-        <Block row space={'between'} flex={false}>
-          {State[playbackState] != 'Buffering' &&
-            State[playbackState] != 'loading' && (
-              <React.Fragment>
-                <Text caption black>
-                  {convertToMinutes(progress.position)}
-                </Text>
-                <Text caption black>
-                  {convertToMinutes(progress.duration)}
-                </Text>
-              </React.Fragment>
-            )}
+    if (State[playbackState] == 'Buffering') {
+      return (
+        <Block center middle>
+          <Spinner type={'Bounce'} />
         </Block>
-      </Block>
+      );
+    }
+    return (
+      <React.Fragment>
+        <Block flex={false} style={{paddingHorizontal: '5%'}}>
+          <Slider
+            // style={styles.slider}
+            trackStyle={styles.progress}
+            thumbStyle={styles.progressThumb}
+            maximumValue={progress.duration}
+            minimumValue={0}
+            value={progress.position}
+            minimumTrackTintColor={theme.colors.gray4}
+            maximumTrackTintColor={theme.colors.gray}
+            thumbTintColor={theme.colors.black}
+            onSlidingComplete={value => TrackPlayer.seekTo(value)}
+          />
+
+          <Block row space={'between'} flex={false}>
+            {State[playbackState] != 'Buffering' &&
+              State[playbackState] != 'loading' && (
+                <React.Fragment>
+                  <Text caption black>
+                    {convertToMinutes(progress.position)}
+                  </Text>
+                  <Text caption black>
+                    {convertToMinutes(progress.duration)}
+                  </Text>
+                </React.Fragment>
+              )}
+          </Block>
+        </Block>
+        <Block
+          flex={false}
+          middle
+          center
+          space={'between'}
+          style={{
+            bottom: 0,
+            flexDirection: 'row',
+            marginHorizontal: '10%',
+          }}>
+          <TouchableOpacity>
+            <Icon color={theme.colors.black} name="step-backward" size={40} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              togglePlay();
+            }}>
+            <Icon color={theme.colors.black} name={iconPlay} size={80} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon color={theme.colors.black} name="step-forward" size={40} />
+          </TouchableOpacity>
+        </Block>
+      </React.Fragment>
     );
   }
+
   function _renderHeader() {
     return (
       <TouchableOpacity onPress={() => navigation.goBack(null)}>
-        <Card
+        <Block
           flex={false}
           center
           middle
           shadow
           style={{
-            marginTop: height * 0.1,
             marginHorizontal: '5%',
-            backgroundColor: theme.colors.gray4,
-            flexDirection: 'row',
+            backgroundColor: theme.colors.white,
+            width: '90%',
+            height: 100,
           }}>
-          <Block style={{position: 'absolute', top: 10, left: 10, margin: 10}}>
-            <Icon color={theme.colors.black} name="chevron-down" size={20} />
-          </Block>
-          <Block style={{paddingHorizontal: 15}}>
-            <Text center bold middle h3 black>
-              {currentSongData.title}
-            </Text>
-          </Block>
-        </Card>
+          <Text center bold middle h3 black>
+            {currentSongData.title}
+          </Text>
+          <Icon color={theme.colors.black} name="chevron-down" size={40} />
+        </Block>
       </TouchableOpacity>
     );
   }
   function _renderControlCard() {
     return (
-      <Card
+      <Block
         style={{
-          backgroundColor: theme.colors.gray4,
+          backgroundColor: theme.colors.white,
           marginHorizontal: width * 0.05,
           padding: 0,
         }}
@@ -174,30 +185,8 @@ export default function Player(props) {
         <Text black title center middle>
           {currentSongData.author}
         </Text>
-        {_renderProgressBar()}
         {_renderPlayBackControls()}
-      </Card>
-    );
-  }
-  function _renderFooter() {
-    return (
-      <TouchableOpacity onPress={() => navigation.goBack(null)}>
-        <Card
-          flex={false}
-          center
-          middle
-          shadow
-          style={{
-            marginTop: height * 0.1,
-            marginHorizontal: '5%',
-            backgroundColor: theme.colors.gray4,
-            flexDirection: 'row',
-          }}>
-          <Text center middle h3 black>
-            Powered by Serena
-          </Text>
-        </Card>
-      </TouchableOpacity>
+      </Block>
     );
   }
 
@@ -215,7 +204,7 @@ const styles = StyleSheet.create({
   welcome: {
     paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
-    backgroundColor: theme.colors.gray4,
+    backgroundColor: theme.colors.white,
   },
   // horizontal line
   hLine: {

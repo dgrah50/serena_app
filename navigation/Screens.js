@@ -5,7 +5,8 @@ import {theme, mocks, time} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomTabBar from '../components/CustomTabBar';
 import Overview from '../screens/Overview';
-import OneVerse from '../screens/OneVerse';
+import HomeFeed from '../screens/HomeFeed';
+import Detail from '../screens/Detail';
 import Groups from '../screens/Groups';
 import GroupFeed from '../screens/GroupFeed';
 import SinglePostScreen from '../screens/SinglePostScreen';
@@ -30,8 +31,21 @@ export default createBottomTabNavigator(
           Pray: {
             screen: Fetch,
           },
-          OneVerse: {
-            screen: OneVerse,
+          HomeFeed: {
+            screen: createStackNavigator(
+              {
+                HomeFeed: {
+                  screen: HomeFeed,
+                },
+                Detail: {
+                  screen: Detail,
+                },
+              },
+              {
+                headerMode: 'none',
+                initialRouteName: 'HomeFeed',
+              },
+            ),
           },
         },
         {

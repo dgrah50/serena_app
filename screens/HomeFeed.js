@@ -5,16 +5,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   Share,
+  View,
+  ImageBackground,
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import LinearGradient from 'react-native-linear-gradient';
 import {Block, Card, Text} from '../components';
 import {theme} from '../constants';
 import {Bars} from 'react-native-loader';
 
-export default class OneVerse extends Component {
- 
+export default class HomeFeed extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,21 +24,22 @@ export default class OneVerse extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      sermons: this.props.navigation.getParam('response').sermons.current,
-    });
+    console.log(this.props.navigation.getParam('response'));
+    try {
+      this.setState({
+        sermons: this.props.navigation.getParam('response').sermons.current,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
     return (
-      <LinearGradient
-        colors={['rgba(76, 102, 159, 1)', 'rgba(76, 102, 159, 1)']}
-        style={styles.welcome}>
+      <View style={styles.welcome}>
         {this._renderVerseCard()}
-        <Block>
-          {this.state.sermons ? this._renderSermons() : this._renderSpinner()}
-        </Block>
-      </LinearGradient>
+        <Block>{this.state.sermons && this._renderSermons()}</Block>
+      </View>
     );
   }
 
@@ -57,46 +58,52 @@ export default class OneVerse extends Component {
     }
 
     return (
-      <Card flex={false} shadow>
-        <Block flex={false}>
-          <Block flex={false} center>
-            <Text h2 style={{marginVertical: 8}}>
-              {verses[0].verse}
-            </Text>
+      <ImageBackground
+        style={{width: '100%'}}
+        imageStyle={{borderRadius: 25}}
+        resizeMode="center"
+        source={require('../assets/images/hand.jpg')}>
+        <Block flex={false} style={{padding: 10}}>
+          <Block flex={false}>
+            <Block flex={false} center>
+              <Text h2 white style={{marginVertical: 8}}>
+                {verses[0].verse}
+              </Text>
+            </Block>
+            <Block flex={false} center>
+              <Text h3 white style={{marginVertical: 8}}>
+                {verses[0].bookname}
+              </Text>
+            </Block>
           </Block>
-          <Block flex={false} center>
-            <Text h3 style={{marginVertical: 8}}>
-              {verses[0].bookname}
-            </Text>
+          <Block flex={false} row middle space={'between'}>
+            <TouchableOpacity>
+              <Icon.Button
+                name="heart"
+                backgroundColor={theme.colors.accent}
+                onPress={() =>
+                  this.addToFavourites(
+                    verses[0].verse,
+                    verses[0].bookname,
+                    verses[0].osis,
+                  )
+                }>
+                Like
+              </Icon.Button>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Icon.Button
+                name="share-alt"
+                backgroundColor={theme.colors.share}
+                onPress={() =>
+                  this.onShare(verses[0].verse + ' ' + verses[0].bookname)
+                }>
+                Share
+              </Icon.Button>
+            </TouchableOpacity>
           </Block>
         </Block>
-        <Block flex={false} row middle space={'between'}>
-          <TouchableOpacity>
-            <Icon.Button
-              name="heart"
-              backgroundColor={theme.colors.accent}
-              onPress={() =>
-                this.addToFavourites(
-                  verses[0].verse,
-                  verses[0].bookname,
-                  verses[0].osis,
-                )
-              }>
-              Like
-            </Icon.Button>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Icon.Button
-              name="share-alt"
-              backgroundColor={theme.colors.share}
-              onPress={() =>
-                this.onShare(verses[0].verse + ' ' + verses[0].bookname)
-              }>
-              Share
-            </Icon.Button>
-          </TouchableOpacity>
-        </Block>
-      </Card>
+      </ImageBackground>
     );
   }
   _renderItem(item, idx) {
@@ -146,7 +153,7 @@ export default class OneVerse extends Component {
   _renderSermons() {
     return (
       <Block>
-        <Text h3 spacing={1} style={{marginVertical: 8}}>
+        <Text h3 white spacing={1} style={{marginVertical: 8}}>
           Related Sermons
         </Text>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -213,8 +220,8 @@ const styles = StyleSheet.create({
   welcome: {
     paddingTop: 2 * theme.sizes.padding,
     paddingHorizontal: theme.sizes.padding,
-    backgroundColor: theme.colors.gray4,
-    flex:1,
+    backgroundColor: theme.colors.bg,
+    flex: 1,
   },
   // horizontal line
   hLine: {
