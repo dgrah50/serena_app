@@ -8,6 +8,8 @@ import {
   View,
   ImageBackground,
 } from 'react-native';
+import axios from 'axios';
+import qs from 'qs';
 import firebase from 'react-native-firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Block, Card, Text} from '../components';
@@ -16,69 +18,102 @@ import {Bars} from 'react-native-loader';
 import {Transition} from 'react-navigation-fluid-transitions';
 
 export default class HomeFeed extends Component {
+  static navigationOptions = ({navigation}) => {
+    return {
+      title: 'Feed',
+      // headerTransparent: true,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    };
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       sermons: undefined,
+      verses: [
+        {
+          verse:
+            'You will seek Me and find Me when you search for Me with all your heart.',
+          bookname: 'Jeremiah 29:13',
+        },
+      ],
+      dailyVerse: [
+        {
+          verse:
+            'You will seek Me and find Me when you search for Me with all your heart.',
+          bookname: 'Jeremiah 29:13',
+        },
+      ],
     };
     this.onShare = this.onShare.bind(this);
+    this.fetchDailyVerse();
   }
 
   componentDidMount() {
-    console.log(this.props.navigation.getParam('response'));
     try {
       this.setState({
         sermons: this.props.navigation.getParam('response').sermons.current,
+        verses: this.props.navigation.getParam('response').verses,
       });
     } catch (error) {
       console.log(error);
     }
   }
 
+  fetchDailyVerse() {
+    axios.get('https://beta.ourmanna.com/api/v1/get/?format=json').then(res => {
+      console.log(res.data.verse);
+      this.setState({
+        dailyVerse: [
+          {
+            verse: res.data.verse.details.text,
+            bookname: res.data.verse.details.reference,
+          },
+        ],
+      });
+    });
+  }
+
   render() {
     return (
       <View style={styles.welcome}>
-        {this._renderVerseCard()}
-        <Block>{this.state.sermons && this._renderSermons()}</Block>
+      <ScrollView >
+        {this._renderVerseCard(this.state.verses,1)}
+        <Block>{this.state.sermons && this._renderRelatedSermons()}</Block>
+        {this._renderVerseCard(this.state.dailyVerse,2)}
+      </ScrollView>
       </View>
     );
   }
 
   //****** SUB COMPONENTS SECTION
-  _renderVerseCard() {
-    let navprop = this.props.navigation.getParam('response').verses;
-    let verses = [
-      {
-        verse:
-          'You will seek Me and find Me when you search for Me with all your heart.',
-        bookname: 'Jeremiah 29:13',
-      },
-    ];
-    if (navprop.length != 0) {
-      verses = navprop;
-    }
-
+  _renderVerseCard(verses,index) {
     return (
       <TouchableOpacity
         onPress={() => {
-          this.props.navigation.navigate('Detail', {verse: verses[0]});
+          this.props.navigation.navigate('Detail', {
+            verse: verses[0],
+            index: index,
+          });
         }}>
-        <Transition shared="hands">
+        <Transition shared={'image' + index}>
           <ImageBackground
             style={{width: '100%'}}
-            imageStyle={{borderRadius: 25}}
+            imageStyle={{borderRadius: theme.sizes.border}}
             source={require('../assets/images/hand.jpg')}>
-            <Block flex={false} style={{padding: 10}}>
+            <Block flex={false} style={{padding: 10, marginBottom: 10}}>
               <Block flex={false}>
                 <Block flex={false} center>
-                  <Transition shared="versetext">
+                  <Transition shared={'versetext' + index}>
                     <Text h2 white style={{marginVertical: 8}}>
                       {verses[0].verse}
                     </Text>
                   </Transition>
                 </Block>
                 <Block flex={false} center>
-                  <Transition shared="booktext">
+                  <Transition shared={'booktext' + index}>
                     <Text h3 white style={{marginVertical: 8}}>
                       {verses[0].bookname}
                     </Text>
@@ -86,7 +121,7 @@ export default class HomeFeed extends Component {
                 </Block>
               </Block>
               <Block flex={false} row middle space={'between'}>
-                <Transition shared="likebutton">
+                <Transition shared={'likebutton' + index}>
                   <TouchableOpacity>
                     <Icon.Button
                       name="heart"
@@ -102,7 +137,7 @@ export default class HomeFeed extends Component {
                     </Icon.Button>
                   </TouchableOpacity>
                 </Transition>
-                <Transition shared="sharebutton">
+                <Transition shared={'sharebutton' + index}>
                   <TouchableOpacity>
                     <Icon.Button
                       name="share-alt"
@@ -165,17 +200,17 @@ export default class HomeFeed extends Component {
       </TouchableOpacity>
     );
   }
-  _renderSermons() {
+  _renderRelatedSermons() {
     return (
       <Block>
-        <Text h3 white spacing={1} style={{marginVertical: 8}}>
+        <Text h3 black spacing={1} style={{marginVertical: 8}}>
           Related Sermons
         </Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <View showsVerticalScrollIndicator={false}>
           {this.state.sermons.map((sermon, idx) => {
             return this._renderItem(sermon, idx);
           })}
-        </ScrollView>
+        </View>
       </Block>
     );
   }

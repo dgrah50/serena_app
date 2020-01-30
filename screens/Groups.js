@@ -16,12 +16,24 @@ const {width} = Dimensions.get('window');
 const stream = require('getstream');
 
 export default class Groups extends Component {
-  static navigationOptions = {
-    title: 'Groups',
-    headerTransparent: true,
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
+  static navigationOptions = ({navigation}) => {
+    return {
+      title: 'Groups',
+      headerTransparent: true,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Profile');
+          }}>
+          <Block center middle style={{paddingRight: 20}}>
+            <Icon color={'black'} name="bars" size={30} />
+          </Block>
+        </TouchableOpacity>
+      ),
+    };
   };
 
   constructor(props) {
@@ -98,8 +110,8 @@ export default class Groups extends Component {
         style={{
           width: '100%',
           flex: 1,
-          paddingTop: '15%',
-          backgroundColor: theme.colors.bg
+          paddingTop: '20%',
+          backgroundColor: theme.colors.bg,
         }}>
         {this._renderGroups()}
       </View>
@@ -188,7 +200,9 @@ export default class Groups extends Component {
           />
         </Card>
         <Block flex={false} white style={{paddingLeft: 20, paddingBottom: 20}}>
-          <Text h3 white>Your Serena Groups</Text>
+          <Text h3 white>
+            Your Serena Groups
+          </Text>
         </Block>
         <ScrollView
           showsVerticalScrollIndicator={false}

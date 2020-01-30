@@ -208,7 +208,7 @@ export default class Profile extends Component {
             backgroundColor: theme.colors.white,
             color: theme.colors.black,
             borderColor: theme.colors.white,
-            height: height * 0.2,
+            height: height * 0.1,
           }}
           onChangeTextHandler={this.bioHandler}
         />

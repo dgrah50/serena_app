@@ -136,19 +136,18 @@ export default function Player(props) {
       <TouchableOpacity onPress={() => navigation.goBack(null)}>
         <Block
           flex={false}
-          center
-          middle
           shadow
+          center
           style={{
             marginHorizontal: '5%',
             backgroundColor: theme.colors.white,
             width: '90%',
             height: 100,
           }}>
+          <View style={{height:6, borderRadius:3, width:width*0.3, top:0, backgroundColor:"black", marginHorizontal:width*0.2, marginTop:5, marginBottom:15}}/>
           <Text center bold middle h3 black>
             {currentSongData.title}
           </Text>
-          <Icon color={theme.colors.black} name="chevron-down" size={40} />
         </Block>
       </TouchableOpacity>
     );

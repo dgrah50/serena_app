@@ -76,6 +76,9 @@ export default createBottomTabNavigator(
           CreateGroup: {
             screen: CreateGroup,
           },
+          Profile: {
+            screen: Profile,
+          },
         },
         {
           initialRouteName: 'Groups',
@@ -85,33 +88,6 @@ export default createBottomTabNavigator(
         tabBarLabel: 'Groups',
         tabBarIcon: ({tintColor}) => (
           <Icon name="comments" size={25} color={tintColor} />
-        ),
-      },
-    },
-    Profile: {
-      screen: createStackNavigator(
-        {
-          Profile: {
-            screen: Profile,
-          },
-          GroupFeed: {
-            screen: GroupFeed,
-          },
-          SinglePostScreen: {
-            screen: SinglePostScreen,
-          },
-          CreateGroup: {
-            screen: CreateGroup,
-          },
-        },
-        {
-          initialRouteName: 'Profile',
-        },
-      ),
-      navigationOptions: {
-        tabBarLabel: 'Profile',
-        tabBarIcon: ({tintColor}) => (
-          <Icon name="user" size={25} color={tintColor} />
         ),
       },
     },
