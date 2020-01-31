@@ -17,15 +17,15 @@ import Fetch from '../screens/Fetch';
 
 export default createBottomTabNavigator(
   {
-    Overview: {
-      screen: Overview,
-      navigationOptions: {
-        tabBarLabel: 'Home',
-        tabBarIcon: ({tintColor}) => (
-          <Icon name="home" size={25} color={tintColor} />
-        ),
-      },
-    },
+    // Overview: {
+    //   screen: Overview,
+    //   navigationOptions: {
+    //     tabBarLabel: 'Home',
+    //     tabBarIcon: ({tintColor}) => (
+    //       <Icon name="home" size={25} color={tintColor} />
+    //     ),
+    //   },
+    // },
     Pray: {
       screen: createStackNavigator(
         {
@@ -57,40 +57,63 @@ export default createBottomTabNavigator(
       navigationOptions: {
         tabBarLabel: 'Pray',
         tabBarIcon: ({tintColor}) => (
-          <Icon name="microphone" size={25} color={tintColor} />
+          <Icon name="home" size={25} color={tintColor} />
         ),
       },
     },
-    Groups: {
-      screen: createStackNavigator(
+    Discover: {
+      screen: FluidNavigator(
         {
-          Groups: {
-            screen: Groups,
+          HomeFeed: {
+            screen: HomeFeed,
           },
-          GroupFeed: {
-            screen: GroupFeed,
-          },
-          SinglePostScreen: {
-            screen: SinglePostScreen,
-          },
-          CreateGroup: {
-            screen: CreateGroup,
-          },
-          Profile: {
-            screen: Profile,
+          Detail: {
+            screen: Detail,
           },
         },
         {
-          initialRouteName: 'Groups',
+          headerMode: 'none',
+          initialRouteName: 'HomeFeed',
         },
       ),
       navigationOptions: {
-        tabBarLabel: 'Groups',
+        tabBarLabel: 'Discover',
         tabBarIcon: ({tintColor}) => (
-          <Icon name="comments" size={25} color={tintColor} />
+          <Icon name="search" size={25} color={tintColor} />
         ),
       },
     },
+
+    // Groups: {
+    //   screen: createStackNavigator(
+    //     {
+    //       Groups: {
+    //         screen: Groups,
+    //       },
+    //       GroupFeed: {
+    //         screen: GroupFeed,
+    //       },
+    //       SinglePostScreen: {
+    //         screen: SinglePostScreen,
+    //       },
+    //       CreateGroup: {
+    //         screen: CreateGroup,
+    //       },
+    //       Profile: {
+    //         screen: Profile,
+    //       },
+    //     },
+    //     {
+    //       initialRouteName: 'Groups',
+    //     },
+    //   ),
+    //   navigationOptions: {
+    //     tabBarLabel: 'Groups',
+    //     tabBarIcon: ({tintColor}) => (
+    //       <Icon name="comments" size={25} color={tintColor} />
+    //     ),
+    //   },
+    // },
   },
   {
     initialRouteName: 'Pray',

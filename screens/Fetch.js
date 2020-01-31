@@ -49,6 +49,7 @@ export default class Fetch extends Component {
     //   }
     // });
   }
+
   handleViewRef = ref => (this.view = ref);
 
   static navigationOptions = {
@@ -94,14 +95,37 @@ export default class Fetch extends Component {
               width: '100%',
               justifyContent: 'center',
               alignItems: 'center',
-              height: '75%',
+              height: '100%',
             }}>
+            <View
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '10%',
+                top: 0,
+                position: 'absolute',
+              }}>
+              <Image
+                resizeMode="contain"
+                source={require('../assets/images/whiteicon.png')}
+                style={{width: 45, height: 45, top: 0, paddingRight: 40}}
+              />
+            </View>
+
+            {this.state.showMicButton && (
+              <Animatable.View animation={'fadeIn'} >
+                <Text h2 white>
+                  {' '}
+                  What's on your mind?{' '}
+                </Text>
+              </Animatable.View>
+            )}
             {this._renderMicRing()}
+            {this.state.showMicButton && this._renderEmotionChips()}
             {this.state.showMicButton && this._renderKeyboardButton()}
             {!this.state.showMicButton && this._renderTypedPrayerInput()}
-            {this._renderEmotionChips()}
           </View>
-          <Block>{this._renderPraylist()}</Block>
         </LinearGradient>
       </TouchableWithoutFeedback>
     );
@@ -115,7 +139,7 @@ export default class Fetch extends Component {
         <ScrollView horizontal={true}>
           {emotions.topicList.map(topic => {
             return (
-              <Block style={{padding: 5}} key={topic}>
+              <Block  style={{padding: 5}} key={topic}>
                 <RNChipView
                   onPress={() => {
                     this.apiCall(topic);
@@ -134,7 +158,9 @@ export default class Fetch extends Component {
   //List of sub emotions is given in emotions.emotions
   _renderEmotionChips() {
     return (
-      <View center middle style={{height: '20%', marginTop: '5%'}}>
+      <View
+        center
+        style={{height: '15%', marginTop: '5%',}}>
         {this.state.EmojiEmotion ? (
           <React.Fragment>
             <ScrollView
@@ -159,7 +185,7 @@ export default class Fetch extends Component {
             </ScrollView>
             <Animatable.View
               animation={'fadeIn'}
-              style={{justifyContent: 'center', alignItems: 'center'}}>
+              style={{justifyContent: 'flex-start', alignItems: 'center'}}>
               <Icon
                 name={'times-circle'}
                 size={30}
@@ -193,7 +219,9 @@ export default class Fetch extends Component {
                         EmojiEmotion: Object.keys(emotions.emotions)[idx],
                       });
                     }}>
-                    <Text h1 style={{paddingHorizontal:10}}>{topic}</Text>
+                    <Text h1 style={{paddingHorizontal: 10}}>
+                      {topic}
+                    </Text>
                   </TouchableOpacity>
                 </Animatable.View>
               );
@@ -249,116 +277,46 @@ export default class Fetch extends Component {
       <TouchableOpacity
         hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
         onPress={this.hideMic.bind(this)}>
-        <View style={[styles.buttonStyleMini]}>
-          <Icon name={'keyboard'} size={30} color={'#5334B8'} />
-        </View>
+        <Block row flex={false} justifyContent={"flex-start"} style={[styles.searchBox]} >
+          <Icon name={'search'} size={30} style={{marginHorizontal:10}} color={theme.colors.white} />
+          <Text white h3>Search...</Text>
+        </Block>
       </TouchableOpacity>
     );
   }
 
   _renderTypedPrayerInput() {
     return (
-      <AutoGrowingTextInput
-        style={[
-          styles.growingPrayerInput,
-          this.state.showMicButton ? {marginBottom: 100} : {marginBottom: 0},
-        ]}
-        placeholder={'Type your prayer'}
-        placeholderTextColor={'rgba(255, 255, 255, 0.8)'}
-        ref={typedText => {
-          this.prayInputField = typedText;
-        }}
-        selectTextOnFocus={false}
-        autoFocus={true}
-        multiline={true}
-        blurOnSubmit={false}
-        minHeight={45}
-        underlineColorAndroid="transparent"
-        onKeyPress={this.onKeyPress.bind(this)}
-        onChangeText={typedText => this.setState({typedText})}
-        value={this.state.typedText}
-        onFocus={this.hideMic.bind(this)}
-        onEndEditing={this.showMic.bind(this)}
-        onSubmitEditing={this.showMic.bind(this)}
-      />
+      <Animatable.View animation={'fadeIn'}>
+        <AutoGrowingTextInput
+          style={[
+            styles.searchBox,
+            theme.fonts.h3,
+            {paddingHorizontal: 15, paddingBottom:5, color: theme.colors.white},
+            this.state.showMicButton ? {marginBottom: 100} : {marginBottom: 0},
+          ]}
+          placeholder={'What\'s on your mind?'}
+          placeholderTextColor={'rgba(255, 255, 255, 0.8)'}
+          ref={typedText => {
+            this.prayInputField = typedText;
+          }}
+          selectTextOnFocus={false}
+          autoFocus={true}
+          multiline={true}
+          blurOnSubmit={false}
+          minHeight={45}
+          underlineColorAndroid="transparent"
+          onKeyPress={this.onKeyPress.bind(this)}
+          onChangeText={typedText => this.setState({typedText})}
+          value={this.state.typedText}
+          onFocus={this.hideMic.bind(this)}
+          onEndEditing={this.showMic.bind(this)}
+          onSubmitEditing={this.showMic.bind(this)}
+        />
+      </Animatable.View>
     );
   }
 
-  _renderPraylist = () => {
-    let ENTRIES1 = [
-      {
-        title: 'Favourites',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
-        // illustration: require('../../assets/piusLBG.png')
-      },
-      {
-        title: 'Love',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
-      },
-      {
-        title: 'Strength',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
-      },
-      {
-        title: 'Fear',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/2154354/elephant.jpg',
-      },
-      {
-        title: 'Anxiety',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
-      },
-      {
-        title: 'Faith',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
-      },
-      {
-        title: 'Healing',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/2757996/rhinos3.jpg',
-      },
-      {
-        title: 'Hope',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/2416384/exodus.png',
-      },
-      {
-        title: 'Marriage',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/2275389/journey.jpg',
-      },
-      {
-        title: 'More Soon...',
-        illustration:
-          'https://cdn.dribbble.com/users/288987/screenshots/3342177/fox-tale.jpg',
-      },
-    ];
-
-    return (
-      <Block flex={false}>
-        <Carousel
-          data={ENTRIES1}
-          renderItem={this._renderItem.bind(this)}
-          sliderWidth={WIDTH}
-          itemWidth={WIDTH * 0.4}
-          inactiveSlideScale={1}
-          inactiveSlideOpacity={1}
-          enableMomentum={true}
-          activeSlideAlignment={'start'}
-          activeAnimationType={'spring'}
-          activeAnimationOptions={{
-            friction: 4,
-            tension: 40,
-          }}
-        />
-      </Block>
-    );
-  };
 
   _renderItem({item, index}) {
     return (
@@ -439,6 +397,7 @@ export default class Fetch extends Component {
     }
   }
   hideMic() {
+
     this.view.animate({
       0: {
         opacity: 1,
@@ -507,10 +466,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonStyleMini: {
-    width: 50,
+  searchBox: {
+    width: WIDTH*0.8,
     height: 50,
-    borderRadius: 25,
+    borderRadius: theme.sizes.border,
     backgroundColor: theme.colors.gray,
     justifyContent: 'center',
     alignItems: 'center',

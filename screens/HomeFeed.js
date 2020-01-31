@@ -36,13 +36,7 @@ export default class HomeFeed extends Component {
     super(props);
     this.state = {
       sermons: undefined,
-      verses: [
-        {
-          verse:
-            'You will seek Me and find Me when you search for Me with all your heart.',
-          bookname: 'Jeremiah 29:13',
-        },
-      ],
+      verses: null,
       dailyVerse: [
         {
           verse:
@@ -54,7 +48,7 @@ export default class HomeFeed extends Component {
     };
     this.onShare = this.onShare.bind(this);
     this.fetchDailyVerse();
-    this.fetchPodcasts('food');
+    // this.fetchPodcasts('food');
   }
 
   componentDidMount() {
@@ -106,10 +100,16 @@ export default class HomeFeed extends Component {
     return (
       <View style={styles.welcome}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {this._renderVerseCard(this.state.verses, 1)}
+          <Text h2 black spacing={1} style={{marginVertical: 8}}>
+            { this.state.verses ? "Related Verses" : "Verse Of The Day"}
+          </Text>
+          {this.state.verses
+            ? this._renderVerseCard(this.state.verses, 1)
+            : this._renderVerseCard(this.state.dailyVerse, 2)}
           {this.state.sermons && this._renderRelatedSermons()}
-          <Block style={styles.hline} />
+          <View style={styles.hLine} />
           {this._renderVerseCard(this.state.dailyVerse, 2)}
+          {this._renderVerseCard(this.state.dailyVerse, 3)}
           {/* {this.state.podcasts && this._renderPodcasts()} */}
         </ScrollView>
       </View>
@@ -120,9 +120,6 @@ export default class HomeFeed extends Component {
   _renderVerseCard(verses, index) {
     return (
       <React.Fragment>
-        <Text h2 black spacing={1} style={{marginVertical: 8}}>
-          Related Verses
-        </Text>
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate('Detail', {
@@ -132,13 +129,10 @@ export default class HomeFeed extends Component {
           }}>
           <Transition shared={'image' + index}>
             <ImageBackground
-              style={{width: '100%'}}
+              style={{width: '100%', marginBottom: 10}}
               imageStyle={{borderRadius: theme.sizes.border}}
               source={require('../assets/images/hand.jpg')}>
-              <Block
-                flex={false}
-                middle
-                style={{padding: 10, marginBottom: 10}}>
+              <Block flex={false} middle style={{padding: 10}}>
                 <Block flex={false}>
                   <Block flex={false} center>
                     <Transition shared={'versetext' + index}>
@@ -391,8 +385,9 @@ const styles = StyleSheet.create({
   },
   // horizontal line
   hLine: {
-    marginVertical: theme.sizes.base * 2,
-    marginHorizontal: theme.sizes.base * 2,
-    height: 1,
+    marginBottom: theme.sizes.base,
+    marginHorizontal: WIDTH*0.1,
+    height: 3,
+    backgroundColor:theme.colors.gray2
   },
 });
