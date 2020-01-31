@@ -178,7 +178,7 @@ export default class Fetch extends Component {
                   style={{padding: 5}}
                   key={topic}
                   animation={'fadeInLeft'}>
-                  <RNChipView
+                  {/* <RNChipView
                     onPress={() => {
                       this.setState({
                         EmojiEmotion: Object.keys(emotions.emotions)[idx],
@@ -186,7 +186,15 @@ export default class Fetch extends Component {
                     }}
                     title={topic}
                     avatar={false}
-                  />
+                  /> */}
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({
+                        EmojiEmotion: Object.keys(emotions.emotions)[idx],
+                      });
+                    }}>
+                    <Text h1 style={{paddingHorizontal:10}}>{topic}</Text>
+                  </TouchableOpacity>
                 </Animatable.View>
               );
             })}
