@@ -34,26 +34,30 @@ export default class HomeFeed extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       sermons: undefined,
       verses: null,
       recommendedVerses: props.screenProps.recommendedVerses.verses,
       recommendedSermons: props.screenProps.recommendedVerses.sermons.current,
       dailyVerse: null,
-      podcasts: null,
+      podcasts: [],
       likedosis: null,
     };
+
     this.fetchDailyVerse();
     this.fetchLikes();
-    console.log(props.screenProps.recommendedVerses);
-    // this.fetchPodcasts('food');
+    
   }
 
   componentDidMount() {
+    this.fetchPodcasts(this.props.screenProps.recommendedVerses.keyword);
     try {
       this.setState({
         sermons: this.props.navigation.getParam('response').sermons.current,
         verses: this.props.navigation.getParam('response').verses,
+        recommendedVerses: props.screenProps.recommendedVerses.verses,
+        recommendedSermons: props.screenProps.recommendedVerses.sermons.current,
       });
     } catch (error) {
       console.log(error);
@@ -85,8 +89,7 @@ export default class HomeFeed extends Component {
           {this.state.dailyVerse &&
             this.state.likedosis &&
             this._renderRecommendedSermons()}
-
-          {/* {this.state.podcasts && this._renderPodcasts()} */}
+          {this.state.podcasts && this._renderPodcasts()}
         </ScrollView>
       </View>
     );
@@ -157,12 +160,11 @@ export default class HomeFeed extends Component {
             marginVertical: 8,
             paddingHorizontal: theme.sizes.padding,
           }}>
-          {_renderSermon(this.state.recommendedSermons[0], 2, this.props,true)}
+          {_renderSermon(this.state.recommendedSermons[0], 2, this.props, true)}
         </View>
       </Block>
     );
   }
-
   _renderSearchResults() {
     return (
       <ScrollView
@@ -218,12 +220,30 @@ export default class HomeFeed extends Component {
     );
   }
   _renderPodcasts() {
-    const items = this.state.podcasts.getElementsByTagName('item');
-    let podcastsamples = _.sample(Array.prototype.slice.call(items), 5);
     return (
-      <View style={{width: 300, backgroundColor: 'red'}}>
-        {podcastsamples.map(this._renderPodcast)}
-      </View>
+      <Block>
+        <Text
+          h2
+          black
+          spacing={1}
+          style={{
+            marginVertical: 8,
+            paddingHorizontal: theme.sizes.padding,
+          }}>
+          Related Podcasts
+        </Text>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            marginVertical: 8,
+            paddingHorizontal: theme.sizes.padding,
+          }}>
+          {this.state.podcasts.map((podcast, idx) => {
+            return _renderSermon(podcast, idx, this.props);
+          })}
+        </ScrollView>
+      </Block>
     );
   }
 
@@ -243,26 +263,80 @@ export default class HomeFeed extends Component {
     });
   }
 
+  logPodTrack = (track, podcastImage) => {
+    const titles = Array.prototype.slice.call(
+      track.getElementsByTagName('title'),
+    );
+    const authors = Array.prototype.slice.call(
+      track.getElementsByTagName('itunes:author'),
+    );
+    const durations = Array.prototype.slice.call(
+      track.getElementsByTagName('itunes:duration'),
+    );
+    const descriptions = Array.prototype.slice.call(
+      track.getElementsByTagName('description'),
+    );
+    const enclosures = Array.prototype.slice.call(
+      track.getElementsByTagName('enclosure'),
+    );
+
+    try {
+      return {
+        title: titles[0].childNodes[0].nodeValue,
+        mp3link: enclosures[0].getAttribute('url'),
+        speakerimg: podcastImage,
+        date_uploaded: null,
+        duration: durations[0].childNodes[0].nodeValue,
+        author: authors[0].childNodes[0].nodeValue,
+        plays: null,
+        description: descriptions[0].childNodes[0].nodeValue.replace(
+          /(<([^>]+)>)/gi,
+          '',
+        ),
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   fetchPodcasts = async term => {
-    const podcasts = await fetch(
+    console.log('test');
+    const result = await fetch(
       `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1314`,
     );
-    let text = await podcasts.text();
-    let sample = _.sample(JSON.parse(text).results, 5);
-    let xmlList = sample.map(async item => {
-      let interm = await fetch(item.feedUrl);
-      let ret = await interm.text();
-      return ret;
-    });
-    Promise.all(xmlList).then(res => {
-      const podcastDocument = new DOMParser().parseFromString(
-        res[0],
-        'text/xml',
-      );
-      this.setState({
-        podcasts: podcastDocument,
-      });
-    });
+    try {
+      const json = await result.json();
+      let podcasts = json.results;
+      sampleIndexs = _.sample([...Array(podcasts.length).keys()], 5);
+
+      podcastList = [];
+      let newcasts = null;
+      for (const index in sampleIndexs) {
+        const result2 = await fetch(podcasts[index].feedUrl);
+        const text = await result2.text();
+        const podcastImage = podcasts[index].artworkUrl600;
+        const podcastDocument = new DOMParser().parseFromString(
+          text,
+          'text/xml',
+        );
+        const items = podcastDocument.getElementsByTagName('item');
+
+        newcasts = Array.prototype.slice
+          .call(items)
+          .map(item => {
+            return this.logPodTrack(item, podcastImage);
+          })
+          .filter(item => item != undefined);
+
+        this.setState(previousState => ({
+          podcasts: [...previousState.podcasts, ..._.sample(newcasts, 5)],
+        }));
+      }
+      console.log(this.state.podcasts);
+    } catch (e) {
+      // what should we do if
+      // the request returns invalid JSON?
+    }
   };
 
   fetchLikes() {
