@@ -15,7 +15,11 @@ import {Block, Text} from '../components';
 import {theme} from '../constants';
 import {Bars} from 'react-native-loader';
 import {DOMParser} from 'xmldom';
-import {_renderVerseCard, _renderSermon, _renderPodcast} from '../components/VerseSermonCards'
+import {
+  _renderVerseCard,
+  _renderSermon,
+  _renderPodcast,
+} from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
 
@@ -44,7 +48,6 @@ export default class HomeFeed extends Component {
       ],
       podcasts: null,
     };
-    this.onShare = this.onShare.bind(this);
     this.fetchDailyVerse();
     // this.fetchPodcasts('food');
   }
@@ -74,13 +77,30 @@ export default class HomeFeed extends Component {
             }}>
             {this.state.verses ? 'Related Verses' : 'Verse Of The Day'}
           </Text>
-          {this.state.verses
-            ? this._renderSearchResults()
-            : _renderVerseCard(this.state.dailyVerse, 2, false, this.props)}
+          {this.state.verses ? (
+            this._renderSearchResults()
+          ) : (
+            <_renderVerseCard
+              verses={this.state.dailyVerse}
+              index={2}
+              scroller={false}
+              props={this.props}
+            />
+          )}
           {this.state.sermons && this._renderRelatedSermons()}
           <View style={styles.hLine} />
-          {_renderVerseCard(this.state.dailyVerse, 3, false, this.props)}
-          {_renderVerseCard(this.state.dailyVerse, 4, false, this.props)}
+          <_renderVerseCard
+            verses={this.state.dailyVerse}
+            index={3}
+            scroller={false}
+            props={this.props}
+          />
+          <_renderVerseCard
+            verses={this.state.dailyVerse}
+            index={4}
+            scroller={false}
+            props={this.props}
+          />
           {/* {this.state.podcasts && this._renderPodcasts()} */}
         </ScrollView>
       </View>
@@ -95,9 +115,14 @@ export default class HomeFeed extends Component {
         style={{width: '100%'}}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
-        {this.state.verses.map((verse, index) =>
-          _renderVerseCard([verse], index, true,this.props),
-        )}
+        {this.state.verses.map((verse, index) => (
+          <_renderVerseCard
+            verses={[verse]}
+            index={index}
+            scroller={true}
+            props={this.props}
+          />
+        ))}
       </ScrollView>
     );
   }
@@ -124,7 +149,7 @@ export default class HomeFeed extends Component {
             paddingHorizontal: theme.sizes.padding,
           }}>
           {this.state.sermons.map((sermon, idx) => {
-            return _renderSermon(sermon, idx,this.props);
+            return _renderSermon(sermon, idx, this.props);
           })}
         </ScrollView>
       </Block>
@@ -140,27 +165,8 @@ export default class HomeFeed extends Component {
     );
   }
 
-
   //****** HELPER FUNCTIONS SECTION
-  onShare = async message => {
-    try {
-      const result = await Share.share({
-        message: message,
-      });
 
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
   fetchDailyVerse() {
     axios.get('https://beta.ourmanna.com/api/v1/get/?format=json').then(res => {
       this.setState({
@@ -194,27 +200,6 @@ export default class HomeFeed extends Component {
       });
     });
   };
-  addToFavourites(verseText, bookText, osis) {
-    osis = osis.toString();
-    if (osis.length == 7) {
-      osis = '0' + osis.toString();
-    }
-    let firestoreref = firebase
-      .firestore()
-      .collection('users')
-      .doc(firebase.auth().currentUser.uid)
-      .collection('likes');
-    try {
-      firestoreref.doc(osis).set({
-        verseText: verseText,
-        bookText: bookText,
-        time: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      this.setState({alreadyLiked: true});
-    } catch (err) {
-      console.log(err);
-    }
-  }
 }
 
 const styles = StyleSheet.create({
