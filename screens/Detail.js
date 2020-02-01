@@ -24,6 +24,7 @@ export default class Detail extends Component {
     let verse = this.props.navigation.getParam('verse');
     let index = this.props.navigation.getParam('index');
     let imageIndex = this.props.navigation.getParam('imageIndex');
+    let alreadyLiked = this.props.navigation.getParam('alreadyLiked');
     return (
       <TouchableWithoutFeedback onPress={this.props.navigation.goBack}>
         <Transition shared={'image' + index}>
@@ -67,7 +68,8 @@ export default class Detail extends Component {
                     <TouchableOpacity>
                       <Icon
                         name="heart"
-                        size={20}
+                        solid={alreadyLiked}
+                        size={40}
                         color={theme.colors.white}
                         style={{marginHorizontal: 10}}
                         onPress={() =>
@@ -83,7 +85,7 @@ export default class Detail extends Component {
                     <TouchableOpacity>
                       <Icon
                         name="paper-plane"
-                        size={20}
+                        size={40}
                         color={theme.colors.white}
                         onPress={() =>
                           this.onShare(

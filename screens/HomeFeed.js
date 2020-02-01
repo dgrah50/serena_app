@@ -37,12 +37,15 @@ export default class HomeFeed extends Component {
     this.state = {
       sermons: undefined,
       verses: null,
+      recommendedVerses: props.screenProps.recommendedVerses.verses,
+      recommendedSermons: props.screenProps.recommendedVerses.sermons.current,
       dailyVerse: null,
       podcasts: null,
       likedosis: null,
     };
     this.fetchDailyVerse();
     this.fetchLikes();
+    console.log(props.screenProps.recommendedVerses);
     // this.fetchPodcasts('food');
   }
 
@@ -73,43 +76,16 @@ export default class HomeFeed extends Component {
           </Text>
           {this.state.verses
             ? this._renderSearchResults()
-            : this.state.dailyVerse && (
-                <_renderVerseCard
-                  likedosis={this.state.likedosis}
-                  imageIndex={Math.floor(
-                    Math.random() * theme.randomImages.length,
-                  )}
-                  verses={this.state.dailyVerse}
-                  index={2}
-                  key={2}
-                  scroller={false}
-                  props={this.props}
-                />
-              )}
+            : this.state.dailyVerse && [this._renderDailyVerse(), this._renderSOD()]}
           {this.state.sermons && this._renderRelatedSermons()}
           <View style={styles.hLine} />
-          {this.state.dailyVerse && this.state.likedosis && (
-            <_renderVerseCard
-              likedosis={this.state.likedosis}
-              imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
-              verses={this.state.dailyVerse}
-              index={6}
-              key={6}
-              scroller={false}
-              props={this.props}
-            />
-          )}
-          {this.state.dailyVerse && this.state.likedosis && (
-            <_renderVerseCard
-              likedosis={this.state.likedosis}
-              imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
-              verses={this.state.dailyVerse}
-              index={7}
-              key={7}
-              scroller={false}
-              props={this.props}
-            />
-          )}
+          {this.state.dailyVerse &&
+            this.state.likedosis &&
+            this._renderRecommendedVerses()}
+          {this.state.dailyVerse &&
+            this.state.likedosis &&
+            this._renderRecommendedSermons()}
+
           {/* {this.state.podcasts && this._renderPodcasts()} */}
         </ScrollView>
       </View>
@@ -118,23 +94,97 @@ export default class HomeFeed extends Component {
 
   //****** SUB COMPONENTS SECTION
 
+  _renderDailyVerse() {
+    return (
+      <_renderVerseCard
+        likedosis={this.state.likedosis}
+        imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
+        verses={this.state.dailyVerse}
+        index={2}
+        key={2}
+        scroller={false}
+        props={this.props}
+      />
+    );
+  }
+  _renderRecommendedVerses() {
+    return this.state.recommendedVerses.map((verse, index) => {
+      return (
+        <_renderVerseCard
+          likedosis={this.state.likedosis}
+          imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
+          verses={[verse]}
+          index={index + 3}
+          key={index + 3}
+          scroller={false}
+          props={this.props}
+        />
+      );
+    });
+  }
+  _renderRecommendedSermons() {
+    return (
+      <Block>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            marginVertical: 8,
+            paddingHorizontal: theme.sizes.padding,
+          }}>
+          {this.state.recommendedSermons.map((sermon, idx) => {
+            return _renderSermon(sermon, idx, this.props);
+          })}
+        </ScrollView>
+      </Block>
+    );
+  }
+  _renderSOD() {
+    return (
+      <Block>
+        <Text
+          h2
+          black
+          spacing={1}
+          style={{
+            marginVertical: 8,
+            paddingHorizontal: theme.sizes.padding,
+          }}>
+          Sermon Of The Day
+        </Text>
+        <View
+          style={{
+            marginVertical: 8,
+            paddingHorizontal: theme.sizes.padding,
+          }}>
+          {_renderSermon(this.state.recommendedSermons[0], 2, this.props,true)}
+        </View>
+      </Block>
+    );
+  }
+
   _renderSearchResults() {
     return (
       <ScrollView
         style={{width: '100%'}}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
-        {this.state.verses.map((verse, index) => (
-          this.state.likedosis && (<_renderVerseCard
-            likedosis={this.state.likedosis}
-            imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
-            verses={[verse]}
-            key={index}
-            index={index}
-            scroller={true}
-            props={this.props}
-          />)
-        ))}
+        {this.state.verses.map(
+          (verse, index) =>
+            this.state.likedosis && (
+              <_renderVerseCard
+                likedosis={this.state.likedosis}
+                imageIndex={Math.floor(
+                  Math.random() * theme.randomImages.length,
+                )}
+                verses={[verse]}
+                key={index}
+                index={index}
+                scroller={true}
+                props={this.props}
+              />
+            ),
+        )}
       </ScrollView>
     );
   }
@@ -237,6 +287,7 @@ export default class HomeFeed extends Component {
 const styles = StyleSheet.create({
   welcome: {
     paddingTop: 2 * theme.sizes.padding,
+    backgroundColor: theme.colors.bg,
     // paddingHorizontal: theme.sizes.padding,
     flex: 1,
   },

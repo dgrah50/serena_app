@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Dimensions,
   Image,
   ImageBackground,
@@ -43,6 +44,7 @@ export class _renderVerseCard extends React.Component {
               verse: verses[0],
               index: index,
               imageIndex: imageIndex,
+              alreadyLiked:this.state.alreadyLiked
             });
           }}>
           <Transition shared={'image' + index}>
@@ -181,7 +183,7 @@ export function _renderPodcast(track, props) {
   );
 }
 
-export function _renderSermon(item, idx, props) {
+export function _renderSermon(item, idx, props, center=false) {
   let uri = item.speakerimg;
   let speakerName = item.author;
   let duration = item.duration;
@@ -190,6 +192,9 @@ export function _renderSermon(item, idx, props) {
   return (
     <TouchableOpacity
       key={idx}
+      style={{
+        alignItems: center && 'center',
+      }}
       onPress={() => {
         props.navigation.navigate('Player', {
           sermon: item,
@@ -204,11 +209,15 @@ export function _renderSermon(item, idx, props) {
             backgroundColor: theme.colors.gray3,
             padding: 5,
 
+            marginTop: 10,
             marginBottom: 20,
-            marginRight: 20,
+            marginRight: !center && 20,
             width: WIDTH * 0.7,
             borderRadius: theme.sizes.border,
           },
+
+          center ? {width: WIDTH * 0.8} : {width: WIDTH * 0.7},
+
           theme.shadow,
         ]}>
         <Block middle center row>
