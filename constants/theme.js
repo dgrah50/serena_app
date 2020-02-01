@@ -31,6 +31,40 @@ const sizes = {
   small: 8,
 };
 
+const shadow = {
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 7,
+  },
+  shadowOpacity: 0.43,
+  shadowRadius: 9.51,
+
+  elevation: 15,
+};
+
+const randomImages = [
+  require('../assets/images/versebgs/image1.jpg'),
+  require('../assets/images/versebgs/image2.jpg'),
+  require('../assets/images/versebgs/image3.jpg'),
+  require('../assets/images/versebgs/image4.jpg'),
+  require('../assets/images/versebgs/image5.jpg'),
+  require('../assets/images/versebgs/image6.jpg'),
+  require('../assets/images/versebgs/image7.jpg'),
+  require('../assets/images/versebgs/image8.jpg'),
+  require('../assets/images/versebgs/image9.jpg'),
+  require('../assets/images/versebgs/image10.jpg'),
+  require('../assets/images/versebgs/image11.jpg'),
+  require('../assets/images/versebgs/image12.jpg'),
+  require('../assets/images/versebgs/image13.jpg'),
+  require('../assets/images/versebgs/image14.jpg'),
+  require('../assets/images/versebgs/image15.jpg'),
+  require('../assets/images/versebgs/image16.jpg'),
+  require('../assets/images/versebgs/image17.jpg'),
+  require('../assets/images/versebgs/image18.jpg'),
+  require('../assets/images/versebgs/image19.jpg'),
+];
+
 const fonts = {
   h1: {
     fontFamily: 'Rubik-Light',
@@ -63,4 +97,4 @@ const fonts = {
   },
 };
 
-export {colors, sizes, fonts};
+export {colors, sizes, fonts, shadow,randomImages};

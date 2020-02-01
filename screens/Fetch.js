@@ -19,7 +19,6 @@ import {Block, Card, Text, AnimatedCircularProgress} from '../components';
 import {theme, time, emotions} from '../constants';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import LinearGradient from 'react-native-linear-gradient';
-import Carousel from 'react-native-snap-carousel';
 import SliderEntry from '../components/SliderEntry';
 import * as Animatable from 'react-native-animatable';
 
@@ -154,8 +153,6 @@ export default class Fetch extends Component {
       </Block>
     );
   }
-  //To be implemented. Each emoji needs to map to a sub emotion
-  //List of sub emotions is given in emotions.emotions
   _renderEmotionChips() {
     return (
       <View
@@ -204,15 +201,6 @@ export default class Fetch extends Component {
                   style={{padding: 5}}
                   key={topic}
                   animation={'fadeInLeft'}>
-                  {/* <RNChipView
-                    onPress={() => {
-                      this.setState({
-                        EmojiEmotion: Object.keys(emotions.emotions)[idx],
-                      });
-                    }}
-                    title={topic}
-                    avatar={false}
-                  /> */}
                   <TouchableOpacity
                     onPress={() => {
                       this.setState({
@@ -231,15 +219,6 @@ export default class Fetch extends Component {
       </View>
     );
   }
-
-  fadeIn = {
-    from: {
-      opacity: 1,
-    },
-    to: {
-      opacity: 0,
-    },
-  };
   _renderMicRing() {
     return (
       <Animatable.View
@@ -265,13 +244,12 @@ export default class Fetch extends Component {
         hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
         onPressIn={this.setRingOn.bind(this)}
         onPressOut={this.stopListen.bind(this)}>
-        <View style={[styles.buttonStyle]}>
+        <View style={[styles.buttonStyle, theme.shadow]}>
           <Icon name={'microphone'} size={60} color={'#5334B8'} />
         </View>
       </TouchableOpacity>
     );
   }
-
   _renderKeyboardButton() {
     return (
       <TouchableOpacity
@@ -284,7 +262,6 @@ export default class Fetch extends Component {
       </TouchableOpacity>
     );
   }
-
   _renderTypedPrayerInput() {
     return (
       <Animatable.View animation={'fadeIn'}>
@@ -316,8 +293,6 @@ export default class Fetch extends Component {
       </Animatable.View>
     );
   }
-
-
   _renderItem({item, index}) {
     return (
       <SliderEntry

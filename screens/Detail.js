@@ -6,7 +6,7 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
 import {theme} from '../constants';
 import {Transition} from 'react-navigation-fluid-transitions';
@@ -23,64 +23,78 @@ export default class Detail extends Component {
   render() {
     let verse = this.props.navigation.getParam('verse');
     let index = this.props.navigation.getParam('index');
+    let imageIndex = this.props.navigation.getParam('imageIndex');
     return (
       <TouchableWithoutFeedback onPress={this.props.navigation.goBack}>
         <Transition shared={'image' + index}>
           <ImageBackground
             style={{width: '100%'}}
-            source={require('../assets/images/hand.jpg')}>
-            <Block
-              flex={false}
-              center
-              middle
-              style={{padding: 10, height: '100%'}}>
-              <Block flex={false}>
-                <Block flex={false} center>
-                  <Transition shared={'versetext' + index}>
-                    <Text h2 white style={{marginVertical: 8}}>
-                      {verse.verse}
-                    </Text>
-                  </Transition>
+            source={theme.randomImages[imageIndex]}>
+            <Transition shared={'filter' + index}>
+              <Block
+                flex={false}
+                center
+                middle
+                style={{
+                  padding: 10,
+                  height: '100%',
+                  backgroundColor: 'rgba(0, 0, 0, .3)',
+                  borderRadius: theme.sizes.border,
+                }}>
+                <Block flex={false}>
+                  <Block flex={false} center>
+                    <Transition shared={'versetext' + index}>
+                      <Text h2 white style={{marginVertical: 8}}>
+                        {verse.verse}
+                      </Text>
+                    </Transition>
+                  </Block>
+                  <Block flex={false} center>
+                    <Transition shared={'booktext' + index}>
+                      <Text h3 white style={{marginVertical: 8}}>
+                        {verse.bookname}
+                      </Text>
+                    </Transition>
+                  </Block>
                 </Block>
-                <Block flex={false} center>
-                  <Transition shared={'booktext' + index}>
-                    <Text h3 white style={{marginVertical: 8}}>
-                      {verse.bookname}
-                    </Text>
+                <Block
+                  flex={false}
+                  row
+                  middle
+                  style={{width: '100%'}}
+                  space={'between'}>
+                  <Transition shared={'likebutton' + index}>
+                    <TouchableOpacity>
+                      <Icon
+                        name="heart"
+                        size={20}
+                        color={theme.colors.white}
+                        style={{marginHorizontal: 10}}
+                        onPress={() =>
+                          this.addToFavourites(
+                            verses[0].verse,
+                            verses[0].bookname,
+                            verses[0].osis,
+                          )
+                        }></Icon>
+                    </TouchableOpacity>
+                  </Transition>
+                  <Transition shared={'sharebutton' + index}>
+                    <TouchableOpacity>
+                      <Icon
+                        name="paper-plane"
+                        size={20}
+                        color={theme.colors.white}
+                        onPress={() =>
+                          this.onShare(
+                            verses[0].verse + ' ' + verses[0].bookname,
+                          )
+                        }></Icon>
+                    </TouchableOpacity>
                   </Transition>
                 </Block>
               </Block>
-              <Block flex={false} row middle style={{width:"100%"}} space={'between'}>
-                <Transition shared={'likebutton' + index}>
-                  <TouchableOpacity>
-                    <Icon.Button
-                      name="heart"
-                      backgroundColor={theme.colors.accent}
-                      onPress={() =>
-                        this.addToFavourites(
-                          verse.verse,
-                          verse.bookname,
-                          verse.osis,
-                        )
-                      }>
-                      Like
-                    </Icon.Button>
-                  </TouchableOpacity>
-                </Transition>
-                <Transition shared={'sharebutton' + index}>
-                  <TouchableOpacity>
-                    <Icon.Button
-                      name="share-alt"
-                      backgroundColor={theme.colors.share}
-                      onPress={() =>
-                        this.onShare(verse.verse + ' ' + verse.bookname)
-                      }>
-                      Share
-                    </Icon.Button>
-                  </TouchableOpacity>
-                </Transition>
-              </Block>
-            </Block>
+            </Transition>
           </ImageBackground>
         </Transition>
       </TouchableWithoutFeedback>

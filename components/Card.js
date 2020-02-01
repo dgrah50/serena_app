@@ -1,22 +1,19 @@
-import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet} from 'react-native';
 
 import Block from './Block';
-import { theme } from '../constants';
+import {theme} from '../constants';
 
 export default class Card extends Component {
   render() {
-    const { color, style, children, ...props } = this.props;
-    const cardStyles = [
-      styles.card,
-      style,
-    ];
+    const {color, style, children, ...props} = this.props;
+    const cardStyles = [styles.card, style];
 
     return (
       <Block color={color || theme.colors.white} style={cardStyles} {...props}>
         {children}
       </Block>
-    )
+    );
   }
 }
 
@@ -26,10 +23,20 @@ export const styles = StyleSheet.create({
     padding: theme.sizes.base + 4,
     marginBottom: theme.sizes.base,
   },
-  shadow: {
+  shadowOld: {
     shadowColor: theme.colors.black,
     shadowOpacity: 0.11,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowRadius: 13,
-  }
-})
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.0,
+    elevation: 24,
+  },
+});
