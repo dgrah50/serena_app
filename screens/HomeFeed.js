@@ -10,10 +10,8 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import firebase from 'react-native-firebase';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
-import {theme} from '../constants';
-import {Bars} from 'react-native-loader';
+import {theme, time} from '../constants';
 import {DOMParser} from 'xmldom';
 import {
   _renderVerseCard,
@@ -39,16 +37,12 @@ export default class HomeFeed extends Component {
     this.state = {
       sermons: undefined,
       verses: null,
-      dailyVerse: [
-        {
-          verse:
-            'You will seek Me and find Me when you search for Me with all your heart.',
-          bookname: 'Jeremiah 29:13',
-        },
-      ],
+      dailyVerse: null,
       podcasts: null,
+      likedosis: null,
     };
     this.fetchDailyVerse();
+    this.fetchLikes();
     // this.fetchPodcasts('food');
   }
 
@@ -77,30 +71,45 @@ export default class HomeFeed extends Component {
             }}>
             {this.state.verses ? 'Related Verses' : 'Verse Of The Day'}
           </Text>
-          {this.state.verses ? (
-            this._renderSearchResults()
-          ) : (
+          {this.state.verses
+            ? this._renderSearchResults()
+            : this.state.dailyVerse && (
+                <_renderVerseCard
+                  likedosis={this.state.likedosis}
+                  imageIndex={Math.floor(
+                    Math.random() * theme.randomImages.length,
+                  )}
+                  verses={this.state.dailyVerse}
+                  index={2}
+                  key={2}
+                  scroller={false}
+                  props={this.props}
+                />
+              )}
+          {this.state.sermons && this._renderRelatedSermons()}
+          <View style={styles.hLine} />
+          {this.state.dailyVerse && this.state.likedosis && (
             <_renderVerseCard
+              likedosis={this.state.likedosis}
+              imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
               verses={this.state.dailyVerse}
-              index={2}
+              index={6}
+              key={6}
               scroller={false}
               props={this.props}
             />
           )}
-          {this.state.sermons && this._renderRelatedSermons()}
-          <View style={styles.hLine} />
-          <_renderVerseCard
-            verses={this.state.dailyVerse}
-            index={3}
-            scroller={false}
-            props={this.props}
-          />
-          <_renderVerseCard
-            verses={this.state.dailyVerse}
-            index={4}
-            scroller={false}
-            props={this.props}
-          />
+          {this.state.dailyVerse && this.state.likedosis && (
+            <_renderVerseCard
+              likedosis={this.state.likedosis}
+              imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
+              verses={this.state.dailyVerse}
+              index={7}
+              key={7}
+              scroller={false}
+              props={this.props}
+            />
+          )}
           {/* {this.state.podcasts && this._renderPodcasts()} */}
         </ScrollView>
       </View>
@@ -116,12 +125,15 @@ export default class HomeFeed extends Component {
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
         {this.state.verses.map((verse, index) => (
-          <_renderVerseCard
+          this.state.likedosis && (<_renderVerseCard
+            likedosis={this.state.likedosis}
+            imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
             verses={[verse]}
+            key={index}
             index={index}
             scroller={true}
             props={this.props}
-          />
+          />)
         ))}
       </ScrollView>
     );
@@ -174,11 +186,13 @@ export default class HomeFeed extends Component {
           {
             verse: res.data.verse.details.text,
             bookname: res.data.verse.details.reference,
+            osis: time.DateNowOSIS,
           },
         ],
       });
     });
   }
+
   fetchPodcasts = async term => {
     const podcasts = await fetch(
       `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1314`,
@@ -200,6 +214,24 @@ export default class HomeFeed extends Component {
       });
     });
   };
+
+  fetchLikes() {
+    let firestoreref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('likes')
+      .get()
+      .then(snapshot => {
+        let likedosis = snapshot._docs.map(doc => doc.id);
+        this.setState({
+          likedosis: likedosis,
+        });
+      })
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
+  }
 }
 
 const styles = StyleSheet.create({

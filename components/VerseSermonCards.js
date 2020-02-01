@@ -11,39 +11,31 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
 import {theme} from '../constants';
 import {Transition} from 'react-navigation-fluid-transitions';
+import firebase from 'react-native-firebase';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
 
-async function addToFavourites(verseText, bookText, osis) {
-  osis = osis.toString();
-  if (osis.length == 7) {
-    osis = '0' + osis.toString();
-  }
-  let firestoreref = firebase
-    .firestore()
-    .collection('users')
-    .doc(firebase.auth().currentUser.uid)
-    .collection('likes');
-  try {
-    firestoreref.doc(osis).set({
-      verseText: verseText,
-      bookText: bookText,
-      time: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-    // setAlreadyLiked(true);
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 export class _renderVerseCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      alreadyLiked: false,
+    };
+  }
+  componentDidMount() {
+    if (this.props.likedosis) {
+      if (this.props.likedosis.includes(this.props.verses[0].osis)) {
+        this.setState({
+          alreadyLiked: true,
+        });
+      }
+    }
+  }
+
   render() {
-    
-    const {verses, index, scroller, props} = this.props;
-    console.log(verses);
-    let imageIndex = Math.floor(Math.random() * theme.randomImages.length);
+    const {verses, index, scroller, props, imageIndex} = this.props;
     return (
-      <React.Fragment key={index}>
+      <React.Fragment>
         <TouchableOpacity
           style={scroller && {width: WIDTH * 0.8}}
           onPress={() => {
@@ -101,12 +93,12 @@ export class _renderVerseCard extends React.Component {
                       <TouchableOpacity>
                         <Icon
                           name="heart"
-                          solid
+                          solid={this.state.alreadyLiked}
                           size={20}
                           color={theme.colors.white}
                           style={{marginHorizontal: 10}}
                           onPress={() =>
-                            addToFavourites(
+                            this.addToFavourites(
                               verses[0].verse,
                               verses[0].bookname,
                               verses[0].osis,
@@ -133,6 +125,30 @@ export class _renderVerseCard extends React.Component {
         </TouchableOpacity>
       </React.Fragment>
     );
+  }
+
+  async addToFavourites(verseText, bookText, osis) {
+    osis = osis.toString();
+    if (osis.length == 7) {
+      osis = '0' + osis.toString();
+    }
+    let firestoreref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('likes');
+    try {
+      firestoreref.doc(osis).set({
+        verseText: verseText,
+        bookText: bookText,
+        time: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      this.setState({
+        alreadyLiked: true,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 

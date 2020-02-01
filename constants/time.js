@@ -23,5 +23,7 @@ month[11] = 'December';
 
 let d = new Date();
 let DateNow = {weekday: weekday[d.getDay()], month: month[d.getMonth()], date: d.getUTCDate()}
+let DateNowOSIS =
+  "VOD"+d.getUTCDate().toString() + (d.getMonth() + 1).toString() + d.getFullYear().toString() ; 
 
-export {DateNow};
+export {DateNow, DateNowOSIS};
