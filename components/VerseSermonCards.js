@@ -16,7 +16,7 @@ import firebase from 'react-native-firebase';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
 
-export class _renderVerseCard extends React.Component {
+export class VerseCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,21 +38,24 @@ export class _renderVerseCard extends React.Component {
     return (
       <React.Fragment>
         <TouchableOpacity
-          style={scroller && {width: WIDTH * 0.8}}
+          style={{
+            alignItems: !scroller && 'center',
+          }}
           onPress={() => {
             props.navigation.navigate('Detail', {
               verse: verses[0],
               index: index,
               imageIndex: imageIndex,
-              alreadyLiked:this.state.alreadyLiked
+              alreadyLiked: this.state.alreadyLiked,
             });
           }}>
           <Transition shared={'image' + index}>
             <ImageBackground
               style={[
                 {
-                  marginBottom: 10,
-                  padding: theme.sizes.padding,
+                  width: WIDTH * 0.9,
+                  height: WIDTH * 0.7,
+                  marginBottom: WIDTH * 0.05,
                   borderRadius: theme.sizes.border,
                 },
                 theme.shadow,
@@ -67,6 +70,7 @@ export class _renderVerseCard extends React.Component {
                   middle
                   style={{
                     padding: 10,
+                    height: WIDTH * 0.7,
                     backgroundColor: 'rgba(0, 0, 0, .3)',
                     borderRadius: theme.sizes.border,
                   }}>
@@ -74,10 +78,9 @@ export class _renderVerseCard extends React.Component {
                     <Block flex={false} center>
                       <Transition shared={'versetext' + index}>
                         <Text
-                          h2
                           white
                           numberOfLines={3}
-                          style={{marginVertical: 8}}>
+                          style={{marginVertical: 8, fontSize: 24}}>
                           {verses[0].verse}
                         </Text>
                       </Transition>
@@ -207,24 +210,21 @@ export function _renderSermon(item, idx, props, center=false) {
         style={[
           {
             backgroundColor: theme.colors.gray3,
-            padding: 5,
-
-            marginTop: 10,
+            padding: 15,
             marginBottom: 20,
             marginRight: !center && 20,
             width: WIDTH * 0.7,
             borderRadius: theme.sizes.border,
           },
 
-          center ? {width: WIDTH * 0.8} : {width: WIDTH * 0.7},
-
+          center ? {width: WIDTH * 0.9} : {width: WIDTH * 0.7},
           theme.shadow,
         ]}>
-        <Block middle center row>
+        <Block middle center row style={{marginBottom: 10}}>
           <Image
             style={{
-              width: 80,
-              height: 80,
+              width: 70,
+              height: 70,
               borderRadius: 10,
               marginRight: 10,
             }}
@@ -233,10 +233,10 @@ export function _renderSermon(item, idx, props, center=false) {
             }}
           />
           <Block middle>
-            <Text caption gray3>
+            <Text title gray>
               {speakerName}
             </Text>
-            <Text title numberOfLines={2}>
+            <Text h3 numberOfLines={2}>
               {item.title}
             </Text>
           </Block>
@@ -252,17 +252,17 @@ export function _renderSermon(item, idx, props, center=false) {
             <Icon
               name="heart"
               size={20}
-              color={theme.colors.black}
+              color={theme.colors.gray}
               style={{marginRight: 10}}
             />
-            <Icon name="paper-plane" size={20} color={theme.colors.black} />
+            <Icon name="paper-plane" size={20} color={theme.colors.gray} />
           </Block>
           <Block flex={false} row center middle>
-            <Text right caption light>
-              {duration + 's'}
+            <Text right title gray>
+              {duration}
             </Text>
             <Block flex={false} row center middle style={styles.playButton}>
-              <Text white>PLAY</Text>
+              <Text white>PLAY </Text>
               <Icon name="play" size={10} color={theme.colors.white} />
             </Block>
           </Block>

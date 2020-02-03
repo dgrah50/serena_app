@@ -1,16 +1,16 @@
 const colors = {
-  accent: '#FF4957',
-  primary: '#27A9FF',
+  accent: '#449CD6',
+  primary: '#449CD6',
   secondary: '#4DA1FF',
   tertiary: '#FFE358',
   black: '#2F2F2F',
   white: '#FFFFFF',
-  gray: '#BDBFC7',
+  gray: '#58595B',
   gray2: '#D8D8D8',
   gray3: '#F0F0F0',
   gray4: '#F7F8FA',
   blue: '#24a0ed',
-  bg: '#D8D8D8',
+  bg: '#EFEFF4',
 };
 
 const sizes = {
@@ -19,14 +19,14 @@ const sizes = {
   font: 14,
   border: 10,
   padding: 25,
-
   // font sizes
   h1: 39,
   h2: 29,
   h3: 19,
+  verse: 24,
   title: 16,
   header: 24,
-  body: 12,
+  body: 14,
   caption: 12,
   small: 8,
 };
@@ -35,12 +35,12 @@ const shadow = {
   shadowColor: '#000',
   shadowOffset: {
     width: 0,
-    height: 7,
+    height: 3,
   },
-  shadowOpacity: 0.43,
-  shadowRadius: 9.51,
+  shadowOpacity: 0.2,
+  shadowRadius: 4.65,
 
-  elevation: 15,
+  elevation: 7,
 };
 
 const randomImages = [

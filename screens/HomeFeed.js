@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import {
-  Image,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
-  Share,
   Dimensions,
   View,
 } from 'react-native';
@@ -13,8 +10,9 @@ import firebase from 'react-native-firebase';
 import {Block, Text} from '../components';
 import {theme, time} from '../constants';
 import {DOMParser} from 'xmldom';
+import Shimmer from '../components/shimmer';
 import {
-  _renderVerseCard,
+  VerseCard,
   _renderSermon,
   _renderPodcast,
 } from '../components/VerseSermonCards';
@@ -38,27 +36,37 @@ export default class HomeFeed extends Component {
     this.state = {
       sermons: undefined,
       verses: null,
-      recommendedVerses: props.screenProps.recommendedVerses.verses,
-      recommendedSermons: props.screenProps.recommendedVerses.sermons.current,
+      podcasts: null,
+      recommendedVerses: this.props.screenProps.recommendedVerses.verses,
+      recommendedSermons: this.props.screenProps.recommendedVerses.sermons
+        .current,
+      recommendedPodcasts: [],
       dailyVerse: null,
-      podcasts: [],
       likedosis: null,
+      loading: true,
     };
 
     this.fetchDailyVerse();
     this.fetchLikes();
-    
   }
 
   componentDidMount() {
-    this.fetchPodcasts(this.props.screenProps.recommendedVerses.keyword);
     try {
-      this.setState({
-        sermons: this.props.navigation.getParam('response').sermons.current,
-        verses: this.props.navigation.getParam('response').verses,
-        recommendedVerses: props.screenProps.recommendedVerses.verses,
-        recommendedSermons: props.screenProps.recommendedVerses.sermons.current,
-      });
+      if (this.props.navigation.getParam('response') != undefined) {
+        this.fetchPodcasts(
+          this.props.navigation.getParam('response').keyword,
+          false,
+        );
+        this.setState({
+          sermons: this.props.navigation.getParam('response').sermons.current,
+          verses: this.props.navigation.getParam('response').verses,
+        });
+      } else {
+        this.fetchPodcasts(
+          this.props.screenProps.recommendedVerses.keyword,
+          true,
+        );
+      }
     } catch (error) {
       console.log(error);
     }
@@ -78,18 +86,27 @@ export default class HomeFeed extends Component {
             }}>
             {this.state.verses ? 'Related Verses' : 'Verse Of The Day'}
           </Text>
+
           {this.state.verses
             ? this._renderSearchResults()
-            : this.state.dailyVerse && [this._renderDailyVerse(), this._renderSOD()]}
+            : this.state.dailyVerse &&
+              this.state.recommendedSermons && [
+                this._renderDailyVerse(),
+                this._renderSOD(),
+              ]}
           {this.state.sermons && this._renderRelatedSermons()}
+          {this.state.podcasts && this._renderRelatedPodcasts()}
           <View style={styles.hLine} />
           {this.state.dailyVerse &&
-            this.state.likedosis &&
+            this.state.recommendedVerses &&
             this._renderRecommendedVerses()}
+
           {this.state.dailyVerse &&
-            this.state.likedosis &&
+            this.state.recommendedSermons &&
             this._renderRecommendedSermons()}
-          {this.state.podcasts && this._renderPodcasts()}
+          {this.state.dailyVerse &&
+            this.state.recommendedVerses &&
+            this._renderRecommendedPodcasts()}
         </ScrollView>
       </View>
     );
@@ -99,7 +116,7 @@ export default class HomeFeed extends Component {
 
   _renderDailyVerse() {
     return (
-      <_renderVerseCard
+      <VerseCard
         likedosis={this.state.likedosis}
         imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
         verses={this.state.dailyVerse}
@@ -113,7 +130,7 @@ export default class HomeFeed extends Component {
   _renderRecommendedVerses() {
     return this.state.recommendedVerses.map((verse, index) => {
       return (
-        <_renderVerseCard
+        <VerseCard
           likedosis={this.state.likedosis}
           imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
           verses={[verse]}
@@ -150,7 +167,6 @@ export default class HomeFeed extends Component {
           black
           spacing={1}
           style={{
-            marginVertical: 8,
             paddingHorizontal: theme.sizes.padding,
           }}>
           Sermon Of The Day
@@ -174,7 +190,7 @@ export default class HomeFeed extends Component {
         {this.state.verses.map(
           (verse, index) =>
             this.state.likedosis && (
-              <_renderVerseCard
+              <VerseCard
                 likedosis={this.state.likedosis}
                 imageIndex={Math.floor(
                   Math.random() * theme.randomImages.length,
@@ -190,7 +206,6 @@ export default class HomeFeed extends Component {
       </ScrollView>
     );
   }
-  _renderVODs() {}
 
   _renderRelatedSermons() {
     return (
@@ -219,7 +234,7 @@ export default class HomeFeed extends Component {
       </Block>
     );
   }
-  _renderPodcasts() {
+  _renderRelatedPodcasts() {
     return (
       <Block>
         <Text
@@ -240,6 +255,23 @@ export default class HomeFeed extends Component {
             paddingHorizontal: theme.sizes.padding,
           }}>
           {this.state.podcasts.map((podcast, idx) => {
+            return _renderSermon(podcast, idx, this.props);
+          })}
+        </ScrollView>
+      </Block>
+    );
+  }
+  _renderRecommendedPodcasts() {
+    return (
+      <Block>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            marginVertical: 8,
+            paddingHorizontal: theme.sizes.padding,
+          }}>
+          {this.state.recommendedPodcasts.map((podcast, idx) => {
             return _renderSermon(podcast, idx, this.props);
           })}
         </ScrollView>
@@ -299,8 +331,7 @@ export default class HomeFeed extends Component {
     }
   };
 
-  fetchPodcasts = async term => {
-    console.log('test');
+  fetchPodcasts = async (term, recommended) => {
     const result = await fetch(
       `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1314`,
     );
@@ -328,14 +359,19 @@ export default class HomeFeed extends Component {
           })
           .filter(item => item != undefined);
 
-        this.setState(previousState => ({
-          podcasts: [...previousState.podcasts, ..._.sample(newcasts, 5)],
-        }));
+        podcastList = [...podcastList, ..._.sample(newcasts, 5)];
       }
-      console.log(this.state.podcasts);
+      if (recommended) {
+        this.setState({
+          recommendedPodcasts: _.sample(podcastList, 5),
+        });
+      } else {
+        this.setState({
+          podcasts: _.sample(podcastList, 5),
+        });
+      }
     } catch (e) {
-      // what should we do if
-      // the request returns invalid JSON?
+      console.log(e);
     }
   };
 
@@ -370,6 +406,6 @@ const styles = StyleSheet.create({
     marginBottom: theme.sizes.base,
     marginHorizontal: WIDTH * 0.1,
     height: 3,
-    backgroundColor: theme.colors.gray2,
+    backgroundColor: theme.colors.black,
   },
 });

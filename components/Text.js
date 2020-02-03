@@ -10,6 +10,7 @@ export default class Typography extends Component {
       h1,
       h2,
       h3,
+      verse,
       title,
       body,
       caption,
@@ -47,6 +48,7 @@ export default class Typography extends Component {
       h1 && styles.h1,
       h2 && styles.h2,
       h3 && styles.h3,
+      verse && styles.verse,
       title && styles.title,
       body && styles.body,
       caption && styles.caption,
@@ -88,30 +90,30 @@ export default class Typography extends Component {
 const styles = StyleSheet.create({
   // default style
   text: {
-    fontFamily: "Rubik-Regular",
+    fontFamily: "Lato-Regular",
     fontSize: theme.sizes.font,
     color: theme.colors.black
   },
   // variations
   regular: {
     fontWeight: "normal",
-    fontFamily: "Rubik-Regular"
+    fontFamily: "Lato-Regular"
   },
   bold: {
     fontWeight: "bold",
-    fontFamily: "Rubik-Bold"
+    fontFamily: "Lato-Bold"
   },
   semibold: {
     fontWeight: "500",
-    fontFamily: "Rubik-SemiBold"
+    fontFamily: "Lato-SemiBold"
   },
   medium: {
     fontWeight: "500",
-    fontFamily: "Rubik-Medium"
+    fontFamily: "Lato-Medium"
   },
   light: {
     fontWeight: "200",
-    fontFamily: "Rubik-Light"
+    fontFamily: "Lato-Light"
   },
   // position
   center: { textAlign: "center" },
@@ -129,6 +131,7 @@ const styles = StyleSheet.create({
   h1: theme.fonts.h1,
   h2: theme.fonts.h2,
   h3: theme.fonts.h3,
+  verse: theme.fonts.verse,
   title: theme.fonts.title,
   body: theme.fonts.body,
   caption: theme.fonts.caption,

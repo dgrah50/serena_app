@@ -42,17 +42,27 @@ export default class Detail extends Component {
                   backgroundColor: 'rgba(0, 0, 0, .3)',
                   borderRadius: theme.sizes.border,
                 }}>
+                <TouchableOpacity
+                  style={{position: 'absolute', top: 30, left: 30}}>
+                  <Icon
+                    name="arrow-left"
+                    size={30}
+                    color={theme.colors.white}
+                    onPress={() =>
+                      this.onShare(verses[0].verse + ' ' + verses[0].bookname)
+                    }></Icon>
+                </TouchableOpacity>
                 <Block flex={false}>
                   <Block flex={false} center>
                     <Transition shared={'versetext' + index}>
-                      <Text h2 white style={{marginVertical: 8}}>
+                      <Text h2 white center style={{marginVertical: 8}}>
                         {verse.verse}
                       </Text>
                     </Transition>
                   </Block>
                   <Block flex={false} center>
                     <Transition shared={'booktext' + index}>
-                      <Text h3 white style={{marginVertical: 8}}>
+                      <Text h3 white center style={{marginVertical: 8}}>
                         {verse.bookname}
                       </Text>
                     </Transition>
@@ -62,7 +72,7 @@ export default class Detail extends Component {
                   flex={false}
                   row
                   middle
-                  style={{width: '100%'}}
+                  style={{width: '100%', position: 'absolute', bottom: 0}}
                   space={'between'}>
                   <Transition shared={'likebutton' + index}>
                     <TouchableOpacity>
