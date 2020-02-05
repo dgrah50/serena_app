@@ -36,7 +36,6 @@ export default class Fetch extends Component {
       results: [],
       EmojiEmotion: null,
     };
-    Voice.onSpeechStart = this.onSpeechStart;
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
     // firebase.auth().onAuthStateChanged(function(user) {
     //   if (user) {
@@ -232,33 +231,35 @@ export default class Fetch extends Component {
   }
   _renderMicRing() {
     return (
-      <Animatable.View
-        ref={this.handleViewRef}
-        center
-        middle
-        flex={false}
-        style={{marginBottom: '10%'}}>
-        <AnimatedCircularProgress
-          onAnimationComplete={() => {
-            // console.log('animation done');
-          }}
-          ref={ref => (this.circularProgress = ref)}
-          tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
-          {fill => this._renderMicButton()}
-        </AnimatedCircularProgress>
-      </Animatable.View>
+      <React.Fragment>
+        <Animatable.View
+          ref={this.handleViewRef}
+          center
+          middle
+          flex={false}
+          style={{marginBottom: '10%'}}>
+          <AnimatedCircularProgress
+            onAnimationComplete={() => {
+              // console.log('animation done');
+            }}
+            ref={ref => (this.circularProgress = ref)}
+            tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
+            {fill => this._renderMicButton()}
+          </AnimatedCircularProgress>
+        </Animatable.View>
+      </React.Fragment>
     );
   }
   _renderMicButton() {
     return (
-      <TouchableOpacity
-        hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
-        onPressIn={this.setRingOn.bind(this)}
-        onPressOut={this.stopListen.bind(this)}>
-        <View style={[styles.buttonStyle, theme.shadow]}>
-          <Icon name={'microphone'} size={60} color={theme.colors.primary} />
-        </View>
-      </TouchableOpacity>
+        <TouchableOpacity
+          hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
+          onPressIn={this.setRingOn.bind(this)}
+          onPressOut={this.stopListen.bind(this)}>
+          <View style={[styles.buttonStyle, theme.shadow]}>
+            <Icon name={'microphone'} size={60} color={theme.colors.primary} />
+          </View>
+        </TouchableOpacity>
     );
   }
   _renderKeyboardButton() {

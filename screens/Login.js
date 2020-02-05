@@ -6,16 +6,15 @@ import {
   Alert,
   View,
   StyleSheet,
+  Platform
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
 import {Button, Block, Text, Input} from '../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {theme, mocks, time} from '../constants';
+import {theme} from '../constants';
 import LottieView from 'lottie-react-native';
-
-import Swiper from '../components/Swiper';
-import {ThemeColors} from 'react-navigation';
+import {request, PERMISSIONS} from 'react-native-permissions';
 
 const {height, width} = Dimensions.get('window');
 
@@ -110,7 +109,7 @@ class Onboarding extends Component {
         <Block flex={false} center style={styles.paginationRow}>
           <Button
             style={styles.buttonStyle}
-            onPress={() => this.setState({screen: 2})}>
+            onPress={() => this.requestPermissions()}>
             <Text white> ALLOW MICROPHONE ACCESS </Text>
           </Button>
           <Dots
@@ -181,6 +180,19 @@ class Onboarding extends Component {
       </Block>
     );
   }
+
+  requestPermissions(){
+    if (Platform.OS === 'android'){
+      request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
+        this.setState({screen: 2});
+      });
+    } else {
+      request(PERMISSIONS.IOS.SPEECH_RECOGNITION).then(result => {
+       this.setState({screen: 2});
+      });
+    }
+  }
+
 
   async facebookLogin() {
     try {
