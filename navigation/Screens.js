@@ -14,6 +14,7 @@ import SinglePostScreen from '../screens/SinglePostScreen';
 import CreateGroup from '../screens/CreateGroup';
 import Profile from '../screens/Profile';
 import Fetch from '../screens/Fetch';
+import Favourites from '../screens/Favourites';
 
 export default createBottomTabNavigator(
   {
@@ -61,6 +62,22 @@ export default createBottomTabNavigator(
               },
             ),
           },
+          Favourites: {
+            screen: FluidNavigator(
+              {
+                Favourites: {
+                  screen: Favourites,
+                },
+                Detail: {
+                  screen: Detail,
+                },
+              },
+              {
+                headerMode: 'none',
+                initialRouteName: 'Favourites',
+              },
+            ),
+          },
         },
         {
           headerMode: 'none',
@@ -82,6 +99,22 @@ export default createBottomTabNavigator(
           },
           Detail: {
             screen: Detail,
+          },
+          Favourites: {
+            screen: FluidNavigator(
+              {
+                Favourites: {
+                  screen: Favourites,
+                },
+                Detail: {
+                  screen: Detail,
+                },
+              },
+              {
+                headerMode: 'none',
+                initialRouteName: 'Favourites',
+              },
+            ),
           },
         },
         {

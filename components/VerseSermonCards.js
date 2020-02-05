@@ -75,6 +75,7 @@ export class VerseCard extends React.Component {
                   <Transition shared={'versetext' + index}>
                     <Text
                       white
+                      center
                       numberOfLines={3}
                       style={{marginVertical: 8, fontSize: 24}}>
                       {verses[0].verse}
@@ -94,7 +95,7 @@ export class VerseCard extends React.Component {
                 row
                 middle
                 justifyContent={'flex-start'}
-                style={{position: 'absolute', bottom: 25}}>
+                style={{position: 'absolute', width:"100%", bottom: 20}}>
                 <Transition shared={'likebutton' + index}>
                   <TouchableOpacity>
                     <Icon

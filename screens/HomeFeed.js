@@ -6,7 +6,8 @@ import firebase from 'react-native-firebase';
 import {Block, Text} from '../components';
 import {theme, time} from '../constants';
 import {DOMParser} from 'xmldom';
-import Shimmer from '../components/shimmer';
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
   VerseCard,
   _renderSermon,
@@ -14,6 +15,7 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class HomeFeed extends Component {
   static navigationOptions = ({navigation}) => {
@@ -31,13 +33,13 @@ export default class HomeFeed extends Component {
     this.state = {
       sermons: undefined,
       verses: null,
-      podcasts: null,
+      podcasts: [],
+      recommendedPodcasts: null,
       recommendedVerses: null,
       recommendedSermons: null,
-      relatedPodcasts: [],
       dailyVerse: null,
       likedosis: null,
-      loading: true,
+      isLoading: true,
     };
 
     this.fetchDailyVerse();
@@ -49,7 +51,7 @@ export default class HomeFeed extends Component {
       if (this.props.navigation.getParam('response') != undefined) {
         this.fetchPodcasts(
           this.props.navigation.getParam('response').keyword,
-          false,
+          true,
         );
         this.setState({
           sermons: this.props.navigation.getParam('response').sermons.current,
@@ -59,28 +61,52 @@ export default class HomeFeed extends Component {
     } catch (error) {
       console.log(error);
     }
-    axios
-      .post(
-        'https://serenaengine333.co.uk/api/verses/recs',
-        qs.stringify({
-          userID: firebase.auth().currentUser.uid,
-        }),
-      )
-      .then(res => {
-        this.setState({
-          recommendedSermons: res.data.sermons.current,
-          recommendedVerses: res.data.verses,
+    if (!this.state.recommendedSermons || !this.state.recommendedSermons) {
+      axios
+        .post(
+          'https://serenaengine333.co.uk/api/verses/recs',
+          qs.stringify({
+            userID: firebase.auth().currentUser.uid,
+          }),
+        )
+        .then(res => {
+          this.setState({
+            recommendedSermons: res.data.sermons.current,
+            recommendedVerses: res.data.verses,
+          });
+          console.log(res.data.keyword);
+          this.fetchPodcasts(res.data.keyword, false);
+        })
+        .catch(err => {
+          console.log(err);
         });
-        console.log(res.data.keyword);
-        this.fetchPodcasts(res.data.keyword, true);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    }
   }
 
   render() {
-    return (
+    let isLoading = true;
+    if (
+      this.state.verses &&
+      this.state.dailyVerse &&
+      this.state.sermons &&
+      this.state.podcasts &&
+      this.state.recommendedVerses &&
+      this.state.recommendedSermons &&
+      this.state.recommendedPodcasts
+    ) {
+      // this.setState({isLoading: false});
+      isLoading = false;
+    } else if (
+      this.state.dailyVerse &&
+      this.state.recommendedVerses &&
+      this.state.recommendedSermons &&
+      this.state.recommendedPodcasts
+    ) {
+      isLoading = false;
+    }
+    return isLoading ? (
+      this._renderLoadingPlaceHolder()
+    ) : (
       <View style={styles.welcome}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text
@@ -95,19 +121,22 @@ export default class HomeFeed extends Component {
           </Text>
 
           {this.state.verses && this._renderSearchResults()}
-          {this.state.dailyVerse &&
-            this.state.recommendedSermons &&
+          {!this.state.verses &&
+            this.state.dailyVerse &&
             this._renderDailyVerse()}
-          {this.state.dailyVerse &&
+          {!this.state.verses &&
             this.state.recommendedSermons &&
             this._renderSOD()}
           {this.state.sermons && this._renderRelatedSermons()}
-          {this.state.relatedPodcasts && this._renderRelatedPodcasts()}
+          {this.state.verses &&
+            this.state.podcasts &&
+            this._renderRelatedPodcasts()}
+          {this._renderFavouritesButton()}
           <View style={styles.hLine} />
           {this.state.recommendedVerses && this._renderRecommendedVerses()}
           {this.state.recommendedSermons && this._renderRecommendedSermons()}
           {this.state.dailyVerse &&
-            this.state.recommendedVerses &&
+            this.state.recommendedPodcasts &&
             this._renderRecommendedPodcasts()}
         </ScrollView>
       </View>
@@ -115,7 +144,39 @@ export default class HomeFeed extends Component {
   }
 
   //****** SUB COMPONENTS SECTION
-
+  _renderLoadingPlaceHolder() {
+    return (
+      <Block center style={styles.welcome}>
+        <ShimmerPlaceHolder
+          autoRun={true}
+          style={{
+            width: WIDTH * 0.9,
+            height: WIDTH * 0.7,
+            marginBottom: WIDTH * 0.05,
+            borderRadius: theme.sizes.border,
+          }}
+        />
+        <ShimmerPlaceHolder
+          autoRun={true}
+          style={{
+            width: WIDTH * 0.9,
+            height: WIDTH * 0.4,
+            borderRadius: theme.sizes.border,
+          }}
+        />
+        <View style={styles.hLine} />
+        <ShimmerPlaceHolder
+          autoRun={true}
+          style={{
+            width: WIDTH * 0.9,
+            height: WIDTH * 0.7,
+            marginBottom: WIDTH * 0.05,
+            borderRadius: theme.sizes.border,
+          }}
+        />
+      </Block>
+    );
+  }
   _renderDailyVerse() {
     return (
       <VerseCard
@@ -171,7 +232,7 @@ export default class HomeFeed extends Component {
             marginVertical: 8,
             paddingHorizontal: theme.sizes.padding,
           }}>
-          {this.state.relatedPodcasts.map((podcast, idx) => {
+          {this.state.recommendedPodcasts.map((podcast, idx) => {
             return _renderSermon(podcast, idx, this.props);
           })}
         </ScrollView>
@@ -195,7 +256,7 @@ export default class HomeFeed extends Component {
           style={{
             paddingHorizontal: theme.sizes.padding,
           }}>
-          {_renderSermon(this.state.recommendedSermons[0], 2, this.props, true)}
+          {_renderSermon(this.state.recommendedSermons[2], 2, this.props, true)}
         </View>
       </Block>
     );
@@ -203,7 +264,7 @@ export default class HomeFeed extends Component {
   _renderSearchResults() {
     return (
       <ScrollView
-        style={{width: '100%', marginLeft:20}}
+        style={{width: '100%', marginLeft: 20}}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
         {this.state.verses.map(
@@ -272,11 +333,49 @@ export default class HomeFeed extends Component {
             marginVertical: 8,
             paddingHorizontal: theme.sizes.padding,
           }}>
-          {this.state.relatedPodcasts.map((podcast, idx) => {
+          {this.state.podcasts.map((podcast, idx) => {
             return _renderSermon(podcast, idx, this.props);
           })}
         </ScrollView>
       </Block>
+    );
+  }
+  _renderFavouritesButton() {
+    return (
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('Favourites')}>
+        <Block
+          space={'between'}
+          middle
+          row
+          style={[
+            {
+              backgroundColor: theme.colors.gray3,
+              padding: 15,
+              paddingBottom: 13,
+              marginHorizontal: WIDTH * 0.05,
+              marginBottom: WIDTH * 0.05,
+              width: WIDTH * 0.9,
+              borderRadius: theme.sizes.border,
+            },
+            theme.shadow,
+          ]}>
+          <Icon
+            name="heart"
+            size={20}
+            solid={true}
+            color={'red'}
+            style={{marginRight: 10}}
+          />
+          <Text h3>Favourites</Text>
+          <Icon
+            name="chevron-right"
+            size={20}
+            color={theme.colors.black}
+            style={{marginRight: 10}}
+          />
+        </Block>
+      </TouchableOpacity>
     );
   }
 
@@ -362,11 +461,11 @@ export default class HomeFeed extends Component {
       }
       if (related) {
         this.setState({
-          relatedPodcasts: _.sample(podcastList, 5),
+          podcasts: _.sample(podcastList, 5),
         });
       } else {
         this.setState({
-          podcasts: _.sample(podcastList, 5),
+          recommendedPodcasts: _.sample(podcastList, 5),
         });
       }
     } catch (e) {

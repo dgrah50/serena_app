@@ -105,7 +105,7 @@ export default class Fetch extends Component {
                 right: 30,
                 zIndex: 1,
               }}
-              onPress={() => this.props.navigation.navigate('Profile')}>
+              onPress={() => this.props.navigation.navigate('Favourites')}>
               <Icon name="cog" size={25} color={theme.colors.white}></Icon>
             </TouchableOpacity>
             <View

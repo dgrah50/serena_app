@@ -63,6 +63,22 @@ const randomImages = [
   require('../assets/images/versebgs/image17.jpg'),
   require('../assets/images/versebgs/image18.jpg'),
   require('../assets/images/versebgs/image19.jpg'),
+  require('../assets/images/versebgs/image20.jpg'),
+  require('../assets/images/versebgs/image21.jpg'),
+  require('../assets/images/versebgs/image22.jpg'),
+  require('../assets/images/versebgs/image23.jpg'),
+  require('../assets/images/versebgs/image24.jpg'),
+  require('../assets/images/versebgs/image25.jpg'),
+  require('../assets/images/versebgs/image26.jpg'),
+  require('../assets/images/versebgs/image27.jpg'),
+  require('../assets/images/versebgs/image28.jpg'),
+  require('../assets/images/versebgs/image29.jpg'),
+  require('../assets/images/versebgs/image30.jpg'),
+  require('../assets/images/versebgs/image31.jpg'),
+  require('../assets/images/versebgs/image32.jpg'),
+  require('../assets/images/versebgs/image33.jpg'),
+  require('../assets/images/versebgs/image34.jpg'),
+  require('../assets/images/versebgs/image35.jpg'),
 ];
 
 const fonts = {

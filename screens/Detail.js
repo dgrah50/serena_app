@@ -31,79 +31,78 @@ export default class Detail extends Component {
           <ImageBackground
             style={{width: '100%'}}
             source={theme.randomImages[imageIndex]}>
-              <Block
-                flex={false}
-                center
-                middle
-                style={{
-                  padding: 10,
-                  height: '100%',
-                  borderRadius: theme.sizes.border,
-                }}>
-                <TouchableOpacity
-                  style={{position: 'absolute', top: 30, left: 30}}>
-                  <Icon
-                    name="arrow-left"
-                    size={30}
-                    color={theme.colors.white}
-                    onPress={() =>
-                      this.onShare(verses[0].verse + ' ' + verses[0].bookname)
-                    }></Icon>
-                </TouchableOpacity>
-                <Block flex={false}>
-                  <Block flex={false} center>
-                    <Transition shared={'versetext' + index}>
-                      <Text h2 white center style={{marginVertical: 8}}>
-                        {verse.verse}
-                      </Text>
-                    </Transition>
-                  </Block>
-                  <Block flex={false} center>
-                    <Transition shared={'booktext' + index}>
-                      <Text h3 white center style={{marginVertical: 8}}>
-                        {verse.bookname}
-                      </Text>
-                    </Transition>
-                  </Block>
-                </Block>
-                <Block
-                  flex={false}
-                  row
-                  middle
-                  style={{width: '100%', position: 'absolute', bottom: 0}}
-                  space={'between'}>
-                  <Transition shared={'likebutton' + index}>
-                    <TouchableOpacity>
-                      <Icon
-                        name="heart"
-                        solid={alreadyLiked}
-                        size={40}
-                        color={theme.colors.white}
-                        style={{marginHorizontal: 10}}
-                        onPress={() =>
-                          this.addToFavourites(
-                            verses[0].verse,
-                            verses[0].bookname,
-                            verses[0].osis,
-                          )
-                        }></Icon>
-                    </TouchableOpacity>
+            <Block
+              flex={false}
+              center
+              middle
+              style={{
+                padding: 10,
+                height: '100%',
+                borderRadius: theme.sizes.border,
+              }}>
+              <TouchableOpacity
+                style={{position: 'absolute', top: 30, left: 30}}>
+                <Icon
+                  name="arrow-left"
+                  size={30}
+                  color={theme.colors.white}
+                  onPress={() =>
+                    this.onShare(verses[0].verse + ' ' + verses[0].bookname)
+                  }></Icon>
+              </TouchableOpacity>
+              <Block flex={false}>
+                <Block flex={false} center>
+                  <Transition shared={'versetext' + index}>
+                    <Text h2 white center style={{marginVertical: 8}}>
+                      {verse.verse}
+                    </Text>
                   </Transition>
-                  <Transition shared={'sharebutton' + index}>
-                    <TouchableOpacity>
-                      <Icon
-                        name="paper-plane"
-                        size={40}
-                        color={theme.colors.white}
-                        onPress={() =>
-                          this.onShare(
-                            verses[0].verse + ' ' + verses[0].bookname,
-                          )
-                        }></Icon>
-                    </TouchableOpacity>
+                </Block>
+                <Block flex={false} center>
+                  <Transition shared={'booktext' + index}>
+                    <Text h3 white center style={{marginVertical: 8}}>
+                      {verse.bookname}
+                    </Text>
                   </Transition>
                 </Block>
               </Block>
+              <Block
+                flex={false}
+                row
+                middle
+                style={{width: '100%', position: 'absolute', bottom: 25}}
+                space={'between'}>
+                <Transition shared={'likebutton' + index}>
+                  <TouchableOpacity>
+                    <Icon
+                      name="heart"
+                      solid={alreadyLiked}
+                      size={40}
+                      color={theme.colors.white}
+                      style={{marginLeft: 10}}
+                      onPress={() =>
+                        this.addToFavourites(
+                          verses[0].verse,
+                          verses[0].bookname,
+                          verses[0].osis,
+                        )
+                      }></Icon>
+                  </TouchableOpacity>
+                </Transition>
+                <Transition shared={'sharebutton' + index}>
+                  <TouchableOpacity>
+                    <Icon
+                      name="paper-plane"
+                      size={40}
+                      color={theme.colors.white}
+                      style={{marginRight: 10}}
+                      onPress={() =>
+                        this.onShare(verses[0].verse + ' ' + verses[0].bookname)
+                      }></Icon>
+                  </TouchableOpacity>
+                </Transition>
+              </Block>
+            </Block>
           </ImageBackground>
         </Transition>
       </TouchableWithoutFeedback>
