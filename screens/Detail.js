@@ -31,7 +31,6 @@ export default class Detail extends Component {
           <ImageBackground
             style={{width: '100%'}}
             source={theme.randomImages[imageIndex]}>
-            <Transition shared={'filter' + index}>
               <Block
                 flex={false}
                 center
@@ -39,7 +38,6 @@ export default class Detail extends Component {
                 style={{
                   padding: 10,
                   height: '100%',
-                  backgroundColor: 'rgba(0, 0, 0, .3)',
                   borderRadius: theme.sizes.border,
                 }}>
                 <TouchableOpacity
@@ -106,7 +104,6 @@ export default class Detail extends Component {
                   </Transition>
                 </Block>
               </Block>
-            </Transition>
           </ImageBackground>
         </Transition>
       </TouchableWithoutFeedback>

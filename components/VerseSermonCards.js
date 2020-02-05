@@ -57,74 +57,73 @@ export class VerseCard extends React.Component {
                   height: WIDTH * 0.7,
                   marginBottom: WIDTH * 0.05,
                   borderRadius: theme.sizes.border,
+                  justifyContent:'center',
+                  alignItems:'center',
+                  padding:10
                 },
+                scroller
+                  ? {width: WIDTH * 0.7, marginRight: 20, height: WIDTH * 0.5}
+                  : {width: WIDTH * 0.9},
                 theme.shadow,
               ]}
               imageStyle={{
                 borderRadius: theme.sizes.border,
               }}
               source={theme.randomImages[imageIndex]}>
-              <Transition shared={'filter' + index}>
-                <Block
-                  flex={false}
-                  middle
-                  style={{
-                    padding: 10,
-                    height: WIDTH * 0.7,
-                    backgroundColor: 'rgba(0, 0, 0, .3)',
-                    borderRadius: theme.sizes.border,
-                  }}>
-                  <Block flex={false}>
-                    <Block flex={false} center>
-                      <Transition shared={'versetext' + index}>
-                        <Text
-                          white
-                          numberOfLines={3}
-                          style={{marginVertical: 8, fontSize: 24}}>
-                          {verses[0].verse}
-                        </Text>
-                      </Transition>
-                    </Block>
-                    <Block flex={false} center>
-                      <Transition shared={'booktext' + index}>
-                        <Text h3 white style={{marginVertical: 8}}>
-                          {verses[0].bookname}
-                        </Text>
-                      </Transition>
-                    </Block>
-                  </Block>
-                  <Block flex={false} row middle justifyContent={'flex-start'} style={{position:"absolute",bottom:25}}>
-                    <Transition shared={'likebutton' + index}>
-                      <TouchableOpacity>
-                        <Icon
-                          name="heart"
-                          solid={this.state.alreadyLiked}
-                          size={20}
-                          color={theme.colors.white}
-                          style={{marginHorizontal: 10}}
-                          onPress={() =>
-                            this.addToFavourites(
-                              verses[0].verse,
-                              verses[0].bookname,
-                              verses[0].osis,
-                            )
-                          }></Icon>
-                      </TouchableOpacity>
-                    </Transition>
-                    <Transition shared={'sharebutton' + index}>
-                      <TouchableOpacity>
-                        <Icon
-                          name="paper-plane"
-                          size={20}
-                          color={theme.colors.white}
-                          onPress={() =>
-                            onShare(verses[0].verse + ' ' + verses[0].bookname)
-                          }></Icon>
-                      </TouchableOpacity>
-                    </Transition>
-                  </Block>
+              <Block flex={false} center middle>
+                <Block flex={false} center middle>
+                  <Transition shared={'versetext' + index}>
+                    <Text
+                      white
+                      numberOfLines={3}
+                      style={{marginVertical: 8, fontSize: 24}}>
+                      {verses[0].verse}
+                    </Text>
+                  </Transition>
                 </Block>
-              </Transition>
+                <Block flex={false} center>
+                  <Transition shared={'booktext' + index}>
+                    <Text h3 white style={{marginVertical: 8}}>
+                      {verses[0].bookname}
+                    </Text>
+                  </Transition>
+                </Block>
+              </Block>
+              <Block
+                flex={false}
+                row
+                middle
+                justifyContent={'flex-start'}
+                style={{position: 'absolute', bottom: 25}}>
+                <Transition shared={'likebutton' + index}>
+                  <TouchableOpacity>
+                    <Icon
+                      name="heart"
+                      solid={this.state.alreadyLiked}
+                      size={20}
+                      color={theme.colors.white}
+                      style={{marginHorizontal: 10}}
+                      onPress={() =>
+                        this.addToFavourites(
+                          verses[0].verse,
+                          verses[0].bookname,
+                          verses[0].osis,
+                        )
+                      }></Icon>
+                  </TouchableOpacity>
+                </Transition>
+                <Transition shared={'sharebutton' + index}>
+                  <TouchableOpacity>
+                    <Icon
+                      name="paper-plane"
+                      size={20}
+                      color={theme.colors.white}
+                      onPress={() =>
+                        onShare(verses[0].verse + ' ' + verses[0].bookname)
+                      }></Icon>
+                  </TouchableOpacity>
+                </Transition>
+              </Block>
             </ImageBackground>
           </Transition>
         </TouchableOpacity>
@@ -251,11 +250,7 @@ export function _renderSermon(item, idx, props, center = false) {
             justifyContent: 'space-between',
             width: '100%',
           }}>
-          <Block
-            flex={false}
-            row
-            center
-            middle>
+          <Block flex={false} row center middle>
             <Icon
               name="heart"
               size={20}

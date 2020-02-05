@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Dimensions, View} from 'react-native';
 import axios from 'axios';
+import qs from 'qs';
 import firebase from 'react-native-firebase';
 import {Block, Text} from '../components';
 import {theme, time} from '../constants';
@@ -32,15 +28,13 @@ export default class HomeFeed extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       sermons: undefined,
       verses: null,
       podcasts: null,
-      recommendedVerses: this.props.screenProps.recommendedVerses.verses,
-      recommendedSermons: this.props.screenProps.recommendedVerses.sermons
-        .current,
-      recommendedPodcasts: [],
+      recommendedVerses: null,
+      recommendedSermons: null,
+      relatedPodcasts: [],
       dailyVerse: null,
       likedosis: null,
       loading: true,
@@ -61,15 +55,28 @@ export default class HomeFeed extends Component {
           sermons: this.props.navigation.getParam('response').sermons.current,
           verses: this.props.navigation.getParam('response').verses,
         });
-      } else {
-        this.fetchPodcasts(
-          this.props.screenProps.recommendedVerses.keyword,
-          true,
-        );
       }
     } catch (error) {
       console.log(error);
     }
+    axios
+      .post(
+        'https://serenaengine333.co.uk/api/verses/recs',
+        qs.stringify({
+          userID: firebase.auth().currentUser.uid,
+        }),
+      )
+      .then(res => {
+        this.setState({
+          recommendedSermons: res.data.sermons.current,
+          recommendedVerses: res.data.verses,
+        });
+        console.log(res.data.keyword);
+        this.fetchPodcasts(res.data.keyword, true);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -87,23 +94,18 @@ export default class HomeFeed extends Component {
             {this.state.verses ? 'Related Verses' : 'Verse Of The Day'}
           </Text>
 
-          {this.state.verses
-            ? this._renderSearchResults()
-            : this.state.dailyVerse &&
-              this.state.recommendedSermons && [
-                this._renderDailyVerse(),
-                this._renderSOD(),
-              ]}
-          {this.state.sermons && this._renderRelatedSermons()}
-          {this.state.podcasts && this._renderRelatedPodcasts()}
-          <View style={styles.hLine} />
-          {this.state.dailyVerse &&
-            this.state.recommendedVerses &&
-            this._renderRecommendedVerses()}
-
+          {this.state.verses && this._renderSearchResults()}
           {this.state.dailyVerse &&
             this.state.recommendedSermons &&
-            this._renderRecommendedSermons()}
+            this._renderDailyVerse()}
+          {this.state.dailyVerse &&
+            this.state.recommendedSermons &&
+            this._renderSOD()}
+          {this.state.sermons && this._renderRelatedSermons()}
+          {this.state.relatedPodcasts && this._renderRelatedPodcasts()}
+          <View style={styles.hLine} />
+          {this.state.recommendedVerses && this._renderRecommendedVerses()}
+          {this.state.recommendedSermons && this._renderRecommendedSermons()}
           {this.state.dailyVerse &&
             this.state.recommendedVerses &&
             this._renderRecommendedPodcasts()}
@@ -159,6 +161,23 @@ export default class HomeFeed extends Component {
       </Block>
     );
   }
+  _renderRecommendedPodcasts() {
+    return (
+      <Block>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            marginVertical: 8,
+            paddingHorizontal: theme.sizes.padding,
+          }}>
+          {this.state.relatedPodcasts.map((podcast, idx) => {
+            return _renderSermon(podcast, idx, this.props);
+          })}
+        </ScrollView>
+      </Block>
+    );
+  }
   _renderSOD() {
     return (
       <Block>
@@ -184,7 +203,7 @@ export default class HomeFeed extends Component {
   _renderSearchResults() {
     return (
       <ScrollView
-        style={{width: '100%'}}
+        style={{width: '100%', marginLeft:20}}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
         {this.state.verses.map(
@@ -206,7 +225,6 @@ export default class HomeFeed extends Component {
       </ScrollView>
     );
   }
-
   _renderRelatedSermons() {
     return (
       <Block>
@@ -254,24 +272,7 @@ export default class HomeFeed extends Component {
             marginVertical: 8,
             paddingHorizontal: theme.sizes.padding,
           }}>
-          {this.state.podcasts.map((podcast, idx) => {
-            return _renderSermon(podcast, idx, this.props);
-          })}
-        </ScrollView>
-      </Block>
-    );
-  }
-  _renderRecommendedPodcasts() {
-    return (
-      <Block>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            marginVertical: 8,
-            paddingHorizontal: theme.sizes.padding,
-          }}>
-          {this.state.recommendedPodcasts.map((podcast, idx) => {
+          {this.state.relatedPodcasts.map((podcast, idx) => {
             return _renderSermon(podcast, idx, this.props);
           })}
         </ScrollView>
@@ -294,7 +295,6 @@ export default class HomeFeed extends Component {
       });
     });
   }
-
   logPodTrack = (track, podcastImage) => {
     const titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
@@ -330,8 +330,7 @@ export default class HomeFeed extends Component {
       console.log(err);
     }
   };
-
-  fetchPodcasts = async (term, recommended) => {
+  fetchPodcasts = async (term, related) => {
     const result = await fetch(
       `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1314`,
     );
@@ -361,9 +360,9 @@ export default class HomeFeed extends Component {
 
         podcastList = [...podcastList, ..._.sample(newcasts, 5)];
       }
-      if (recommended) {
+      if (related) {
         this.setState({
-          recommendedPodcasts: _.sample(podcastList, 5),
+          relatedPodcasts: _.sample(podcastList, 5),
         });
       } else {
         this.setState({
@@ -374,7 +373,6 @@ export default class HomeFeed extends Component {
       console.log(e);
     }
   };
-
   fetchLikes() {
     let firestoreref = firebase
       .firestore()

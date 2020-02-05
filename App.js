@@ -20,7 +20,7 @@ export default function App(props) {
   const [authTokenSet, setAuthTokenStatus] = useState(false);
   const [StreamToken, setStreamToken] = useState(null);
   const [tabBarVisible, showTabBar] = useState(false);
-  const [recommendedVerses, setRecs] = useState(null);
+  const [recommendedVerses, setRecs] = useState({verses:null,sermons:{current:null}});
   const didMountRef = useRef(false);
 
   useEffect(() => {
@@ -79,24 +79,7 @@ export default function App(props) {
     }
   }, [authTokenSet]);
 
-  useEffect(() => {
-    if (authTokenSet) {
-      axios
-        .post(
-          'https://serenaengine333.co.uk/api/verses/recs',
-          qs.stringify({
-            userID: firebase.auth().currentUser.uid,
-          }),
-        )
-        .then(res => {
-          console.log(res.data);
-          setRecs(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-  }, [authTokenSet]);
+
 
   return (
     <View style={styles.container}>
@@ -105,7 +88,6 @@ export default function App(props) {
         screenProps={{
           currentSongData,
           StreamToken,
-          recommendedVerses,
           changeSong: setCurrentSong,
           setToggleTabBar: setToggleTabBar,
         }}
