@@ -69,8 +69,6 @@
 	<string>For saving a photo.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>For choosing a photo.</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Serena uses speech recognition for voice search.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Rubik-Black.ttf</string>

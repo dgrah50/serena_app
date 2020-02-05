@@ -93,7 +93,7 @@ export class VerseCard extends React.Component {
                       </Transition>
                     </Block>
                   </Block>
-                  <Block flex={false} row middle justifyContent={'flex-start'}>
+                  <Block flex={false} row middle justifyContent={'flex-start'} style={{position:"absolute",bottom:25}}>
                     <Transition shared={'likebutton' + index}>
                       <TouchableOpacity>
                         <Icon
@@ -186,7 +186,7 @@ export function _renderPodcast(track, props) {
   );
 }
 
-export function _renderSermon(item, idx, props, center=false) {
+export function _renderSermon(item, idx, props, center = false) {
   let uri = item.speakerimg;
   let speakerName = item.author;
   let duration = item.duration;
@@ -211,7 +211,8 @@ export function _renderSermon(item, idx, props, center=false) {
           {
             backgroundColor: theme.colors.gray3,
             padding: 15,
-            marginBottom: 20,
+            paddingBottom: 13,
+            marginBottom: WIDTH * 0.05,
             marginRight: !center && 20,
             width: WIDTH * 0.7,
             borderRadius: theme.sizes.border,
@@ -242,13 +243,19 @@ export function _renderSermon(item, idx, props, center=false) {
           </Block>
         </Block>
         <Block
+          flex={false}
           row
           center
+          middle
           style={{
             justifyContent: 'space-between',
             width: '100%',
           }}>
-          <Block flex={false} row center middle style={{marginTop: 10}}>
+          <Block
+            flex={false}
+            row
+            center
+            middle>
             <Icon
               name="heart"
               size={20}
@@ -302,7 +309,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.blue,
     borderRadius: 10,
     marginLeft: 10,
-    padding: 5,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
   },
   // horizontal line
   hLine: {

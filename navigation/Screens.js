@@ -30,7 +30,20 @@ export default createBottomTabNavigator(
       screen: createStackNavigator(
         {
           Pray: {
-            screen: Fetch,
+            screen: createStackNavigator(
+              {
+                Pray: {
+                  screen: Fetch,
+                },
+                Profile: {
+                  screen: Profile,
+                },
+              },
+              {
+                headerMode: 'none',
+                initialRouteName: 'Pray',
+              },
+            ),
           },
           HomeFeed: {
             screen: FluidNavigator(

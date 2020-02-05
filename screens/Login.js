@@ -1,197 +1,187 @@
 import React, {Component} from 'react';
-import {Image, KeyboardAvoidingView, Dimensions, Alert} from 'react-native';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Dimensions,
+  Alert,
+  View,
+  StyleSheet,
+} from 'react-native';
 import firebase from 'react-native-firebase';
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
 import {Button, Block, Text, Input} from '../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {theme, mocks, time} from '../constants';
-import Onboarding from 'react-native-onboarding-swiper';
 import LottieView from 'lottie-react-native';
+
+import Swiper from '../components/Swiper';
+import {ThemeColors} from 'react-navigation';
 
 const {height, width} = Dimensions.get('window');
 
-class Login extends Component {
+class Onboarding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOnboarding: true,
-      fullName: null,
+      screen: 0,
     };
   }
 
   render() {
-    const {navigation} = this.props;
-    return this.state.showOnboarding
-      ? this._renderOnboarding()
-      : this._renderLoginView();
+    switch (this.state.screen) {
+      case 0:
+        return this._renderScreen0();
+      case 1:
+        return this._renderScreen1();
+      case 2:
+        return this._renderScreen2();
+      default:
+        return this._renderScreen0();
+    }
   }
 
-  //****** SUB COMPONENTS SECTION
-
-  _renderLoginView() {
+  _renderScreen0() {
     return (
-      <KeyboardAvoidingView
-        enabled
-        behavior="padding"
-        style={{flex: 1, backgroundColor: theme.colors.gray3}}
-        keyboardVerticalOffset={height * 0.2}>
-        {this._renderSerenaHeader()}
-        {this._renderButtons()}
-      </KeyboardAvoidingView>
+      <Block style={styles.onboarding}>
+        <Image
+          resizeMode="contain"
+          source={require('../assets/images/Base/Logobig.png')}
+          style={{height: 40, width: width, position: 'absolute', top: '10%'}}
+        />
+        <Block flex={false} center middle style={{marginBottom: 20}}>
+          <LottieView
+            style={{width: width * 0.6}}
+            source={require('../assets/anims/levitate.json')}
+            autoPlay
+            loop
+          />
+        </Block>
+        <Block flex={false} style={{paddingHorizontal: '15%'}}>
+          <Text h2 black center style={{marginBottom: 40}}>
+            Welcome {'\n'} to Serena
+          </Text>
+          <Text title black center>
+            Find the perfect Bible verse for you at instantly. Just say what's
+            on your mind.
+          </Text>
+        </Block>
+        <Block flex={false} center style={styles.paginationRow}>
+          <Button
+            style={styles.buttonStyle}
+            onPress={() => this.setState({screen: 1})}>
+            <Text white> CONTINUE </Text>
+          </Button>
+          <Dots
+            isLight={true}
+            numPages={3}
+            currentPage={this.state.screen}
+            Dot={Dot}
+            style={styles.dots}
+          />
+        </Block>
+      </Block>
     );
   }
-  _renderOnboarding() {
+  _renderScreen1() {
     return (
-      <Onboarding
-        pages={[
-          {
-            backgroundColor: theme.colors.gray3,
-            image: (
-              <React.Fragment>
-                <Image
-                  source={require('../assets/images/Base/Logobig.png')}
-                  style={{height: 56, width: 204, marginVertical: '10%'}}
-                />
-                <LottieView
-                  style={{width: width * 0.6}}
-                  source={require('../assets/anims/levitate.json')}
-                  autoPlay
-                  loop
-                />
-              </React.Fragment>
-            ),
-            bottomBarColor: theme.colors.gray3,
-            title: (
-
-              <Text h2 black center>
-                Welcome to Serena
-              </Text>
-            ),
-            subtitle:
-              "Find the perfect Bible verse for you at instantly. Just say what's on your mind.",
-          },
-          {
-            backgroundColor: theme.colors.gray3,
-            image: (
-              <React.Fragment>
-                <Image
-                  source={require('../assets/images/Base/Logobig.png')}
-                  style={{height: 56, width: 204, marginVertical: '10%'}}
-                />
-                <LottieView
-                  style={{width: width * 0.6}}
-                  source={require('../assets/anims/happydude.json')}
-                  autoPlay
-                  loop
-                />
-              </React.Fragment>
-            ),
-            title: (
-              <Text h2 black center>
-                Personalised for You.
-              </Text>
-            ),
-            subtitle:
-              'Serena recommends sermons for you to. Any time. Any place.',
-          },
-          {
-            backgroundColor: theme.colors.gray3,
-            image: (
-              <React.Fragment>
-                <Image
-                  source={require('../assets/images/Base/Logobig.png')}
-                  style={{height: 56, width: 204, marginVertical: '10%'}}
-                />
-                <LottieView
-                  style={{width: width * 0.6}}
-                  source={require('../assets/anims/womanonphone.json')}
-                  autoPlay
-                  loop
-                />
-              </React.Fragment>
-            ),
-            title: (
-              <Text h2 black center>
-                Share with friends and family.
-              </Text>
-            ),
-            subtitle:
-              'With Serena you can make groups to share prayers and verses. ',
-          },
-        ]}
-        onDone={() => this.setState({showOnboarding: false})}
-        onSkip={() => this.setState({showOnboarding: false})}
-      />
+      <Block style={styles.onboarding}>
+        <Image
+          resizeMode="contain"
+          source={require('../assets/images/Base/Logobig.png')}
+          style={{height: 40, width: width, position: 'absolute', top: '10%'}}
+        />
+        <Block flex={false} center middle style={{marginBottom: 20}}>
+          <LottieView
+            style={{width: width * 0.6}}
+            source={require('../assets/anims/happydude.json')}
+            autoPlay
+            loop
+          />
+        </Block>
+        <Block flex={false} style={{paddingHorizontal: '15%'}}>
+          <Text h2 black center style={{marginBottom: 40}}>
+            Personalised {'\n'} for You.
+          </Text>
+          <Text title black center>
+            Serena is designed to recommend sermons for you. Please allow Serena
+            to access your microphone in order to enable voice search.
+          </Text>
+        </Block>
+        <Block flex={false} center style={styles.paginationRow}>
+          <Button
+            style={styles.buttonStyle}
+            onPress={() => this.setState({screen: 2})}>
+            <Text white> ALLOW MICROPHONE ACCESS </Text>
+          </Button>
+          <Dots
+            isLight={true}
+            numPages={3}
+            currentPage={this.state.screen}
+            Dot={Dot}
+            style={styles.dots}
+          />
+        </Block>
+      </Block>
     );
   }
-
-  _renderSerenaHeader() {
+  _renderScreen2() {
     return (
-      <Block center space={'between'} style={{top: '10%'}}>
+      <Block style={styles.onboarding}>
+        <Image
+          resizeMode="contain"
+          source={require('../assets/images/Base/Logobig.png')}
+          style={{height: 40, width: width, position: 'absolute', top: '10%'}}
+        />
+        <Block flex={false} center middle style={{marginBottom: 20}}>
+          <LottieView
+            style={{width: width * 0.6}}
+            source={require('../assets/anims/womanonphone.json')}
+            autoPlay
+            loop
+          />
+        </Block>
+        <Block flex={false} style={{paddingHorizontal: '15%'}}>
+          <Text h2 black center style={{marginBottom: 40}}>
+            Share with friends and family.
+          </Text>
+          <Text title black center>
+            Filler text
+          </Text>
+        </Block>
         <Block
           flex={false}
           center
-          middle
-          style={{marginVertical: '10%', height: '30%'}}>
-          <Image
-            source={require('../assets/images/Base/Logobig.png')}
-            style={{height: 56, width: 204, marginVertical: '10%'}}
+          style={[styles.paginationRow, {height: '20%'}]}>
+          <Block flex={false} row style={{width: '80%', height: '50%'}}>
+            <Button
+              style={[styles.buttonStyle, {width: '50%', marginBottom: 0}]}
+              onPress={() => this.props.navigation.navigate('EmailLogin')}>
+              <Text white> LOG IN WITH EMAIL </Text>
+            </Button>
+            <Button
+              style={[styles.buttonStyle, {width: '50%', marginBottom: 0}]}
+              onPress={() => this.props.navigation.navigate('Register')}>
+              <Text white> SIGN UP WITH EMAIL </Text>
+            </Button>
+          </Block>
+
+          <Button
+            style={[styles.buttonStyle, {backgroundColor: '#3b5998'}]}
+            onPress={() => this.facebookLogin()}>
+            <Text white> CONTINUE WITH FACEBOOK </Text>
+          </Button>
+          <Dots
+            isLight={true}
+            numPages={3}
+            currentPage={this.state.screen}
+            Dot={Dot}
+            style={styles.dots}
           />
-          <Text h2 black center>
-            Welcome back to Serena. {'\n'} {'\n'}
-            <Text h3 black center>
-              Find the right scripture or sermon for you. {'\n'}
-              Any time, any place.
-            </Text>
-          </Text>
         </Block>
       </Block>
     );
   }
 
-  _renderButtons() {
-    return (
-      <Block flex={false} style={{height: '20%', marginBottom: '10%'}}>
-        <Block
-          row
-          middle
-          center
-          space={'between'}
-          style={{marginHorizontal: '10%', marginBottom: 20}}>
-          <Button
-            shadow
-            onPress={() => this.props.navigation.navigate('EmailLogin')}
-            style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
-            {/* <Icon name="facebook-f" size={30} color="#fff" /> */}
-            <Text button black center middle>
-              LOG IN WITH EMAIL
-            </Text>
-          </Button>
-          <Button
-            shadow
-            onPress={() => this.props.navigation.navigate('Register')}
-            style={{width: width * 0.35, backgroundColor: theme.colors.white}}>
-            <Text button black center middle >
-              SIGN UP WITH EMAIL
-            </Text>
-          </Button>
-        </Block>
-        <Block row middle center>
-          <Button
-            shadow
-            onPress={() => this.facebookLogin()}
-            style={{width: width * 0.8, backgroundColor: '#3b5998'}}>
-            {/* <Icon name="facebook-f" size={30} color="#fff" /> */}
-            <Text button white center middle>
-              CONTINUE WITH FACEBOOK
-            </Text>
-          </Button>
-        </Block>
-      </Block>
-    );
-  }
-
-  //****** HELPER FUNCTIONS SECTION
   async facebookLogin() {
     try {
       const result = await LoginManager.logInWithPermissions([
@@ -258,8 +248,66 @@ class Login extends Component {
       cancelable: false,
     });
   }
-
-  // }
 }
 
-export default Login;
+const Dots = ({isLight, numPages, currentPage, Dot}) => (
+  <View style={styles.container}>
+    {[...Array(numPages)].map((_, index) => (
+      <Dot key={index} selected={index === currentPage} isLight={isLight} />
+    ))}
+  </View>
+);
+
+const Dot = ({isLight, selected}) => {
+  let backgroundColor;
+  if (isLight) {
+    backgroundColor = selected ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.3)';
+  } else {
+    backgroundColor = selected ? '#fff' : 'rgba(255, 255, 255, 0.5)';
+  }
+  return (
+    <View
+      style={{
+        ...styles.dot,
+        backgroundColor,
+      }}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  onboarding: {
+    width: '100%',
+    flex: 1,
+    backgroundColor: theme.colors.bg,
+    paddingTop: '40%',
+  },
+  container: {
+    flex: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginHorizontal: 3,
+    backgroundColor: 'red',
+  },
+  paginationRow: {
+    position: 'absolute',
+    height: '10%',
+    bottom: '10%',
+    width: '100%',
+    paddingHorizontal: '10%',
+  },
+  buttonStyle: {
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.white,
+    borderWidth: 2,
+    marginBottom: 10,
+    width: '80%',
+  },
+});
+
+export default Onboarding;

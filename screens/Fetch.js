@@ -86,7 +86,7 @@ export default class Fetch extends Component {
           }
         }}>
         <LinearGradient
-          colors={['#7645C1', '#3023AE']}
+          colors={[theme.colors.primary, '#2474A8']}
           style={styles.welcome}
           showsVerticalScrollIndicator={false}>
           <View
@@ -96,6 +96,19 @@ export default class Fetch extends Component {
               alignItems: 'center',
               height: '100%',
             }}>
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '10%',
+                top: 0,
+                right: 30,
+                zIndex: 1,
+              }}
+              onPress={() => this.props.navigation.navigate('Profile')}>
+              <Icon name="cog" size={25} color={theme.colors.white}></Icon>
+            </TouchableOpacity>
             <View
               style={{
                 width: '100%',
@@ -113,7 +126,7 @@ export default class Fetch extends Component {
             </View>
 
             {this.state.showMicButton && (
-              <Animatable.View animation={'fadeIn'} >
+              <Animatable.View animation={'fadeIn'}>
                 <Text h2 white>
                   {' '}
                   What's on your mind?{' '}
@@ -155,9 +168,7 @@ export default class Fetch extends Component {
   }
   _renderEmotionChips() {
     return (
-      <View
-        center
-        style={{height: '15%', marginTop: '5%',}}>
+      <View center style={{height: '15%', marginTop: '5%'}}>
         {this.state.EmojiEmotion ? (
           <React.Fragment>
             <ScrollView
@@ -186,7 +197,7 @@ export default class Fetch extends Component {
               <Icon
                 name={'times-circle'}
                 size={30}
-                color={theme.colors.gray2}
+                color={'rgba(240, 240, 247, 0.66)'}
                 onPress={() => {
                   this.setState({EmojiEmotion: null});
                 }}
@@ -245,7 +256,7 @@ export default class Fetch extends Component {
         onPressIn={this.setRingOn.bind(this)}
         onPressOut={this.stopListen.bind(this)}>
         <View style={[styles.buttonStyle, theme.shadow]}>
-          <Icon name={'microphone'} size={60} color={'#5334B8'} />
+          <Icon name={'microphone'} size={60} color={theme.colors.primary} />
         </View>
       </TouchableOpacity>
     );
@@ -256,8 +267,8 @@ export default class Fetch extends Component {
         hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
         onPress={this.hideMic.bind(this)}>
         <Block row flex={false} justifyContent={"flex-start"} style={[styles.searchBox]} >
-          <Icon name={'search'} size={30} style={{marginHorizontal:10}} color={theme.colors.white} />
-          <Text white h3>Search...</Text>
+          <Icon name={'search'} size={20} style={{marginLeft:15,marginRight:10}} color={theme.colors.white} />
+          <Text white h3>Search</Text>
         </Block>
       </TouchableOpacity>
     );
@@ -434,18 +445,18 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   buttonStyle: {
-    width: 125,
-    height: 125,
-    borderRadius: 62.5,
-    backgroundColor: theme.colors.gray,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: "rgba(240, 240, 247, 0.66)",
     justifyContent: 'center',
     alignItems: 'center',
   },
   searchBox: {
-    width: WIDTH*0.8,
-    height: 50,
+    width: WIDTH * 0.8,
+    height: 40,
     borderRadius: theme.sizes.border,
-    backgroundColor: theme.colors.gray,
+    backgroundColor: "rgba(240, 240, 247, 0.66)",
     justifyContent: 'center',
     alignItems: 'center',
   },

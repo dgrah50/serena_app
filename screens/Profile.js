@@ -23,7 +23,7 @@ export default class Profile extends Component {
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-    headerTransparent: true,
+
   };
 
   constructor(props) {
@@ -147,7 +147,7 @@ export default class Profile extends Component {
   render() {
     return (
       <View style={styles.welcome}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             alignItems: 'center',
           }}
@@ -222,7 +222,7 @@ export default class Profile extends Component {
           <Text button white>
             UPDATE PROFILE
           </Text>
-        </Button>
+        </Button> */}
 
         {this._renderLogoutButton()}
       </View>

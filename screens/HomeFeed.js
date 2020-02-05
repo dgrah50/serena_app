@@ -168,12 +168,12 @@ export default class HomeFeed extends Component {
           spacing={1}
           style={{
             paddingHorizontal: theme.sizes.padding,
+            marginBottom: 8,
           }}>
           Sermon Of The Day
         </Text>
         <View
           style={{
-            marginVertical: 8,
             paddingHorizontal: theme.sizes.padding,
           }}>
           {_renderSermon(this.state.recommendedSermons[0], 2, this.props, true)}
@@ -405,7 +405,8 @@ const styles = StyleSheet.create({
   hLine: {
     marginBottom: theme.sizes.base,
     marginHorizontal: WIDTH * 0.1,
-    height: 3,
-    backgroundColor: theme.colors.black,
+    marginVertical: 3,
+    height: 1,
+    backgroundColor: theme.colors.gray,
   },
 });
