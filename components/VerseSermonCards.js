@@ -33,6 +33,12 @@ export class VerseCard extends React.Component {
     }
   }
 
+  cardToggle = val => {
+    this.setState({
+      alreadyLiked: val,
+    });
+  };
+
   render() {
     const {verses, index, scroller, props, imageIndex} = this.props;
     return (
@@ -47,6 +53,7 @@ export class VerseCard extends React.Component {
               index: index,
               imageIndex: imageIndex,
               alreadyLiked: this.state.alreadyLiked,
+              cardToggle: this.cardToggle,
             });
           }}>
           <Transition shared={'image' + index}>
@@ -57,9 +64,9 @@ export class VerseCard extends React.Component {
                   height: WIDTH * 0.7,
                   marginBottom: WIDTH * 0.05,
                   borderRadius: theme.sizes.border,
-                  justifyContent:'center',
-                  alignItems:'center',
-                  padding:10
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: 10,
                 },
                 scroller
                   ? {width: WIDTH * 0.7, marginRight: 20, height: WIDTH * 0.5}
@@ -70,7 +77,7 @@ export class VerseCard extends React.Component {
                 borderRadius: theme.sizes.border,
               }}
               source={theme.randomImages[imageIndex]}>
-              <Block flex={false} center middle>
+              <Block flex={false} center middle style={{padding:10}}>
                 <Block flex={false} center middle>
                   <Transition shared={'versetext' + index}>
                     <Text
@@ -95,7 +102,7 @@ export class VerseCard extends React.Component {
                 row
                 middle
                 justifyContent={'flex-start'}
-                style={{position: 'absolute', width:"100%", bottom: 20}}>
+                style={{position: 'absolute', width: '100%', bottom: 20}}>
                 <Transition shared={'likebutton' + index}>
                   <TouchableOpacity>
                     <Icon
@@ -105,7 +112,7 @@ export class VerseCard extends React.Component {
                       color={theme.colors.white}
                       style={{marginHorizontal: 10}}
                       onPress={() =>
-                        this.addToFavourites(
+                        this.toggleFavourites(
                           verses[0].verse,
                           verses[0].bookname,
                           verses[0].osis,
@@ -132,7 +139,7 @@ export class VerseCard extends React.Component {
     );
   }
 
-  async addToFavourites(verseText, bookText, osis) {
+  async toggleFavourites(verseText, bookText, osis) {
     osis = osis.toString();
     if (osis.length == 7) {
       osis = '0' + osis.toString();
@@ -142,17 +149,28 @@ export class VerseCard extends React.Component {
       .collection('users')
       .doc(firebase.auth().currentUser.uid)
       .collection('likes');
-    try {
-      firestoreref.doc(osis).set({
-        verseText: verseText,
-        bookText: bookText,
-        time: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      this.setState({
-        alreadyLiked: true,
-      });
-    } catch (err) {
-      console.log(err);
+    if (!this.state.alreadyLiked) {
+      try {
+        firestoreref.doc(osis).set({
+          verseText: verseText,
+          bookText: bookText,
+          time: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        this.setState({
+          alreadyLiked: true,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        firestoreref.doc(osis).delete();
+        this.setState({
+          alreadyLiked: false,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 }

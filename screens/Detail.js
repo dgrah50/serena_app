@@ -10,103 +10,154 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
 import {theme} from '../constants';
 import {Transition} from 'react-navigation-fluid-transitions';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-
+import firebase from 'react-native-firebase';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 
 export default class Detail extends Component {
   constructor(props) {
     super(props);
     console.log();
+    this.state = {
+      alreadyLiked: false,
+    };
+    
+  }
+
+  componentDidMount(props) {
+    if (this.props.navigation.getParam('alreadyLiked')) {
+      this.setState({alreadyLiked: true});
+    }
   }
 
   render() {
     let verse = this.props.navigation.getParam('verse');
     let index = this.props.navigation.getParam('index');
     let imageIndex = this.props.navigation.getParam('imageIndex');
-    let alreadyLiked = this.props.navigation.getParam('alreadyLiked');
     return (
-      <TouchableWithoutFeedback onPress={this.props.navigation.goBack}>
-        <Transition shared={'image' + index}>
-          <ImageBackground
-            style={{width: '100%'}}
-            source={theme.randomImages[imageIndex]}>
-            <Block
-              flex={false}
-              center
-              middle
+      <Transition shared={'image' + index}>
+        <ImageBackground
+          style={{width: '100%'}}
+          source={theme.randomImages[imageIndex]}>
+          <Block
+            flex={false}
+            center
+            middle
+            style={{
+              padding: 10,
+              height: '100%',
+              borderRadius: theme.sizes.border,
+            }}>
+            <TouchableOpacity
               style={{
-                padding: 10,
-                height: '100%',
-                borderRadius: theme.sizes.border,
+                position: 'absolute',
+                top: 50,
+                left: 30,
               }}>
-              <TouchableOpacity
-                style={{position: 'absolute', top: 30, left: 30}}>
-                <Icon
-                  name="arrow-left"
-                  size={30}
-                  color={theme.colors.white}
-                  onPress={() =>
-                    this.onShare(verses[0].verse + ' ' + verses[0].bookname)
-                  }></Icon>
-              </TouchableOpacity>
-              <Block flex={false}>
-                <Block flex={false} center>
-                  <Transition shared={'versetext' + index}>
-                    <Text h2 white center style={{marginVertical: 8}}>
-                      {verse.verse}
-                    </Text>
-                  </Transition>
-                </Block>
-                <Block flex={false} center>
-                  <Transition shared={'booktext' + index}>
-                    <Text h3 white center style={{marginVertical: 8}}>
-                      {verse.bookname}
-                    </Text>
-                  </Transition>
-                </Block>
-              </Block>
-              <Block
-                flex={false}
-                row
-                middle
-                style={{width: '100%', position: 'absolute', bottom: 25}}
-                space={'between'}>
-                <Transition shared={'likebutton' + index}>
-                  <TouchableOpacity>
-                    <Icon
-                      name="heart"
-                      solid={alreadyLiked}
-                      size={40}
-                      color={theme.colors.white}
-                      style={{marginLeft: 10}}
-                      onPress={() =>
-                        this.addToFavourites(
-                          verses[0].verse,
-                          verses[0].bookname,
-                          verses[0].osis,
-                        )
-                      }></Icon>
-                  </TouchableOpacity>
+              <Icon
+                name="arrow-left"
+                size={35}
+                color={theme.colors.white}
+                onPress={() =>
+                  {this.props.navigation.goBack();
+                   this.props.navigation.state.params.cardToggle(this.state.alreadyLiked)}
+                }></Icon>
+            </TouchableOpacity>
+            <Block flex={false}>
+              <Block flex={false} center>
+                <Transition shared={'versetext' + index}>
+                  <Text h2 white center style={{marginVertical: 8}}>
+                    {verse.verse}
+                  </Text>
                 </Transition>
-                <Transition shared={'sharebutton' + index}>
-                  <TouchableOpacity>
-                    <Icon
-                      name="paper-plane"
-                      size={40}
-                      color={theme.colors.white}
-                      style={{marginRight: 10}}
-                      onPress={() =>
-                        this.onShare(verses[0].verse + ' ' + verses[0].bookname)
-                      }></Icon>
-                  </TouchableOpacity>
+              </Block>
+              <Block flex={false} center>
+                <Transition shared={'booktext' + index}>
+                  <Text h3 white center style={{marginVertical: 8}}>
+                    {verse.bookname}
+                  </Text>
                 </Transition>
               </Block>
             </Block>
-          </ImageBackground>
-        </Transition>
-      </TouchableWithoutFeedback>
+            <Block
+              flex={false}
+              row
+              middle
+              style={{
+                width: '100%',
+                position: 'absolute',
+                bottom: 25,
+              }}
+              space={'between'}>
+              <Transition shared={'likebutton' + index}>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.toggleFavourites(
+                      verse.verse,
+                      verse.bookname,
+                      verse.osis,
+                    )
+                  }>
+                  <Icon
+                    name="heart"
+                    solid={this.state.alreadyLiked}
+                    size={40}
+                    color={theme.colors.white}
+                    style={{marginLeft: 10}}></Icon>
+                </TouchableOpacity>
+              </Transition>
+              <Transition shared={'sharebutton' + index}>
+                <TouchableOpacity>
+                  <Icon
+                    name="paper-plane"
+                    size={40}
+                    color={theme.colors.white}
+                    style={{marginRight: 10}}
+                    onPress={() =>
+                      this.onShare(verse.verse + ' ' + verse.bookname)
+                    }></Icon>
+                </TouchableOpacity>
+              </Transition>
+            </Block>
+          </Block>
+        </ImageBackground>
+      </Transition>
     );
+  }
+
+  async toggleFavourites(verseText, bookText, osis) {
+    
+    osis = osis.toString();
+    if (osis.length == 7) {
+      osis = '0' + osis.toString();
+    }
+    let firestoreref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('likes');
+    if (!this.state.alreadyLiked) {
+      try {
+        firestoreref.doc(osis).set({
+          verseText: verseText,
+          bookText: bookText,
+          time: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        this.setState({
+          alreadyLiked: true,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        firestoreref.doc(osis).delete();
+        this.setState({
+          alreadyLiked: false,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 }
 

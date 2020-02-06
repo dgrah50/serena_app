@@ -20,6 +20,7 @@ export default class Favourites extends Component {
     super(props);
     this.state = {
       favourites: false,
+      likedosis: [],
     };
   }
 
@@ -42,13 +43,14 @@ export default class Favourites extends Component {
             }}>
             Favourites
           </Text>
-          {this.state.favourites.map((verse,idx) => {
+          {this.state.favourites.map((verse, idx) => {
             return (
               <VerseCard
                 imageIndex={Math.floor(
                   Math.random() * theme.randomImages.length,
                 )}
                 verses={[verse]}
+                likedosis={this.state.likedosis}
                 index={idx}
                 key={idx}
                 scroller={false}
@@ -108,8 +110,9 @@ export default class Favourites extends Component {
       .collection('likes')
       .get()
       .then(snapshot => {
-
+        let likedosis = snapshot._docs.map(doc => doc.id);
         this.setState({
+          likedosis: likedosis,
           favourites: snapshot._docs.map(doc => {
             return {
               verse: doc._data.verseText,
