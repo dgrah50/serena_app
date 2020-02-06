@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   Dimensions,
+  Share
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
@@ -159,6 +160,26 @@ export default class Detail extends Component {
       }
     }
   }
+
+  async  onShare(message) {
+  try {
+    const result = await Share.share({
+      message: message,
+    });
+
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        // shared with activity type of result.activityType
+      } else {
+        // shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // dismissed
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+}
 }
 
 const styles = StyleSheet.create({
