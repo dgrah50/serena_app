@@ -9,7 +9,7 @@ import {
   Easing,
   Keyboard,
   TouchableWithoutFeedback,
-  Platform
+  Platform,
 } from 'react-native';
 import {RNChipView} from 'react-native-chip-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -21,6 +21,7 @@ import {theme, time, emotions} from '../constants';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import LinearGradient from 'react-native-linear-gradient';
 import SliderEntry from '../components/SliderEntry';
+import firebase from 'react-native-firebase';
 import * as Animatable from 'react-native-animatable';
 
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
@@ -243,7 +244,8 @@ export default class Fetch extends Component {
         hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
         onPressIn={this.setRingOn.bind(this)}
         onPressOut={this.stopListen.bind(this)}>
-        <View style={[styles.buttonStyle,  Platform.OS === 'ios' && theme.shadow ]}>
+        <View
+          style={[styles.buttonStyle, Platform.OS === 'ios' && theme.shadow]}>
           <Icon name={'microphone'} size={60} color={theme.colors.primary} />
         </View>
       </TouchableOpacity>
@@ -258,7 +260,7 @@ export default class Fetch extends Component {
           row
           flex={false}
           justifyContent={'flex-start'}
-          style={[styles.searchBox,theme.shadow]}>
+          style={[styles.searchBox, theme.shadow]}>
           <Icon
             name={'search'}
             size={20}
@@ -326,7 +328,10 @@ export default class Fetch extends Component {
       .post(
         'https://serenaengine333.co.uk/api/verses',
         // 'http://localhost:8000/api/verses',
-        qs.stringify({content: query}),
+        qs.stringify({
+          content: query,
+          userID: firebase.auth().currentUser.uid.toString(),
+        }),
       )
       .then(response => {
         this.setState({
