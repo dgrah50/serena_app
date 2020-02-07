@@ -19,7 +19,7 @@ import {ThemeColors} from 'react-navigation';
 
 export default class Profile extends Component {
   static navigationOptions = {
-    title: 'Edit Profile',
+    title: 'Profile Settings',
     headerTitleStyle: {
       fontWeight: 'bold',
     },

@@ -51,28 +51,7 @@ export default class Fetch extends Component {
   handleViewRef = ref => (this.view = ref);
 
   static navigationOptions = {
-    headerLeft: (
-      <Block left style={{paddingLeft: 10}}>
-        <Text gray style={theme.fonts.title}>
-          {time.DateNow.weekday}
-          {', '}
-          <Text style={theme.fonts.title}>
-            {time.DateNow.month} {time.DateNow.date}
-          </Text>
-        </Text>
-      </Block>
-    ),
-    headerRight: (
-      <TouchableOpacity>
-        <Block flex={false}>
-          <Image
-            resizeMode="contain"
-            source={require('../assets/images/Icon/Menu.png')}
-            style={{width: 45, height: 18, paddingRight: 40}}
-          />
-        </Block>
-      </TouchableOpacity>
-    ),
+    header: null,
   };
 
   render() {
@@ -105,7 +84,7 @@ export default class Fetch extends Component {
                 right: 30,
                 zIndex: 1,
               }}
-              onPress={() => this.props.navigation.navigate('Favourites')}>
+              onPress={() => this.props.navigation.navigate('Profile')}>
               <Icon name="cog" size={25} color={theme.colors.white}></Icon>
             </TouchableOpacity>
             <View
@@ -120,7 +99,12 @@ export default class Fetch extends Component {
               <Image
                 resizeMode="contain"
                 source={require('../assets/images/whiteicon.png')}
-                style={{width: 45, height: 45, top: 0, paddingRight: 40}}
+                style={{
+                  width: 45,
+                  height: 45,
+                  top: 0,
+                  paddingRight: 40,
+                }}
               />
             </View>
 
@@ -150,7 +134,7 @@ export default class Fetch extends Component {
         <ScrollView horizontal={true}>
           {emotions.topicList.map(topic => {
             return (
-              <Block  style={{padding: 5}} key={topic}>
+              <Block style={{padding: 5}} key={topic}>
                 <RNChipView
                   onPress={() => {
                     this.apiCall(topic);
@@ -192,7 +176,10 @@ export default class Fetch extends Component {
             </ScrollView>
             <Animatable.View
               animation={'fadeIn'}
-              style={{justifyContent: 'flex-start', alignItems: 'center'}}>
+              style={{
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}>
               <Icon
                 name={'times-circle'}
                 size={30}
@@ -252,14 +239,14 @@ export default class Fetch extends Component {
   }
   _renderMicButton() {
     return (
-        <TouchableOpacity
-          hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
-          onPressIn={this.setRingOn.bind(this)}
-          onPressOut={this.stopListen.bind(this)}>
-          <View style={[styles.buttonStyle, theme.shadow]}>
-            <Icon name={'microphone'} size={60} color={theme.colors.primary} />
-          </View>
-        </TouchableOpacity>
+      <TouchableOpacity
+        hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
+        onPressIn={this.setRingOn.bind(this)}
+        onPressOut={this.stopListen.bind(this)}>
+        <View style={[styles.buttonStyle, theme.shadow]}>
+          <Icon name={'microphone'} size={60} color={theme.colors.primary} />
+        </View>
+      </TouchableOpacity>
     );
   }
   _renderKeyboardButton() {
@@ -267,9 +254,20 @@ export default class Fetch extends Component {
       <TouchableOpacity
         hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
         onPress={this.hideMic.bind(this)}>
-        <Block row flex={false} justifyContent={"flex-start"} style={[styles.searchBox]} >
-          <Icon name={'search'} size={20} style={{marginLeft:15,marginRight:10}} color={theme.colors.white} />
-          <Text white h3>Search</Text>
+        <Block
+          row
+          flex={false}
+          justifyContent={'flex-start'}
+          style={[styles.searchBox]}>
+          <Icon
+            name={'search'}
+            size={20}
+            style={{marginLeft: 15, marginRight: 10}}
+            color={theme.colors.white}
+          />
+          <Text white h3>
+            Search
+          </Text>
         </Block>
       </TouchableOpacity>
     );
@@ -281,10 +279,14 @@ export default class Fetch extends Component {
           style={[
             styles.searchBox,
             theme.fonts.h3,
-            {paddingHorizontal: 15, paddingBottom:5, color: theme.colors.white},
+            {
+              paddingHorizontal: 15,
+              paddingBottom: 5,
+              color: theme.colors.white,
+            },
             this.state.showMicButton ? {marginBottom: 100} : {marginBottom: 0},
           ]}
-          placeholder={'What\'s on your mind?'}
+          placeholder={"What's on your mind?"}
           placeholderTextColor={'rgba(255, 255, 255, 0.8)'}
           ref={typedText => {
             this.prayInputField = typedText;
@@ -384,7 +386,6 @@ export default class Fetch extends Component {
     }
   }
   hideMic() {
-
     this.view.animate({
       0: {
         opacity: 1,
@@ -449,7 +450,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    backgroundColor: "rgba(240, 240, 247, 0.66)",
+    backgroundColor: 'rgba(240, 240, 247, 0.66)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -457,7 +458,7 @@ const styles = StyleSheet.create({
     width: WIDTH * 0.8,
     height: 40,
     borderRadius: theme.sizes.border,
-    backgroundColor: "rgba(240, 240, 247, 0.66)",
+    backgroundColor: 'rgba(240, 240, 247, 0.66)',
     justifyContent: 'center',
     alignItems: 'center',
   },

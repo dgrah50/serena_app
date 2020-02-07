@@ -34,9 +34,11 @@ export class VerseCard extends React.Component {
   }
 
   cardToggle = val => {
-    this.setState({
-      alreadyLiked: val,
-    });
+    if (val != this.state.alreadyLiked) {
+      this.setState({
+        alreadyLiked: val,
+      });
+    }
   };
 
   render() {
@@ -77,7 +79,7 @@ export class VerseCard extends React.Component {
                 borderRadius: theme.sizes.border,
               }}
               source={theme.randomImages[imageIndex]}>
-              <Block flex={false} center middle style={{padding:10}}>
+              <Block flex={false} center middle style={{padding: 10}}>
                 <Block flex={false} center middle>
                   <Transition shared={'versetext' + index}>
                     <Text

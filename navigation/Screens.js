@@ -41,7 +41,6 @@ export default createBottomTabNavigator(
                 },
               },
               {
-                headerMode: 'none',
                 initialRouteName: 'Pray',
               },
             ),
@@ -57,7 +56,6 @@ export default createBottomTabNavigator(
                 },
               },
               {
-                headerMode: 'none',
                 initialRouteName: 'HomeFeed',
               },
             ),
@@ -73,19 +71,19 @@ export default createBottomTabNavigator(
                 },
               },
               {
-                headerMode: 'none',
                 initialRouteName: 'Favourites',
               },
             ),
           },
         },
         {
-          headerMode: 'none',
           initialRouteName: 'Pray',
+          headerMode:'none'
         },
       ),
       navigationOptions: {
         tabBarLabel: 'Pray',
+        header: null,
         tabBarIcon: ({tintColor}) => (
           <Icon name="home" size={25} color={tintColor} />
         ),
@@ -111,14 +109,12 @@ export default createBottomTabNavigator(
                 },
               },
               {
-                headerMode: 'none',
                 initialRouteName: 'Favourites',
               },
             ),
           },
         },
         {
-          headerMode: 'none',
           initialRouteName: 'HomeFeed',
         },
       ),

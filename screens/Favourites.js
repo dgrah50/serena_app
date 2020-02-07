@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Dimensions, View} from 'react-native';
-import axios from 'axios';
-import qs from 'qs';
+import {
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  View,
+  SafeAreaView,
+} from 'react-native';
 import firebase from 'react-native-firebase';
 import {Block, Text} from '../components';
-import {theme, time} from '../constants';
-import {DOMParser} from 'xmldom';
+import {theme} from '../constants';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import {
   VerseCard,
@@ -14,6 +18,7 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
+import Headroom from 'react-native-headroom';
 
 export default class Favourites extends Component {
   constructor(props) {
@@ -29,37 +34,54 @@ export default class Favourites extends Component {
   }
 
   render() {
-    console.log(this.state.favourites);
+    const header = (
+      <Block row center style={[styles.container, styles.header, {paddingLeft:30}]}>
+        <Icon
+          name="arrow-left"
+          size={35}
+          color={theme.colors.black}
+          onPress={() => {
+            this.props.navigation.goBack(null);
+          }}/>
+        <Text
+          h2
+          black
+          spacing={1}
+          style={{
+            marginVertical: 8,
+            paddingHorizontal: theme.sizes.padding,
+          }}>
+          Favourites
+        </Text>
+      </Block>
+    );
     return this.state.favourites ? (
-      <View style={styles.welcome}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Text
-            h2
-            black
-            spacing={1}
-            style={{
-              marginVertical: 8,
-              paddingHorizontal: theme.sizes.padding,
-            }}>
-            Favourites
-          </Text>
-          {this.state.favourites.map((verse, idx) => {
-            return (
-              <VerseCard
-                imageIndex={Math.floor(
-                  Math.random() * theme.randomImages.length,
-                )}
-                verses={[verse]}
-                likedosis={this.state.likedosis}
-                index={idx}
-                key={idx}
-                scroller={false}
-                props={this.props}
-              />
-            );
-          })}
-        </ScrollView>
-      </View>
+      <SafeAreaView style={styles.welcome}>
+        <Headroom
+          style={{flex:1}}
+          headerComponent={header}
+          ScrollableComponent={ScrollView}
+          headerHeight={80}
+          scrollEventThrottle={80}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {this.state.favourites.map((verse, idx) => {
+              return (
+                <VerseCard
+                  imageIndex={Math.floor(
+                    Math.random() * theme.randomImages.length,
+                  )}
+                  verses={[verse]}
+                  likedosis={this.state.likedosis}
+                  index={idx}
+                  key={idx}
+                  scroller={false}
+                  props={this.props}
+                />
+              );
+            })}
+          </ScrollView>
+        </Headroom>
+      </SafeAreaView>
     ) : (
       this._renderLoadingPlaceHolder()
     );
