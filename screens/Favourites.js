@@ -141,7 +141,7 @@ export default class Favourites extends Component {
               bookname: doc._data.bookText,
               osis: doc.id,
             };
-          }),
+          }).reverse(),
         });
       })
       .catch(err => {

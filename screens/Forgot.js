@@ -37,7 +37,9 @@ class Forgot extends Component {
               style={{height: 28, width: 102}}
             />
           </Block>
-          <Block flex={2.5} center>
+          <Block
+           style={{flex: 2.5}} 
+           center>
             <Text h3 style={{marginBottom: 6}}>
               Reset password
             </Text>

@@ -46,8 +46,9 @@ export class VerseCard extends React.Component {
     return (
       <React.Fragment>
         <TouchableOpacity
-          style={{
-            alignItems: !scroller && 'center',
+          style={ !scroller && {
+            // alignItems: !scroller && 'center',
+            alignItems:  'center',
           }}
           onPress={() => {
             props.navigation.navigate('Detail', {
@@ -215,9 +216,11 @@ export function _renderSermon(item, idx, props, center = false) {
   return (
     <TouchableOpacity
       key={idx}
-      style={{
-        alignItems: center && 'center',
-      }}
+      style={
+        center && {
+          alignItems: 'center',
+        }
+      }
       onPress={() => {
         props.navigation.navigate('Player', {
           sermon: item,
@@ -233,12 +236,14 @@ export function _renderSermon(item, idx, props, center = false) {
             padding: 15,
             paddingBottom: 13,
             marginBottom: WIDTH * 0.05,
-            marginRight: !center && 20,
+
             width: WIDTH * 0.7,
             borderRadius: theme.sizes.border,
           },
 
-          center ? {width: WIDTH * 0.9} : {width: WIDTH * 0.7},
+          center
+            ? {width: WIDTH * 0.9}
+            : {width: WIDTH * 0.7, marginRight:20},
           theme.shadow,
         ]}>
         <Block middle center row style={{marginBottom: 10}}>

@@ -234,7 +234,6 @@ export default class Profile extends Component {
         center
         middle
         shadow
-        flex={false}
         row
         style={{
           marginBottom: 12,

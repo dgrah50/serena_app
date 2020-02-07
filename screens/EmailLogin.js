@@ -32,7 +32,7 @@ class EmailLogin extends Component {
   //****** SUB COMPONENTS SECTION
   _renderInputAndButtons() {
     return (
-      <Block flex={3.5}>
+      <Block  style={{flex: 3.5}} >
         <Block center style={{marginTop: 44}}>
           <Input
             full

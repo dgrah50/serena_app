@@ -9,6 +9,7 @@ import {
   Easing,
   Keyboard,
   TouchableWithoutFeedback,
+  Platform
 } from 'react-native';
 import {RNChipView} from 'react-native-chip-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -223,7 +224,6 @@ export default class Fetch extends Component {
           ref={this.handleViewRef}
           center
           middle
-          flex={false}
           style={{marginBottom: '10%'}}>
           <AnimatedCircularProgress
             onAnimationComplete={() => {
@@ -243,7 +243,7 @@ export default class Fetch extends Component {
         hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
         onPressIn={this.setRingOn.bind(this)}
         onPressOut={this.stopListen.bind(this)}>
-        <View style={[styles.buttonStyle, theme.shadow]}>
+        <View style={[styles.buttonStyle,  Platform.OS === 'ios' && theme.shadow ]}>
           <Icon name={'microphone'} size={60} color={theme.colors.primary} />
         </View>
       </TouchableOpacity>
@@ -258,12 +258,12 @@ export default class Fetch extends Component {
           row
           flex={false}
           justifyContent={'flex-start'}
-          style={[styles.searchBox]}>
+          style={[styles.searchBox,theme.shadow]}>
           <Icon
             name={'search'}
             size={20}
             style={{marginLeft: 15, marginRight: 10}}
-            color={theme.colors.white}
+            color={theme.colors.primary}
           />
           <Text white h3>
             Search
@@ -279,6 +279,7 @@ export default class Fetch extends Component {
           style={[
             styles.searchBox,
             theme.fonts.h3,
+            theme.shadow,
             {
               paddingHorizontal: 15,
               paddingBottom: 5,

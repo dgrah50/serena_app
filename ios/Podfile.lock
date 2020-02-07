@@ -327,8 +327,6 @@ PODS:
     - React-Core (= 0.60.5)
   - ReactNativeAutogrowTextinput (5.3.0):
     - React
-  - rn-fetch-blob (0.12.0):
-    - React-Core
   - RNFirebase (5.5.6):
     - Firebase/Core
     - React
@@ -342,7 +340,7 @@ PODS:
     - React
   - RNPermissions (2.0.9):
     - React
-  - RNReanimated (1.4.0):
+  - RNReanimated (1.7.0):
     - React
   - RNScreens (1.0.0-alpha.23):
     - React
@@ -412,7 +410,6 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-RCTWebSocket (from `../node_modules/react-native/Libraries/WebSocket`)
   - ReactNativeAutogrowTextinput (from `../node_modules/react-native-autogrow-textinput`)
-  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNFirebase (from `../node_modules/react-native-firebase/ios`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -534,8 +531,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/WebSocket"
   ReactNativeAutogrowTextinput:
     :path: "../node_modules/react-native-autogrow-textinput"
-  rn-fetch-blob:
-    :path: "../node_modules/rn-fetch-blob"
   RNFirebase:
     :path: "../node_modules/react-native-firebase/ios"
   RNGestureHandler:
@@ -632,11 +627,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
   ReactNativeAutogrowTextinput: 14bd6349ec4fed9231ca141ad3f1dbadf2f63e4c
-  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNFirebase: ac0de8b24c6f91ae9459575491ed6a77327619c6
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
   RNPermissions: 2f74237e97b08beda01e914301e12524ddddf5b8
-  RNReanimated: 8b675a650fc67c87f63d4345a1b2d4a699c25e4f
+  RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
   RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
   RNSharedElement: d37c775d8952f7c07ff7aec97f552514e238b191
