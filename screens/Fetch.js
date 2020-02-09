@@ -110,22 +110,36 @@ export default class Fetch extends Component {
                 }}
               />
             </View>
-
-            {this.state.showMicButton && !this.state.listening && (
-              <Animatable.View animation={'fadeIn'}>
-                <Text h2 white>
-                  {' '}
-                  What's on your mind?{' '}
-                </Text>
-              </Animatable.View>
-            )}
-            {this._renderMicRing()}
-            {this.state.showMicButton &&
-              !this.state.listening &&
-              this._renderEmotionChips()}
+            <View
+              style={{
+                width: '100%',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: '50%',
+              }}>
+              {this.state.showMicButton && !this.state.listening && (
+                <Animatable.View
+                  animation={'fadeIn'}
+                  style={{
+                    width: '100%',
+                    alignItems: 'center',
+                    height: '15%',
+                  }}>
+                  <Text h2 white>
+                    {' '}
+                    What's on your mind?{' '}
+                  </Text>
+                </Animatable.View>
+              )}
+              {this._renderMicRing()}
+              {this.state.showMicButton &&
+                !this.state.listening &&
+                this._renderEmotionChips()}
+            </View>
             {this.state.showMicButton &&
               !this.state.listening &&
               this._renderKeyboardButton()}
+
             {!this.state.showMicButton &&
               !this.state.listening &&
               this._renderTypedPrayerInput()}
@@ -160,7 +174,13 @@ export default class Fetch extends Component {
   }
   _renderEmotionChips() {
     return (
-      <View center style={{height: '15%', marginTop: '5%'}}>
+      <View
+        center
+        style={{
+          height: '20%',
+          width: '100%',
+          alignItems: 'center',
+        }}>
         {this.state.EmojiEmotion ? (
           <React.Fragment>
             <ScrollView
@@ -279,12 +299,19 @@ export default class Fetch extends Component {
     return (
       <TouchableOpacity
         hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
+        style={[styles.searchBox, {marginTop: 100}]}
         onPress={this.hideMic.bind(this)}>
         <Block
           row
           flex={false}
           justifyContent={'flex-start'}
-          style={[styles.searchBox, theme.shadow]}>
+          style={{
+            width: WIDTH * 0.8,
+            height: 40,
+            borderRadius: theme.sizes.border,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Icon
             name={'search'}
             size={20}
@@ -300,18 +327,17 @@ export default class Fetch extends Component {
   }
   _renderTypedPrayerInput() {
     return (
-      <Animatable.View animation={'fadeIn'}>
+      <Animatable.View animation={'fadeIn'} style={{position: 'absolute'}}>
         <AutoGrowingTextInput
           style={[
             styles.searchBox,
             theme.fonts.h3,
-            theme.shadow,
+            Platform.OS === 'ios' && theme.shadow,
             {
               paddingHorizontal: 15,
               paddingBottom: 5,
               color: theme.colors.white,
             },
-            this.state.showMicButton ? {marginBottom: 100} : {marginBottom: 0},
           ]}
           placeholder={"What's on your mind?"}
           placeholderTextColor={'rgba(255, 255, 255, 0.8)'}
