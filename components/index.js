@@ -6,5 +6,16 @@ import Input from "./Input";
 import Text from "./Text";
 import Progress from "./Progress";
 import AnimatedCircularProgress from './AnimatedCircularProgress';
+import RippleAnim from './RippleAnim';
 
-export {Block, Badge, Button, Card, Text, Progress, Input, AnimatedCircularProgress};
+export {
+  Block,
+  Badge,
+  Button,
+  Card,
+  Text,
+  Progress,
+  Input,
+  AnimatedCircularProgress,
+  RippleAnim,
+};

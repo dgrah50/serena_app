@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import qs from 'qs';
 import Voice from 'react-native-voice';
-import {Block, Card, Text, AnimatedCircularProgress} from '../components';
+import {Block, RippleAnim, Text, AnimatedCircularProgress} from '../components';
 import {theme, time, emotions} from '../constants';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import LinearGradient from 'react-native-linear-gradient';
@@ -39,6 +39,7 @@ export default class Fetch extends Component {
       EmojiEmotion: null,
     };
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
+    Voice.onSpeechError = this.onSpeechError.bind(this);
     // firebase.auth().onAuthStateChanged(function(user) {
     //   if (user) {
     //     user.getIdToken().then(function(idToken) {
@@ -81,7 +82,7 @@ export default class Fetch extends Component {
                 position: 'absolute',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '10%',
+                height: '7%',
                 top: 0,
                 right: 30,
                 zIndex: 1,
@@ -94,7 +95,7 @@ export default class Fetch extends Component {
                 width: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '10%',
+                height: '7%',
                 top: 0,
                 position: 'absolute',
               }}>
@@ -110,7 +111,7 @@ export default class Fetch extends Component {
               />
             </View>
 
-            {this.state.showMicButton && (
+            {this.state.showMicButton && !this.state.listening && (
               <Animatable.View animation={'fadeIn'}>
                 <Text h2 white>
                   {' '}
@@ -119,9 +120,15 @@ export default class Fetch extends Component {
               </Animatable.View>
             )}
             {this._renderMicRing()}
-            {this.state.showMicButton && this._renderEmotionChips()}
-            {this.state.showMicButton && this._renderKeyboardButton()}
-            {!this.state.showMicButton && this._renderTypedPrayerInput()}
+            {this.state.showMicButton &&
+              !this.state.listening &&
+              this._renderEmotionChips()}
+            {this.state.showMicButton &&
+              !this.state.listening &&
+              this._renderKeyboardButton()}
+            {!this.state.showMicButton &&
+              !this.state.listening &&
+              this._renderTypedPrayerInput()}
           </View>
         </LinearGradient>
       </TouchableWithoutFeedback>
@@ -220,22 +227,38 @@ export default class Fetch extends Component {
   }
   _renderMicRing() {
     return (
-      <React.Fragment>
-        <Animatable.View
-          ref={this.handleViewRef}
-          center
-          middle
-          style={{marginBottom: '10%'}}>
-          <AnimatedCircularProgress
-            onAnimationComplete={() => {
-              // console.log('animation done');
-            }}
-            ref={ref => (this.circularProgress = ref)}
-            tintColor={this.state.ringVisible ? '#5692D0' : 'rgba(0,0,0,0)'}>
-            {fill => this._renderMicButton()}
-          </AnimatedCircularProgress>
-        </Animatable.View>
-      </React.Fragment>
+      <Animatable.View
+        ref={this.handleViewRef}
+        style={{justifyContent: 'center', alignItems: 'center'}}
+        // style={{marginBottom: '10%'}}
+      >
+        {this.state.listening && <RippleAnim />}
+        <AnimatedCircularProgress
+          onAnimationComplete={() => {
+            console.log('animation done');
+            this.circularProgress.reAnimate(0, 0, Easing.quad);
+            this.stopListen();
+          }}
+          ref={ref => (this.circularProgress = ref)}
+          tintColor={
+            this.state.ringVisible ? theme.colors.white : 'rgba(0,0,0,0)'
+          }>
+          {fill => this._renderMicButton()}
+        </AnimatedCircularProgress>
+        {this.state.listening && (
+          <Block
+            style={{
+              position: 'absolute',
+              bottom: HEIGHT * -0.2,
+              marginHorizontal: WIDTH * 0.1,
+              height: HEIGHT * 0.2,
+            }}>
+            <Text h2 white>
+              {this.state.typedText}
+            </Text>
+          </Block>
+        )}
+      </Animatable.View>
     );
   }
   _renderMicButton() {
@@ -243,7 +266,8 @@ export default class Fetch extends Component {
       <TouchableOpacity
         hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
         onPressIn={this.setRingOn.bind(this)}
-        onPressOut={this.stopListen.bind(this)}>
+        // onPressOut={this.stopListen.bind(this)}
+      >
         <View
           style={[styles.buttonStyle, Platform.OS === 'ios' && theme.shadow]}>
           <Icon name={'microphone'} size={60} color={theme.colors.primary} />
@@ -322,7 +346,6 @@ export default class Fetch extends Component {
 
   //****** HELPER FUNCTIONS SECTION
   apiCall(query) {
-    console.log('calling api');
     this.setState({fetched: false});
     axios
       .post(
@@ -336,6 +359,9 @@ export default class Fetch extends Component {
       .then(response => {
         this.setState({
           fetched: true,
+          typedText: '',
+          listening: false,
+          ringVisible: false,
         });
         this.props.navigation.navigate('HomeFeed', {
           response: response.data,
@@ -352,6 +378,9 @@ export default class Fetch extends Component {
         console.log(error);
       });
   }
+  onSpeechError(e) {
+    console.log(e);
+  }
   onSpeechResults(e) {
     console.log(e.value);
     this.setState({
@@ -360,33 +389,36 @@ export default class Fetch extends Component {
     });
   }
   stopListen() {
+    console.log('stopping');
     try {
-      Voice.cancel();
-      this.circularProgress.stopAnimate();
+      Voice.stop();
+      // this.circularProgress.stopAnimate();
     } catch (e) {
       console.log(e);
     }
     if (this.state.typedText != '') {
       this.apiCall(this.state.typedText);
+    } else {
+      this.setState({
+        typedText: '',
+        listening: false,
+        ringVisible: false,
+      });
     }
-    this.setState({
-      typedText: '',
-      listening: false,
-      ringVisible: false,
-    });
   }
   setRingOn() {
     this.setState({ringVisible: true}, () => this.startListen());
   }
   async startListen(e) {
-    this.circularProgress.reAnimate(0, 100, 8000, Easing.quad);
-    this.setState({
-      results: [],
-      typedText: '',
-      listening: true,
-    });
     try {
       await Voice.start('en-US');
+      console.log('voice started');
+      this.circularProgress.animate(100, 8000, Easing.quad);
+      this.setState({
+        results: [],
+        typedText: '',
+        listening: true,
+      });
     } catch (e) {
       console.error(e);
     }
@@ -410,6 +442,7 @@ export default class Fetch extends Component {
     });
     this.setState({
       showMicButton: false,
+      typedText: '',
     });
   }
   showMic() {

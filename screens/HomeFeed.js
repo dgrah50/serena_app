@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Dimensions, View} from 'react-native';
+import {ScrollView, StyleSheet, Dimensions, View, TouchableOpacity} from 'react-native';
 import axios from 'axios';
 import qs from 'qs';
 import firebase from 'react-native-firebase';
@@ -15,7 +15,6 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class HomeFeed extends Component {
   static navigationOptions = ({navigation}) => {
@@ -65,6 +64,7 @@ export default class HomeFeed extends Component {
       axios
         .post(
           'https://serenaengine333.co.uk/api/verses/recs',
+          // 'http://localhost:8000/api/verses/recs',
           qs.stringify({
             userID: firebase.auth().currentUser.uid,
           }),
