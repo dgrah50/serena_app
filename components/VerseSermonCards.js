@@ -208,10 +208,16 @@ export function _renderPodcast(track, props) {
 }
 
 export function _renderSermon(item, idx, props, center = false) {
-  let uri = item.speakerimg;
-  let speakerName = item.author;
+  if (
+    typeof item == 'undefined' 
+    // typeof item.speakerimg == 'undefined' ||
+    // typeof item.duration == 'undefined'
+  ) {
+    return null;
+  }
+  let uri =  item.speakerimg != undefined ? item.speakerimg : "https://via.placeholder.com/150/449CD6/FFFFFF?text=Serena.com"
+  let speakerName = item.author ;
   let duration = item.duration;
-  let plays = item.plays;
   const changeSong = props.screenProps.changeSong;
   return (
     <TouchableOpacity

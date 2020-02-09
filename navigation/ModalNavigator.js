@@ -16,6 +16,13 @@ export default createStackNavigator(
     // /////////////////////////////////////////////////////////////////////////
     Player: {
       screen: Player,
+      navigationOptions: {
+        /**
+         * Distance from top to register swipe to dismiss modal gesture. Default (135)
+         * https://reactnavigation.org/docs/en/stack-navigator.html#gestureresponsedistance
+         */
+        gestureResponseDistance: {vertical: 1000}, // default is 135 },
+      },
     },
   },
   {
