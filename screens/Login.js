@@ -144,7 +144,7 @@ class Onboarding extends Component {
             Share with friends and family.
           </Text>
           <Text title black center>
-            Filler text
+            Receive a daily Bible Verse and share with your friends to spread the word of God.
           </Text>
         </Block>
         <Block
@@ -155,19 +155,19 @@ class Onboarding extends Component {
             <Button
               style={[styles.buttonStyle, {width: '50%', marginBottom: 0}]}
               onPress={() => this.props.navigation.navigate('EmailLogin')}>
-              <Text white> LOG IN WITH EMAIL </Text>
+              <Text white> LOG IN  </Text>
             </Button>
             <Button
               style={[styles.buttonStyle, {width: '50%', marginBottom: 0}]}
               onPress={() => this.props.navigation.navigate('Register')}>
-              <Text white> SIGN UP WITH EMAIL </Text>
+              <Text white> SIGN UP </Text>
             </Button>
           </Block>
 
           <Button
             style={[styles.buttonStyle, {backgroundColor: '#3b5998'}]}
             onPress={() => this.facebookLogin()}>
-            <Text white> CONTINUE WITH FACEBOOK </Text>
+            <Text white> OR CONTINUE WITH FACEBOOK </Text>
           </Button>
           <Dots
             isLight={true}

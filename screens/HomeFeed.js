@@ -70,6 +70,7 @@ export default class HomeFeed extends Component {
           }),
         )
         .then(res => {
+          console.log("this is the res: "+res.data.sermons)
           this.setState({
             recommendedSermons: res.data.sermons.current,
             recommendedVerses: res.data.verses,
@@ -124,15 +125,25 @@ export default class HomeFeed extends Component {
           {!this.state.verses &&
             this.state.dailyVerse &&
             this._renderDailyVerse()}
-          {!this.state.verses &&
+          {/* {!this.state.verses &&
             this.state.recommendedSermons &&
-            this._renderSOD()}
+            this._renderSOD()} */}
           {this.state.sermons && this._renderRelatedSermons()}
           {this.state.verses &&
             this.state.podcasts &&
             this._renderRelatedPodcasts()}
           {this._renderFavouritesButton()}
           <View style={styles.hLine} />
+          <Text
+            title
+            black
+            spacing={1}
+            style={{
+              marginVertical: 8,
+              paddingHorizontal: theme.sizes.padding,
+            }}>
+            Based on your viewing history
+          </Text>
           {this.state.recommendedVerses && this._renderRecommendedVerses()}
           {this.state.recommendedSermons && this._renderRecommendedSermons()}
           {this.state.dailyVerse &&
@@ -240,6 +251,7 @@ export default class HomeFeed extends Component {
     );
   }
   _renderSOD() {
+    console.log("rec serms: " + this.state.recommendedSermons);
     return (
       <Block>
         <Text
@@ -500,9 +512,9 @@ const styles = StyleSheet.create({
   },
   // horizontal line
   hLine: {
-    marginBottom: theme.sizes.base,
+    // marginBottom: theme.sizes.base,
     marginHorizontal: WIDTH * 0.1,
-    marginVertical: 3,
+    marginTop: 3,
     height: 1,
     backgroundColor: theme.colors.gray,
   },
