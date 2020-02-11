@@ -290,7 +290,7 @@ export default class Fetch extends Component {
       >
         <View
           style={[styles.buttonStyle, Platform.OS === 'ios' && theme.shadow]}>
-          <Icon name={'microphone'} size={60} color={theme.colors.primary} />
+          <Icon name={'microphone'} size={60} color={theme.colors.white} />
         </View>
       </TouchableOpacity>
     );
@@ -316,7 +316,7 @@ export default class Fetch extends Component {
             name={'search'}
             size={20}
             style={{marginLeft: 15, marginRight: 10}}
-            color={theme.colors.primary}
+            color={theme.colors.white}
           />
           <Text white h3>
             Search
@@ -433,7 +433,9 @@ export default class Fetch extends Component {
     }
   }
   setRingOn() {
-    this.setState({ringVisible: true}, () => this.startListen());
+    if (!this.state.listening) {
+      this.setState({ringVisible: true}, () => this.startListen());
+    }
   }
   async startListen(e) {
     try {
@@ -515,7 +517,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    backgroundColor: 'rgba(240, 240, 247, 0.66)',
+    backgroundColor: 'rgba(240, 240, 247, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -523,7 +525,7 @@ const styles = StyleSheet.create({
     width: WIDTH * 0.8,
     height: 40,
     borderRadius: theme.sizes.border,
-    backgroundColor: 'rgba(240, 240, 247, 0.66)',
+    backgroundColor: 'rgba(240, 240, 247, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
   },

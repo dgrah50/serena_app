@@ -5,6 +5,7 @@ import firebase from 'react-native-firebase';
 import TrackPlayer from 'react-native-track-player';
 import axios from 'axios';
 import qs from 'qs';
+import OneSignal from 'react-native-onesignal';
 const mocksong = {
   title: ` `,
   mp3link: null,
@@ -15,12 +16,15 @@ const mocksong = {
   plays: null,
 };
 
-export default function App(props) {
+export default function Container(props) {
   const [currentSongData, setCurrentSong] = useState(mocksong);
   const [authTokenSet, setAuthTokenStatus] = useState(false);
   const [StreamToken, setStreamToken] = useState(null);
   const [tabBarVisible, showTabBar] = useState(false);
-  const [recommendedVerses, setRecs] = useState({verses:null,sermons:{current:null}});
+  const [recommendedVerses, setRecs] = useState({
+    verses: null,
+    sermons: {current: null},
+  });
   const didMountRef = useRef(false);
 
   useEffect(() => {
@@ -79,8 +83,40 @@ export default function App(props) {
     }
   }, [authTokenSet]);
 
+  useEffect(() => {
+    OneSignal.setLogLevel(6, 0);
+    OneSignal.init('5e8397b0-56ae-422c-98e4-fbba0d7f6fbb') // set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
+    OneSignal.setSubscription(true);
+    OneSignal.inFocusDisplaying(2);
+    OneSignal.addEventListener('received', onReceived);
+    OneSignal.addEventListener('opened', onOpened);
+    OneSignal.addEventListener('ids', onIds);
+    OneSignal.checkPermissions(permissions => {
+      console.log(permissions);
+    });
+    OneSignal.getPermissionSubscriptionState(status => {
+      console.log(status);
+    });
+    return function cleanup() {
+      OneSignal.removeEventListener('received', onReceived);
+      OneSignal.removeEventListener('opened', onOpened);
+      OneSignal.removeEventListener('ids', onIds);
+    };
+  });
+  const onReceived = notification => {
+    console.log('Notification received: ', notification);
+  };
 
+  const onOpened = openResult => {
+    console.log('Message: ', openResult.notification.payload.body);
+    console.log('Data: ', openResult.notification.payload.additionalData);
+    console.log('isActive: ', openResult.notification.isAppInFocus);
+    console.log('openResult: ', openResult);
+  };
 
+  const onIds = device => {
+    console.log('Device info: ', device);
+  };
   return (
     <View style={styles.container}>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}

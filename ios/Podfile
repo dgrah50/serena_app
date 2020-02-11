@@ -44,7 +44,6 @@ target 'Serena' do
   pod 'Firebase/Functions', '~> 6.8.1'
   pod 'Firebase/DynamicLinks', '~> 6.8.1'
   pod 'Firebase/Firestore', '~> 6.8.1'
-  pod 'Firebase/Messaging', '~> 6.8.1'
   pod 'Firebase/RemoteConfig', '~> 6.8.1'
   pod 'Firebase/Storage', '~> 6.8.1'
   pod 'Firebase/Performance', '~> 6.8.1'
@@ -52,15 +51,24 @@ target 'Serena' do
   pod 'Crashlytics', '~> 3.14.0'
   pod 'FBSDKCoreKit'
   pod 'FBSDKLoginKit'
+  pod 'OneSignal', '>= 2.11.2', '< 3.0'
 
+
+  pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
 
   target 'SerenaTests' do
     inherit! :search_paths
     # Pods for testing
   end
 
+  
+
   use_native_modules!
 
+end
+
+target 'OneSignalNotificationServiceExtension' do
+  pod 'OneSignal', '>= 2.11.2', '< 3.0'
 end
 
 target 'Serena-tvOS' do

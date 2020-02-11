@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, Dimensions, View, TouchableOpacity} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import axios from 'axios';
 import qs from 'qs';
 import firebase from 'react-native-firebase';
@@ -70,7 +76,7 @@ export default class HomeFeed extends Component {
           }),
         )
         .then(res => {
-          console.log("this is the res: "+res.data.sermons)
+          console.log('this is the res: ' + res.data.sermons);
           this.setState({
             recommendedSermons: res.data.sermons.current,
             recommendedVerses: res.data.verses,
@@ -175,7 +181,7 @@ export default class HomeFeed extends Component {
             borderRadius: theme.sizes.border,
           }}
         />
-        <View style={styles.hLine} />
+        <View style={[styles.hLine, {marginBottom: theme.sizes.base}]} />
         <ShimmerPlaceHolder
           autoRun={true}
           style={{
@@ -251,7 +257,7 @@ export default class HomeFeed extends Component {
     );
   }
   _renderSOD() {
-    console.log("rec serms: " + this.state.recommendedSermons);
+    console.log('rec serms: ' + this.state.recommendedSermons);
     return (
       <Block>
         <Text
@@ -328,16 +334,18 @@ export default class HomeFeed extends Component {
   _renderRelatedPodcasts() {
     return (
       <Block>
-        <Text
-          h2
-          black
-          spacing={1}
-          style={{
-            marginVertical: 8,
-            paddingHorizontal: theme.sizes.padding,
-          }}>
-          Related Podcasts
-        </Text>
+        {this.state.podcasts.length > 0 && (
+          <Text
+            h2
+            black
+            spacing={1}
+            style={{
+              marginVertical: 8,
+              paddingHorizontal: theme.sizes.padding,
+            }}>
+            Related Podcasts
+          </Text>
+        )}
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}

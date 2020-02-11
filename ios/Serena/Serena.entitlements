@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.Serenaapp.Serena.onesignal</string>
+		<string>group.Serenaapp.Serena</string>
 	</array>
 </dict>
 </plist>
