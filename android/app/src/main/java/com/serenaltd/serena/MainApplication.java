@@ -29,6 +29,7 @@ import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.perf.RNFirebasePerformancePackage;
 import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.onesignal.OneSignal;
 
 import java.util.List;
 
@@ -78,5 +79,9 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+    OneSignal.startInit(this)
+      .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+      .unsubscribeWhenNotificationsAreDisabled(true)
+      .init();
   }
 }

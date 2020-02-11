@@ -1,3 +1,16 @@
+buildscript {
+  repositories {
+    maven { url 'https://plugins.gradle.org/m2/'}
+  }
+  dependencies {
+    classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.4, 0.99.99]'
+  }
+}
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+
+repositories {
+  maven { url 'https://maven.google.com' }
+}
 apply plugin: "com.android.application"
 apply plugin: "com.google.firebase.firebase-perf"
 apply plugin: 'io.fabric'
@@ -138,6 +151,11 @@ android {
     targetSdkVersion rootProject.ext.targetSdkVersion
     versionCode 1
     versionName "1.0"
+    manifestPlaceholders = [
+      onesignal_app_id: '5e8397b0-56ae-422c-98e4-fbba0d7f6fbb',
+      // Project number pulled from dashboard, local value is ignored.
+      onesignal_google_project_number: 'REMOTE'
+    ]
 
     // Needed to support API<21, though there is a small chance proguard shrinks things sufficiently
     multiDexEnabled true
@@ -204,6 +222,7 @@ android {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(':react-native-track-player')
+    implementation 'com.onesignal:OneSignal:[3.11.2, 3.99.99]'
 
     /* ----------------------------
     *    REACT NATIVE FIREBASE
@@ -244,8 +263,6 @@ android {
     implementation "com.google.firebase:firebase-functions"
     // Cloud Firestore
     implementation "com.google.firebase:firebase-firestore"
-    // Cloud Messaging / FCM
-    implementation "com.google.firebase:firebase-messaging"
     // Crashlytics
     implementation('com.crashlytics.sdk.android:crashlytics@aar') {
       transitive = true
