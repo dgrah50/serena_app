@@ -1,3 +1,20 @@
+import {Dimensions, Platform, PixelRatio} from 'react-native';
+const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
+
+// based on iphone 5s's scale
+const scale = SCREEN_WIDTH / 320;
+
+export function normalize(size) {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+  }
+}
+
+
+
 const colors = {
   accent: '#449CD6',
   primary: '#449CD6',
@@ -15,20 +32,22 @@ const colors = {
 
 const sizes = {
   // global sizes
-  base: 16,
-  font: 14,
-  border: 10,
-  padding: 25,
+
+  base: normalize(16),
+  font: normalize(14),
+  border: normalize(10),
+  padding: normalize(25),
   // font sizes
-  h1: 39,
-  h2: 29,
-  h3: 19,
-  verse: 24,
-  title: 16,
-  header: 24,
-  body: 14,
-  caption: 12,
-  small: 8,
+  h1: normalize(36),
+  h2: normalize(29),
+  h3: normalize(19),
+  verse: normalize(24),
+  title: normalize(16),
+  header: normalize(24),
+  body: normalize(14),
+  caption: normalize(12),
+  button: normalize(12),
+  small: normalize(10)
 };
 
 const shadow = {
@@ -110,6 +129,9 @@ const fonts = {
   },
   small: {
     fontSize: sizes.small,
+  },
+  button: {
+    fontSize: sizes.button,
   },
 };
 

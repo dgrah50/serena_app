@@ -15,6 +15,7 @@ export default class Typography extends Component {
       body,
       caption,
       small,
+      button,
       size,
       transform,
       // styling
@@ -53,6 +54,7 @@ export default class Typography extends Component {
       body && styles.body,
       caption && styles.caption,
       small && styles.small,
+      button && styles.button,
       size && { fontSize: size },
       transform && { textTransform: transform },
       height && { lineHeight: height },
@@ -135,5 +137,6 @@ const styles = StyleSheet.create({
   title: theme.fonts.title,
   body: theme.fonts.body,
   caption: theme.fonts.caption,
-  small: theme.fonts.small
+  small: theme.fonts.small,
+  button: theme.fonts.button
 });

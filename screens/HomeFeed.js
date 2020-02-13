@@ -52,6 +52,7 @@ export default class HomeFeed extends Component {
   }
 
   componentDidMount() {
+    console.log(firebase.auth().currentUser.uid);
     try {
       if (this.props.navigation.getParam('response') != undefined) {
         this.fetchPodcasts(
@@ -76,7 +77,6 @@ export default class HomeFeed extends Component {
           }),
         )
         .then(res => {
-          console.log('this is the res: ' + res.data.sermons);
           this.setState({
             recommendedSermons: res.data.sermons.current,
             recommendedVerses: res.data.verses,
@@ -257,7 +257,6 @@ export default class HomeFeed extends Component {
     );
   }
   _renderSOD() {
-    console.log('rec serms: ' + this.state.recommendedSermons);
     return (
       <Block>
         <Text

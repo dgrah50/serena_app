@@ -158,7 +158,7 @@ export default createBottomTabNavigator(
     // },
   },
   {
-    initialRouteName: 'Pray',
+    initialRouteName: 'Discover',
     tabBarComponent: props => <CustomTabBar {...props} />,
     tabBarOptions: {
       activeTintColor: theme.colors.white,

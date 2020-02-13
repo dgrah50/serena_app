@@ -177,7 +177,6 @@ export default class Fetch extends Component {
       <View
         center
         style={{
-          height: '20%',
           width: '100%',
           alignItems: 'center',
         }}>

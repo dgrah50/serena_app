@@ -6,7 +6,7 @@ import {
   Alert,
   View,
   StyleSheet,
-  Platform
+  Platform,
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
@@ -41,34 +41,34 @@ class Onboarding extends Component {
 
   _renderScreen0() {
     return (
-      <Block style={styles.onboarding}>
+      <Block style={styles.onboarding} flex={false}>
         <Image
           resizeMode="contain"
           source={require('../assets/images/Base/Logobig.png')}
           style={{height: 40, width: width, position: 'absolute', top: '10%'}}
         />
-        <Block flex={false} center middle style={{marginBottom: 20}}>
+        <Block flex={false} center style={{marginBottom: 20}}>
           <LottieView
-            style={{width: width * 0.6}}
+            style={{width: width * 0.5}}
             source={require('../assets/anims/levitate.json')}
             autoPlay
             loop
           />
         </Block>
-        <Block flex={false} style={{paddingHorizontal: '15%'}}>
-          <Text h2 black center style={{marginBottom: 40}}>
+        <Block flex={false} style={{paddingHorizontal: '5%'}}>
+          <Text h2 black center style={{marginBottom: 20}}>
             Welcome {'\n'} to Serena
           </Text>
-          <Text title black center>
+          <Text black center>
             Find the perfect Bible verse for you at instantly. Just say what's
             on your mind.
           </Text>
         </Block>
-        <Block flex={false} center style={styles.paginationRow}>
+        <Block flex={false} center middle style={styles.paginationRow}>
           <Button
             style={styles.buttonStyle}
             onPress={() => this.setState({screen: 1})}>
-            <Text white> CONTINUE </Text>
+            <Text button white> CONTINUE </Text>
           </Button>
           <Dots
             isLight={true}
@@ -89,28 +89,49 @@ class Onboarding extends Component {
           source={require('../assets/images/Base/Logobig.png')}
           style={{height: 40, width: width, position: 'absolute', top: '10%'}}
         />
-        <Block flex={false} center middle style={{marginBottom: 20}}>
-          <LottieView
-            style={{width: width * 0.6}}
-            source={require('../assets/anims/happydude.json')}
-            autoPlay
-            loop
-          />
-        </Block>
-        <Block flex={false} style={{paddingHorizontal: '15%'}}>
-          <Text h2 black center style={{marginBottom: 40}}>
+        <Block
+          flex={false}
+          space={'between'}
+          style={{ height: height * 0.6}}>
+          <Block
+            flex={false}
+            center
+            middle
+            style={{
+              marginBottom: 20,
+              height: width * 0.5,
+            }}>
+            <LottieView
+              style={{width: width * 0.5}}
+              source={require('../assets/anims/happydude.json')}
+              autoPlay
+              loop
+            />
+          </Block>
+          <Text h2 black center style={{margin: 20,}}>
             Personalised {'\n'} for You.
           </Text>
-          <Text title black center>
-            Serena is designed to recommend sermons for you. Please allow Serena
-            to access your microphone in order to enable voice search.
-          </Text>
+          <Block
+            flex={false}
+            style={{
+              padding: '5%',
+              height: width * 0.5,
+            }}>
+            <Text black center>
+              Serena is designed to recommend sermons for you. Please allow
+              Serena to access your microphone to enable voice search.
+            </Text>
+          </Block>
         </Block>
+
         <Block flex={false} center style={styles.paginationRow}>
           <Button
             style={styles.buttonStyle}
             onPress={() => this.requestPermissions()}>
-            <Text white> ALLOW MICROPHONE ACCESS </Text>
+            <Text button white>
+              {' '}
+              ALLOW MICROPHONE ACCESS{' '}
+            </Text>
           </Button>
           <Dots
             isLight={true}
@@ -133,41 +154,49 @@ class Onboarding extends Component {
         />
         <Block flex={false} center middle style={{marginBottom: 20}}>
           <LottieView
-            style={{width: width * 0.6}}
+            style={{width: width * 0.5}}
             source={require('../assets/anims/womanonphone.json')}
             autoPlay
             loop
           />
         </Block>
-        <Block flex={false} style={{paddingHorizontal: '15%'}}>
-          <Text h2 black center style={{marginBottom: 40}}>
+        <Block flex={false} style={{paddingHorizontal: '5%'}}>
+          <Text h2 black center style={{marginBottom: 20}}>
             Share with friends and family.
           </Text>
-          <Text title black center>
-            Receive a daily Bible Verse and share with your friends to spread the word of God.
+          <Text black center>
+            Receive a daily Bible Verse and share with your friends to spread
+            the word of God.
           </Text>
         </Block>
         <Block
           flex={false}
           center
-          style={[styles.paginationRow, {height: '20%'}]}>
-          <Block flex={false} row style={{width: '80%', height: '50%'}}>
+          justifyContent={'flex-end'}
+          style={[styles.paginationRow, {height: '25%'}]}>
+          <Block flex={false} row style={{width: '80%'}}>
             <Button
               style={[styles.buttonStyle, {width: '50%', marginBottom: 0}]}
               onPress={() => this.props.navigation.navigate('EmailLogin')}>
-              <Text white> LOG IN  </Text>
+              <Text button white>
+                LOG IN
+              </Text>
             </Button>
             <Button
               style={[styles.buttonStyle, {width: '50%', marginBottom: 0}]}
               onPress={() => this.props.navigation.navigate('Register')}>
-              <Text white> SIGN UP </Text>
+              <Text button white>
+                SIGN UP
+              </Text>
             </Button>
           </Block>
 
           <Button
             style={[styles.buttonStyle, {backgroundColor: '#3b5998'}]}
             onPress={() => this.facebookLogin()}>
-            <Text white> OR CONTINUE WITH FACEBOOK </Text>
+            <Text button white>
+              OR CONTINUE WITH FACEBOOK
+            </Text>
           </Button>
           <Dots
             isLight={true}
@@ -181,18 +210,17 @@ class Onboarding extends Component {
     );
   }
 
-  requestPermissions(){
-    if (Platform.OS === 'android'){
+  requestPermissions() {
+    if (Platform.OS === 'android') {
       request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
         this.setState({screen: 2});
       });
     } else {
       request(PERMISSIONS.IOS.SPEECH_RECOGNITION).then(result => {
-       this.setState({screen: 2});
+        this.setState({screen: 2});
       });
     }
   }
-
 
   async facebookLogin() {
     try {
@@ -290,9 +318,10 @@ const Dot = ({isLight, selected}) => {
 const styles = StyleSheet.create({
   onboarding: {
     width: '100%',
-    flex: 1,
+    // flex: 1,
+    height: '100%',
     backgroundColor: theme.colors.bg,
-    paddingTop: '40%',
+    paddingTop: '30%',
   },
   container: {
     flex: 0,
@@ -308,7 +337,6 @@ const styles = StyleSheet.create({
   },
   paginationRow: {
     position: 'absolute',
-    height: '10%',
     bottom: '10%',
     width: '100%',
     paddingHorizontal: '10%',

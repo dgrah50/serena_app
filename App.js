@@ -91,12 +91,6 @@ export default function Container(props) {
     OneSignal.addEventListener('received', onReceived);
     OneSignal.addEventListener('opened', onOpened);
     OneSignal.addEventListener('ids', onIds);
-    OneSignal.checkPermissions(permissions => {
-      console.log(permissions);
-    });
-    OneSignal.getPermissionSubscriptionState(status => {
-      console.log(status);
-    });
     return function cleanup() {
       OneSignal.removeEventListener('received', onReceived);
       OneSignal.removeEventListener('opened', onOpened);
