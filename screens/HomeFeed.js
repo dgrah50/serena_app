@@ -102,6 +102,7 @@ export default class HomeFeed extends Component {
       this.state.recommendedPodcasts
     ) {
       // this.setState({isLoading: false});
+      firebase.analytics().setCurrentScreen('Result');
       isLoading = false;
     } else if (
       this.state.dailyVerse &&
@@ -109,6 +110,7 @@ export default class HomeFeed extends Component {
       this.state.recommendedSermons &&
       this.state.recommendedPodcasts
     ) {
+      firebase.analytics().setCurrentScreen('Discover');
       isLoading = false;
     }
     return isLoading ? (
@@ -143,10 +145,9 @@ export default class HomeFeed extends Component {
           <Text
             title
             black
-            spacing={1}
             style={{
               marginVertical: 8,
-              paddingHorizontal: theme.sizes.padding,
+              paddingLeft: theme.sizes.padding * 0.75,
             }}>
             Based on your viewing history
           </Text>
@@ -295,7 +296,7 @@ export default class HomeFeed extends Component {
                 verses={[verse]}
                 key={index}
                 index={index}
-                scroller={true}
+                scroller={this.state.verses.length > 1}
                 props={this.props}
               />
             ),
@@ -474,7 +475,8 @@ export default class HomeFeed extends Component {
           .map(item => {
             return this.logPodTrack(item, podcastImage);
           })
-          .filter(item => item != undefined);
+          .filter(item => item != undefined)
+          .filter(item => !item.title.includes('Islam'));
 
         podcastList = [...podcastList, ..._.sample(newcasts, 5)];
       }

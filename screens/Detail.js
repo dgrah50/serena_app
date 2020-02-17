@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {
-  View,
+Image,
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
@@ -49,6 +49,7 @@ export default class Detail extends Component {
               borderRadius: theme.sizes.border,
             }}>
             <TouchableOpacity
+              hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
               style={{
                 position: 'absolute',
                 top: 50,
@@ -58,12 +59,14 @@ export default class Detail extends Component {
                 name="arrow-left"
                 size={35}
                 color={theme.colors.white}
-                onPress={() =>
-                  {this.props.navigation.goBack();
-                   this.props.navigation.state.params.cardToggle(this.state.alreadyLiked)}
-                }></Icon>
+                onPress={() => {
+                  this.props.navigation.goBack();
+                  this.props.navigation.state.params.cardToggle(
+                    this.state.alreadyLiked,
+                  );
+                }}></Icon>
             </TouchableOpacity>
-            <Block flex={false}>
+            <Block flex={false} style={{paddingTop: '10%'}}>
               <Block flex={false} center>
                 <Transition shared={'versetext' + index}>
                   <Text h2 white center style={{marginVertical: 8}}>
@@ -77,6 +80,15 @@ export default class Detail extends Component {
                     {verse.bookname}
                   </Text>
                 </Transition>
+                <Image
+                  source={require('../assets/images/whiteicon.png')}
+                  resizeMode="cover"
+                  style={{
+                    height: 40,
+                    width: 40,
+                    bottom: 0,
+                  }}
+                />
               </Block>
             </Block>
             <Block
@@ -106,6 +118,7 @@ export default class Detail extends Component {
                     style={{marginLeft: 10}}></Icon>
                 </TouchableOpacity>
               </Transition>
+
               <Transition shared={'sharebutton' + index}>
                 <TouchableOpacity>
                   <Icon

@@ -149,8 +149,8 @@ android {
     applicationId "com.serenaltd.serena"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 1
-    versionName "1.0"
+    versionCode 2
+    versionName "1.0.1"
     manifestPlaceholders = [
       onesignal_app_id: '5e8397b0-56ae-422c-98e4-fbba0d7f6fbb',
       // Project number pulled from dashboard, local value is ignored.
@@ -168,12 +168,10 @@ android {
       keyPassword 'android'
     }
     release {
-//      if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-//        storeFile file(MYAPP_UPLOAD_STORE_FILE)
-//        storePassword MYAPP_UPLOAD_STORE_PASSWORD
-//        keyAlias MYAPP_UPLOAD_KEY_ALIAS
-//        keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-//      }
+      storeFile file('release.keystore')
+      storePassword 'sMacaroni13!'
+      keyAlias 'release_keystore'
+      keyPassword 'sMacaroni13!'
     }
     splits {
       abi {

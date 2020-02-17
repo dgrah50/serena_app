@@ -14,7 +14,6 @@ export function normalize(size) {
 }
 
 
-
 const colors = {
   accent: '#449CD6',
   primary: '#449CD6',
@@ -114,7 +113,7 @@ const fonts = {
     fontSize: sizes.h3,
   },
   header: {
-    fontFamily: 'Rubik-Bold',
+    fontFamily: 'Rubik-Light',
     fontSize: sizes.header,
   },
   title: {

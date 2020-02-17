@@ -40,6 +40,7 @@ export default class Fetch extends Component {
     };
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
     Voice.onSpeechError = this.onSpeechError.bind(this);
+    firebase.analytics().setCurrentScreen('Home');
     // firebase.auth().onAuthStateChanged(function(user) {
     //   if (user) {
     //     user.getIdToken().then(function(idToken) {
@@ -125,7 +126,7 @@ export default class Fetch extends Component {
                     alignItems: 'center',
                     height: '15%',
                   }}>
-                  <Text h2 white>
+                  <Text header white>
                     {' '}
                     What's on your mind?{' '}
                   </Text>
@@ -189,7 +190,7 @@ export default class Fetch extends Component {
                 return (
                   <Animatable.View
                     animation={'fadeInRight'}
-                    style={{paddingHorizontal: 5}}
+                    style={{paddingHorizontal: 5, paddingBottom:3}}
                     key={topic}>
                     <RNChipView
                       onPress={() => {
@@ -207,6 +208,7 @@ export default class Fetch extends Component {
               style={{
                 justifyContent: 'flex-start',
                 alignItems: 'center',
+                // paddingTop: 5,
               }}>
               <Icon
                 name={'times-circle'}

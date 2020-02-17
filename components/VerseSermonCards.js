@@ -80,7 +80,7 @@ export class VerseCard extends React.Component {
                 borderRadius: theme.sizes.border,
               }}
               source={theme.randomImages[imageIndex]}>
-              <Block flex={false} center middle style={{padding: 10}}>
+              <Block flex={false} center middle style={{padding: 10,marginBottom: 20}}>
                 <Block flex={false} center middle>
                   <Transition shared={'versetext' + index}>
                     <Text
@@ -105,7 +105,7 @@ export class VerseCard extends React.Component {
                 row
                 middle
                 justifyContent={'flex-start'}
-                style={{position: 'absolute', width: '100%', bottom: 20}}>
+                style={{ position: 'absolute', width: '100%', bottom: 10}}>
                 <Transition shared={'likebutton' + index}>
                   <TouchableOpacity>
                     <Icon
@@ -279,10 +279,10 @@ export function _renderSermon(item, idx, props, center = false) {
           center
           middle
           style={{
-            justifyContent: 'space-between',
+            justifyContent: 'flex-end',
             width: '100%',
           }}>
-          <Block flex={false} row center middle>
+          {/* <Block flex={false} row center middle>
             <Icon
               name="heart"
               size={20}
@@ -290,7 +290,7 @@ export function _renderSermon(item, idx, props, center = false) {
               style={{marginRight: 10}}
             />
             <Icon name="paper-plane" size={20} color={theme.colors.gray} />
-          </Block>
+          </Block> */}
           <Block flex={false} row center middle>
             <Text right title gray>
               {duration}

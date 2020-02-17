@@ -2,7 +2,12 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Platform, StatusBar, StyleSheet, View} from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 import firebase from 'react-native-firebase';
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, {
+  Capability,
+  useTrackPlayerEvents,
+  Event,
+  TrackMetadata,
+} from 'react-native-track-player';
 import axios from 'axios';
 import qs from 'qs';
 import OneSignal from 'react-native-onesignal';
@@ -26,6 +31,36 @@ export default function Container(props) {
     sermons: {current: null},
   });
   const didMountRef = useRef(false);
+  const events = [
+    Event.PlaybackError,
+    Event.RemotePause,
+    Event.RemoteNext,
+    Event.RemotePlay,
+    Event.RemotePause,
+    Event.RemoteStop,
+  ];
+  useTrackPlayerEvents(events, event => {
+    if (event.type === Event.PlaybackError) {
+      console.warn('An error occured while playing the current track.', event);
+    }
+    if (event.type === Event.RemoteNext) {
+      TrackPlayer.skipToNext();
+    }
+    if (event.type === Event.RemotePrevious) {
+      TrackPlayer.skipToPrevious();
+    }
+    if (event.type === Event.RemotePlay) {
+      console.log("play")
+      TrackPlayer.play();
+    }
+    if (event.type === Event.RemotePause) {
+       console.log('pause');
+      TrackPlayer.stop();
+    }
+    if (event.type === Event.RemoteStop) {
+      TrackPlayer.stop();
+    }
+  });
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function(user) {
@@ -54,6 +89,18 @@ export default function Container(props) {
           title: currentSongData.title,
           artist: currentSongData.author,
         });
+      });
+      TrackPlayer.updateOptions({
+        stopWithApp: false,
+        jumpInterval: 15,
+        capabilities: [
+          Capability.Play,
+          Capability.Pause,
+        ],
+        compactCapabilities: [
+          Capability.Play,
+          Capability.Pause,
+        ],
       });
     }
   });

@@ -35,14 +35,19 @@ export default class Favourites extends Component {
 
   render() {
     const header = (
-      <Block row center style={[styles.container, styles.header, {paddingLeft:30}]}>
+      <Block
+        row
+        center
+        style={[styles.container, styles.header, {paddingLeft: 30}]}>
         <Icon
+          hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
           name="arrow-left"
           size={35}
           color={theme.colors.black}
           onPress={() => {
             this.props.navigation.goBack(null);
-          }}/>
+          }}
+        />
         <Text
           h2
           black

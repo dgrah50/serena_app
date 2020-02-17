@@ -5,6 +5,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Block, Text, Card} from '../components';
@@ -28,15 +29,18 @@ export default function Player(props) {
 
   return (
     <View
-      style={{
-        width: '100%',
-        height: '60%',
-        bottom: 0,
-        position: 'absolute',
-        borderTopLeftRadius: theme.sizes.border,
-        borderTopRightRadius: theme.sizes.border,
-        backgroundColor: theme.colors.white,
-      }}>
+      style={[
+        {
+          width: '100%',
+          height: '60%',
+          bottom: 0,
+          position: 'absolute',
+          borderTopLeftRadius: theme.sizes.border,
+          borderTopRightRadius: theme.sizes.border,
+          backgroundColor: theme.colors.white,
+        },
+        Platform.OS === 'android' && {height: '100%'},
+      ]}>
       {_renderHeader()}
       {_renderControlCard()}
       {/* {_renderFooter()} */}
@@ -107,15 +111,14 @@ export default function Player(props) {
           flex={false}
           middle
           center
-          space={'between'}
           style={{
             bottom: 0,
             flexDirection: 'row',
             marginHorizontal: '10%',
           }}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Icon color={theme.colors.black} name="step-backward" size={40} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             onPress={() => {
@@ -123,9 +126,9 @@ export default function Player(props) {
             }}>
             <Icon color={theme.colors.black} name={iconPlay} size={80} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Icon color={theme.colors.black} name="step-forward" size={40} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </Block>
       </React.Fragment>
     );
@@ -142,8 +145,18 @@ export default function Player(props) {
             marginHorizontal: '5%',
             backgroundColor: theme.colors.white,
             width: '90%',
-            height: 100,
+            height: height*0.1,
           }}>
+          {(Platform.OS === 'android') &&    <Icon
+          hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
+          name="arrow-left"
+          size={25}
+          style={{ position:"absolute", left:0,top:10}}
+          color={theme.colors.black}
+          onPress={() => {
+            navigation.goBack(null);
+          }}
+        />}
           <View style={{height:6, borderRadius:3, width:width*0.3, top:0, backgroundColor:"black", marginHorizontal:width*0.2, marginTop:5, marginBottom:15}}/>
           <Text center bold middle h3 black>
             {currentSongData.title}
@@ -163,27 +176,32 @@ export default function Player(props) {
         middle
         shadow>
         <Block flex={false} center middle>
-          <Image
-            style={{
-              width: width * 0.3,
-              height: width * 0.3,
-              shadowColor: 'black',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-            }}
-            source={{uri: currentSongData.speakerimg}}
-          />
+          <Block flex={false} row  center style={{width:"100%"}}>
+            <Image
+              style={{
+                width: width * 0.2,
+                height: width * 0.2,
+                shadowColor: 'black',
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+              }}
+              source={{uri: currentSongData.speakerimg}}
+            />
+            <Block flex={false} style={{width: width * 0.7}}>
+              <Text center middle black title style={{paddingTop: 20}}>
+                {currentSongData.title}
+              </Text>
+              <Text black body center middle>
+                {currentSongData.author}
+              </Text>
+            </Block>
+          </Block>
         </Block>
-        <Text center middle black h3 style={{paddingTop: 20}}>
-          {currentSongData.title}
-        </Text>
-        <Text black title center middle>
-          {currentSongData.author}
-        </Text>
+
         {_renderPlayBackControls()}
       </Block>
     );
@@ -192,9 +210,9 @@ export default function Player(props) {
   //****** HELPER FUNCTONS SECTION
   function togglePlay() {
     if (State[playbackState] == 'Playing') {
-      TrackPlayer.pause();
+      TrackPlayer.pause()
     } else {
-      TrackPlayer.play();
+      TrackPlayer.play()
     }
   }
 }

@@ -60,15 +60,18 @@ class Onboarding extends Component {
             Welcome {'\n'} to Serena
           </Text>
           <Text black center>
-            Find the perfect Bible verse for you at instantly. Just say what's
-            on your mind.
+            We want to help every Christian feel closer to God, and live the
+            happiest, most fulfilling life.
           </Text>
         </Block>
         <Block flex={false} center middle style={styles.paginationRow}>
           <Button
             style={styles.buttonStyle}
             onPress={() => this.setState({screen: 1})}>
-            <Text button white> CONTINUE </Text>
+            <Text button white>
+              {' '}
+              CONTINUE{' '}
+            </Text>
           </Button>
           <Dots
             isLight={true}
@@ -89,10 +92,7 @@ class Onboarding extends Component {
           source={require('../assets/images/Base/Logobig.png')}
           style={{height: 40, width: width, position: 'absolute', top: '10%'}}
         />
-        <Block
-          flex={false}
-          space={'between'}
-          style={{ height: height * 0.6}}>
+        <Block flex={false} space={'between'} style={{height: height * 0.6}}>
           <Block
             flex={false}
             center
@@ -108,18 +108,18 @@ class Onboarding extends Component {
               loop
             />
           </Block>
-          <Text h2 black center style={{margin: 20,}}>
+          <Text h2 black center style={{margin: 20}}>
             Personalised {'\n'} for You.
           </Text>
           <Block
             flex={false}
             style={{
-              padding: '5%',
+              padding: '2.5%',
               height: width * 0.5,
             }}>
             <Text black center>
-              Serena is designed to recommend sermons for you. Please allow
-              Serena to access your microphone to enable voice search.
+              Serena recommends Bible verses, sermons & podcasts just for you.
+              Enable microphone access, and you can even speak aloud to Serena.
             </Text>
           </Block>
         </Block>
