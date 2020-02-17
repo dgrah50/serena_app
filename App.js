@@ -6,7 +6,8 @@ import TrackPlayer, {
   Capability,
   useTrackPlayerEvents,
   Event,
-  TrackMetadata,
+  State,
+  usePlaybackState,
 } from 'react-native-track-player';
 import axios from 'axios';
 import qs from 'qs';
@@ -26,6 +27,7 @@ export default function Container(props) {
   const [authTokenSet, setAuthTokenStatus] = useState(false);
   const [StreamToken, setStreamToken] = useState(null);
   const [tabBarVisible, showTabBar] = useState(false);
+  const playbackState = usePlaybackState();
   const [recommendedVerses, setRecs] = useState({
     verses: null,
     sermons: {current: null},
@@ -50,15 +52,21 @@ export default function Container(props) {
       TrackPlayer.skipToPrevious();
     }
     if (event.type === Event.RemotePlay) {
-      console.log("play")
-      TrackPlayer.play();
+      console.log('play');
+      if (State[playbackState] != 'Playing') {
+        TrackPlayer.play();
+      }
     }
     if (event.type === Event.RemotePause) {
-       console.log('pause');
-      TrackPlayer.stop();
+      console.log('pause');
+      if (State[playbackState] == 'Playing') {
+        TrackPlayer.pause();
+      }
     }
     if (event.type === Event.RemoteStop) {
-      TrackPlayer.stop();
+      if (State[playbackState] == 'Playing') {
+        TrackPlayer.stop();
+      }
     }
   });
 
@@ -93,14 +101,9 @@ export default function Container(props) {
       TrackPlayer.updateOptions({
         stopWithApp: false,
         jumpInterval: 15,
-        capabilities: [
-          Capability.Play,
-          Capability.Pause,
-        ],
-        compactCapabilities: [
-          Capability.Play,
-          Capability.Pause,
-        ],
+        capabilities: [Capability.Play, Capability.Pause],
+        notificationCapabilities: [Capability.Play, Capability.Pause],
+        compactCapabilities: [Capability.Play, Capability.Pause],
       });
     }
   });
@@ -132,7 +135,7 @@ export default function Container(props) {
 
   useEffect(() => {
     OneSignal.setLogLevel(6, 0);
-    OneSignal.init('5e8397b0-56ae-422c-98e4-fbba0d7f6fbb') // set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
+    OneSignal.init('5e8397b0-56ae-422c-98e4-fbba0d7f6fbb'); // set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
     OneSignal.setSubscription(true);
     OneSignal.inFocusDisplaying(2);
     OneSignal.addEventListener('received', onReceived);
@@ -149,14 +152,14 @@ export default function Container(props) {
   };
 
   const onOpened = openResult => {
-    console.log('Message: ', openResult.notification.payload.body);
-    console.log('Data: ', openResult.notification.payload.additionalData);
-    console.log('isActive: ', openResult.notification.isAppInFocus);
-    console.log('openResult: ', openResult);
+    // console.log('Message: ', openResult.notification.payload.body);
+    // console.log('Data: ', openResult.notification.payload.additionalData);
+    // console.log('isActive: ', openResult.notification.isAppInFocus);
+    // console.log('openResult: ', openResult);
   };
 
   const onIds = device => {
-    console.log('Device info: ', device);
+    // console.log('Device info: ', device);
   };
   return (
     <View style={styles.container}>

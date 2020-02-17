@@ -307,7 +307,7 @@ export default class HomeFeed extends Component {
   _renderRelatedSermons() {
     return (
       <Block>
-        <Text
+        { this.state.sermons.length>0 &&<Text
           h2
           black
           spacing={1}
@@ -316,7 +316,7 @@ export default class HomeFeed extends Component {
             paddingHorizontal: theme.sizes.padding,
           }}>
           Related Sermons
-        </Text>
+        </Text>}
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -476,7 +476,12 @@ export default class HomeFeed extends Component {
             return this.logPodTrack(item, podcastImage);
           })
           .filter(item => item != undefined)
-          .filter(item => !item.title.includes('Islam'));
+          .filter(item => !item.title.includes('Islam'))
+          .filter(item => !item.title.includes('Hindu'))
+          .filter(item => !item.title.includes('Jew'))
+          .filter(item => !item.title.includes('Judaism'))
+          .filter(item => !item.title.includes('Homosexuality'))
+          .filter(item => !item.title.includes('Gay'))
 
         podcastList = [...podcastList, ..._.sample(newcasts, 5)];
       }

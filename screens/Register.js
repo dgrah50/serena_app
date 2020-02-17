@@ -44,6 +44,7 @@ class Register extends Component {
               full
               label="Full name"
               style={{marginBottom: 25}}
+              value={this.state.name}
               onChangeTextHandler={this.nameTextHandler}
             />
             <Input
@@ -103,7 +104,11 @@ class Register extends Component {
   };
   nameTextHandler = e => {
     this.setState({
-      name: e,
+      name: e
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' '),
     });
   };
   async onSignupPress() {
@@ -125,9 +130,12 @@ class Register extends Component {
             .doc(firebase.auth().currentUser.uid)
             .collection('Info');
           try {
-            firestoreref.doc('fullName').set({
-              fullname: this.state.name,
-            }).then()
+            firestoreref
+              .doc('fullName')
+              .set({
+                fullname: this.state.name,
+              })
+              .then();
             firestoreref.doc('groups').set(
               {
                 subscribed: firebase.firestore.FieldValue.arrayUnion('Serena'),

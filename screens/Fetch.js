@@ -190,7 +190,7 @@ export default class Fetch extends Component {
                 return (
                   <Animatable.View
                     animation={'fadeInRight'}
-                    style={{paddingHorizontal: 5, paddingBottom:3}}
+                    style={{paddingHorizontal: 5, paddingBottom: 3}}
                     key={topic}>
                     <RNChipView
                       onPress={() => {
@@ -373,6 +373,7 @@ export default class Fetch extends Component {
 
   //****** HELPER FUNCTIONS SECTION
   apiCall(query) {
+    firebase.analytics().logEvent('Search');
     this.setState({fetched: false});
     axios
       .post(
