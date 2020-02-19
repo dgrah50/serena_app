@@ -64,6 +64,7 @@ export default class HomeFeed extends React.PureComponent {
 
   componentDidMount() {
     console.log(firebase.auth().currentUser.uid);
+    // this.sectionListRef.scrollToOffset({animated: true, offset: 0});
     try {
       if (this.props.navigation.getParam('response') != undefined) {
         this.fetchPodcasts(
@@ -141,6 +142,10 @@ export default class HomeFeed extends React.PureComponent {
         {this._renderHeader()}
         <SectionList
           sections={this.state.sectionlistdata}
+          ref={ref => {
+            this.sectionListRef = ref;
+          }}
+          // keyExtractor={item => item.osis ? item.osis : item.title}
           renderItem={({item, index}) => this._whichCard(item, index)}
           stickySectionHeadersEnabled={false}
           onEndReached={this._handleLoadMore}
@@ -207,8 +212,8 @@ export default class HomeFeed extends React.PureComponent {
   }
   _renderRecommendedSermon(item, index, prps) {
     return (
-      <Block center middle>
-        {_renderSermon(item, index, prps, true)}
+      <Block center middle key={index}>
+        {_renderSermon(item, index+2, prps, true)}
       </Block>
     );
   }
@@ -315,10 +320,12 @@ export default class HomeFeed extends React.PureComponent {
       return this._renderRecommendedSermon(item, index, this.props);
     } else if (item.hasOwnProperty('osis')) {
       if (item.osis.includes('VOD')) {
-        return [
-          this._renderRecommendedVerse(item, 1),
-          this._renderFavouritesButton(),
-        ];
+        return (
+          <Block key={index}>
+            {this._renderRecommendedVerse(item, 1)}
+            {this._renderFavouritesButton()}
+          </Block>
+        );
       } else {
         return this._renderRecommendedVerse(item, index);
       }
