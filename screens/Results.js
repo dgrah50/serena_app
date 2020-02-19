@@ -120,7 +120,6 @@ export default class Results extends Component {
             this.state.podcasts &&
             this._renderRelatedPodcasts()}
           {this._renderFavouritesButton()}
-          <View style={styles.hLine} />
         </ScrollView>
       </View>
     );
@@ -162,7 +161,6 @@ export default class Results extends Component {
       </Block>
     );
   }
-
   _renderSearchResults() {
     return (
       <ScrollView

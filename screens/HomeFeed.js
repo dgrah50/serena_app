@@ -5,6 +5,7 @@ import {
   Dimensions,
   View,
   TouchableOpacity,
+  SectionList,
 } from 'react-native';
 import axios from 'axios';
 import qs from 'qs';
@@ -83,6 +84,7 @@ export default class HomeFeed extends Component {
           }),
         )
         .then(res => {
+          console.log(res.data);
           this.setState({
             recommendedSermons: res.data.sermons.current,
             recommendedVerses: res.data.verses,
@@ -98,6 +100,7 @@ export default class HomeFeed extends Component {
 
   render() {
     let isLoading = true;
+    let sectionlistdata = null;
     if (
       this.state.dailyVerse &&
       this.state.recommendedVerses &&
@@ -106,6 +109,20 @@ export default class HomeFeed extends Component {
     ) {
       firebase.analytics().setCurrentScreen('Discover');
       isLoading = false;
+      sectionlistdata = [
+        {
+          title: 'Verse Of The Day',
+          data: this.state.dailyVerse,
+        },
+        {
+          title: 'Serena Recommends',
+          data: _.shuffle(
+            this.state.recommendedPodcasts
+              .concat(this.state.recommendedVerses)
+              .concat(this.state.recommendedSermons),
+          ),
+        },
+      ];
     }
     return isLoading ? (
       this._renderLoadingPlaceHolder()
@@ -128,36 +145,42 @@ export default class HomeFeed extends Component {
           </Body>
           <Right />
         </Header>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Text
-            h3
-            black
-            spacing={1}
-            style={{
-              marginVertical: 8,
-              paddingHorizontal: theme.sizes.padding,
-            }}>
-            Verse Of The Day
-          </Text>
-
-          {this.state.dailyVerse && this._renderDailyVerse()}
-          {this._renderFavouritesButton()}
-          <View style={styles.hLine} />
-          <Text
-            title
-            black
-            style={{
-              marginVertical: 8,
-              paddingLeft: theme.sizes.padding * 0.75,
-            }}>
-            Serena recommends
-          </Text>
-          {this.state.recommendedVerses && this._renderRecommendedVerses()}
-          {this.state.recommendedSermons && this._renderRecommendedSermons()}
-          {this.state.recommendedPodcasts && this._renderRecommendedPodcasts()}
-        </ScrollView>
+        <SectionList
+          sections={sectionlistdata}
+          renderItem={({item, index}) => this._whichCard(item, index)}
+          stickySectionHeadersEnabled={false}
+          renderSectionHeader={({section: {title}}) => (
+            <Text
+              h3
+              black
+              style={{
+                marginVertical: 8,
+                paddingHorizontal: theme.sizes.padding,
+              }}>
+              {title}
+            </Text>
+          )}
+        />
       </View>
     );
+  }
+
+  _whichCard(item, index) {
+    console.log(item);
+    if (item.hasOwnProperty('title')) {
+      return this._renderRecommendedSermon(item, index, this.props);
+    } else if (item.hasOwnProperty('osis')) {
+      if (item.osis.includes('VOD')) {
+        return (
+          [
+            this._renderRecommendedVerse(item, index),
+            this._renderFavouritesButton()]
+          
+        );
+      } else {
+        return this._renderRecommendedVerse(item, index);
+      }
+    }
   }
 
   //****** SUB COMPONENTS SECTION
@@ -209,35 +232,24 @@ export default class HomeFeed extends Component {
       />
     );
   }
-  _renderRecommendedVerses() {
-    return this.state.recommendedVerses.map((verse, index) => {
-      return (
-        <VerseCard
-          likedosis={this.state.likedosis}
-          imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
-          verses={[verse]}
-          index={index + 3}
-          key={index + 3}
-          scroller={false}
-          props={this.props}
-        />
-      );
-    });
-  }
-  _renderRecommendedSermons() {
+  _renderRecommendedVerse(verse, index) {
     return (
-      <Block>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            marginVertical: 8,
-            paddingHorizontal: theme.sizes.padding,
-          }}>
-          {this.state.recommendedSermons.map((sermon, idx) => {
-            return _renderSermon(sermon, idx, this.props);
-          })}
-        </ScrollView>
+      <VerseCard
+        likedosis={this.state.likedosis}
+        imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
+        verses={[verse]}
+        index={index + 3}
+        key={index + 3}
+        scroller={false}
+        props={this.props}
+      />
+    );
+    s;
+  }
+  _renderRecommendedSermon(item, index, prps) {
+    return (
+      <Block center middle>
+        {_renderSermon(item, index, prps, true)}
       </Block>
     );
   }
@@ -258,28 +270,7 @@ export default class HomeFeed extends Component {
       </Block>
     );
   }
-  _renderSOD() {
-    return (
-      <Block>
-        <Text
-          h3
-          black
-          spacing={1}
-          style={{
-            paddingHorizontal: theme.sizes.padding,
-            marginBottom: 8,
-          }}>
-          Sermon Of The Day
-        </Text>
-        <View
-          style={{
-            paddingHorizontal: theme.sizes.padding,
-          }}>
-          {_renderSermon(this.state.recommendedSermons[2], 2, this.props, true)}
-        </View>
-      </Block>
-    );
-  }
+
   _renderFavouritesButton() {
     return (
       <TouchableOpacity
