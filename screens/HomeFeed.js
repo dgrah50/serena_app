@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   SectionList,
+  ActivityIndicator,
 } from 'react-native';
 import axios from 'axios';
 import qs from 'qs';
@@ -32,7 +33,7 @@ import {
   Subtitle,
 } from 'native-base';
 
-export default class HomeFeed extends Component {
+export default class HomeFeed extends React.PureComponent {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Feed',
@@ -49,9 +50,12 @@ export default class HomeFeed extends Component {
       recommendedPodcasts: null,
       recommendedVerses: null,
       recommendedSermons: null,
+      nexttopics: null,
       dailyVerse: null,
       likedosis: null,
       isLoading: true,
+      isFetching: false,
+      sectionlistdata: null,
     };
 
     this.fetchDailyVerse();
@@ -88,6 +92,7 @@ export default class HomeFeed extends Component {
           this.setState({
             recommendedSermons: res.data.sermons.current,
             recommendedVerses: res.data.verses,
+            nexttopics: res.data.nexttopics,
           });
           console.log(res.data.keyword);
           this.fetchPodcasts(res.data.keyword, false);
@@ -98,89 +103,56 @@ export default class HomeFeed extends Component {
     }
   }
 
-  render() {
-    let isLoading = true;
-    let sectionlistdata = null;
-    if (
-      this.state.dailyVerse &&
-      this.state.recommendedVerses &&
-      this.state.recommendedSermons &&
-      this.state.recommendedPodcasts
-    ) {
-      firebase.analytics().setCurrentScreen('Discover');
-      isLoading = false;
-      sectionlistdata = [
-        {
-          title: 'Verse Of The Day',
-          data: this.state.dailyVerse,
-        },
-        {
-          title: 'Serena Recommends',
-          data: _.shuffle(
-            this.state.recommendedPodcasts
-              .concat(this.state.recommendedVerses)
-              .concat(this.state.recommendedSermons),
-          ),
-        },
-      ];
+  componentDidUpdate() {
+    if (this.state.isLoading) {
+      if (
+        this.state.dailyVerse &&
+        this.state.recommendedVerses &&
+        this.state.recommendedSermons &&
+        this.state.recommendedPodcasts
+      ) {
+        firebase.analytics().setCurrentScreen('Discover');
+        this.setState((prevState, nextProps) => ({
+          isLoading: false,
+          sectionlistdata: [
+            {
+              title: 'Verse Of The Day',
+              data: prevState.dailyVerse,
+            },
+            {
+              title: 'Serena Recommends',
+              data: _.shuffle(
+                prevState.recommendedPodcasts
+                  .concat(prevState.recommendedVerses)
+                  .concat(prevState.recommendedSermons),
+              ),
+            },
+          ],
+        }));
+      }
     }
-    return isLoading ? (
+  }
+
+  render() {
+    return this.state.isLoading ? (
       this._renderLoadingPlaceHolder()
     ) : (
       <View style={styles.welcome}>
-        <Header>
-          <Left>
-            <Icon
-              name="chevron-left"
-              size={25}
-              style={{paddingLeft: 10}}
-              color={theme.colors.black}
-              onPress={() => {
-                this.props.navigation.navigate('Pray');
-              }}
-            />
-          </Left>
-          <Body>
-            <Title>Discover</Title>
-          </Body>
-          <Right />
-        </Header>
+        {this._renderHeader()}
         <SectionList
-          sections={sectionlistdata}
+          sections={this.state.sectionlistdata}
           renderItem={({item, index}) => this._whichCard(item, index)}
           stickySectionHeadersEnabled={false}
-          renderSectionHeader={({section: {title}}) => (
-            <Text
-              h3
-              black
-              style={{
-                marginVertical: 8,
-                paddingHorizontal: theme.sizes.padding,
-              }}>
-              {title}
-            </Text>
-          )}
+          onEndReached={this._handleLoadMore}
+          onEndReachedThreshold={0.5}
+          showsHorizontalScrollIndicator={false}
+          ListFooterComponent={this._renderListFooter}
+          renderSectionHeader={({section: {title}}) =>
+            this._renderSectionHeader(title)
+          }
         />
       </View>
     );
-  }
-
-  _whichCard(item, index) {
-    console.log(item);
-    if (item.hasOwnProperty('title')) {
-      return this._renderRecommendedSermon(item, index, this.props);
-    } else if (item.hasOwnProperty('osis')) {
-      if (item.osis.includes('VOD')) {
-        return (
-          [
-            this._renderRecommendedVerse(item, index),
-            this._renderFavouritesButton()]
-          
-        );
-      } else {
-        return this._renderRecommendedVerse(item, index);
-      }
-    }
   }
 
   //****** SUB COMPONENTS SECTION
@@ -219,27 +191,14 @@ export default class HomeFeed extends Component {
       </Block>
     );
   }
-  _renderDailyVerse() {
-    return (
-      <VerseCard
-        likedosis={this.state.likedosis}
-        imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
-        verses={this.state.dailyVerse}
-        index={2}
-        key={2}
-        scroller={false}
-        props={this.props}
-      />
-    );
-  }
   _renderRecommendedVerse(verse, index) {
     return (
       <VerseCard
         likedosis={this.state.likedosis}
         imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
         verses={[verse]}
-        index={index + 3}
-        key={index + 3}
+        index={index + 2}
+        key={index + 2}
         scroller={false}
         props={this.props}
       />
@@ -253,24 +212,13 @@ export default class HomeFeed extends Component {
       </Block>
     );
   }
-  _renderRecommendedPodcasts() {
+  _renderRecommendedPodcast() {
     return (
-      <Block>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            marginVertical: 8,
-            paddingHorizontal: theme.sizes.padding,
-          }}>
-          {this.state.recommendedPodcasts.map((podcast, idx) => {
-            return _renderSermon(podcast, idx, this.props);
-          })}
-        </ScrollView>
+      <Block center middle>
+        {_renderSermon(item, index, prps, true)}
       </Block>
     );
   }
-
   _renderFavouritesButton() {
     return (
       <TouchableOpacity
@@ -309,9 +257,73 @@ export default class HomeFeed extends Component {
       </TouchableOpacity>
     );
   }
+  _renderHeader() {
+    return (
+      <Header>
+        <Left>
+          <Icon
+            name="chevron-left"
+            size={25}
+            style={{paddingLeft: 10}}
+            color={theme.colors.black}
+            onPress={() => {
+              this.props.navigation.navigate('Pray');
+            }}
+          />
+        </Left>
+        <Body>
+          <Title>Discover</Title>
+        </Body>
+        <Right />
+      </Header>
+    );
+  }
+  _renderSectionHeader(title) {
+    return (
+      <Text
+        h3
+        black
+        style={{
+          marginVertical: 8,
+          paddingHorizontal: theme.sizes.padding,
+        }}>
+        {title}
+      </Text>
+    );
+  }
+  _renderListFooter = () => {
+    if (!this.state.isFetching) return null;
 
+    return (
+      <Block
+        center
+        middle
+        style={{
+          width: '100%',
+          height: '100%',
+          paddingVertical: 20,
+          marginTop: 10,
+          marginBottom: 10,
+        }}>
+        <ActivityIndicator animating size="large" />
+      </Block>
+    );
+  };
   //****** HELPER FUNCTIONS SECTION
-
+  _whichCard(item, index) {
+    if (item.hasOwnProperty('title')) {
+      return this._renderRecommendedSermon(item, index, this.props);
+    } else if (item.hasOwnProperty('osis')) {
+      if (item.osis.includes('VOD')) {
+        return [
+          this._renderRecommendedVerse(item, 1),
+          this._renderFavouritesButton(),
+        ];
+      } else {
+        return this._renderRecommendedVerse(item, index);
+      }
+    }
+  }
   fetchDailyVerse() {
     axios.get('https://beta.ourmanna.com/api/v1/get/?format=json').then(res => {
       this.setState({
@@ -426,6 +438,63 @@ export default class HomeFeed extends Component {
         console.log('Error getting documents', err);
       });
   }
+  _handleLoadMore = () => {
+    this.setState(
+      (prevState, nextProps) => ({
+        isFetching: true,
+      }),
+      () => {
+        this._fetchMoreContent();
+      },
+    );
+  };
+  _fetchMoreContent = () => {
+    let randomTopic = _.sample(this.state.nexttopics).word;
+    console.log(randomTopic);
+    axios
+      .post(
+        // 'https://serenaengine333.co.uk/api/verses/recs',
+        'http://localhost:8000/api/verses',
+        qs.stringify({
+          content: randomTopic,
+          userID: firebase.auth().currentUser.uid.toString(),
+          log: false,
+        }),
+      )
+      .then(res => {
+        console.log('fetched new');
+        console.log(res.data);
+        this.setState({
+          recommendedSermons: res.data.sermons.current,
+          recommendedVerses: res.data.verses,
+          nexttopics: res.data.nexttopics,
+        });
+        this.fetchPodcasts(res.data.keyword, false).then(() => {
+          this.setState((prevState, nextProps) => ({
+            isFetching: false,
+            sectionlistdata: [
+              {
+                title: 'Verse Of The Day',
+                data: prevState.dailyVerse,
+              },
+              {
+                title: 'Serena Recommends',
+                data: prevState.sectionlistdata[1].data.concat(
+                  _.shuffle(
+                    prevState.recommendedPodcasts
+                      .concat(prevState.recommendedVerses)
+                      .concat(prevState.recommendedSermons),
+                  ),
+                ),
+              },
+            ],
+          }));
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 }
 
 const styles = StyleSheet.create({

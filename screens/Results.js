@@ -113,7 +113,6 @@ export default class Results extends Component {
             }}>
             {this.state.verses ? 'Related Verses' : 'Verse Of The Day'}
           </Text>
-
           {this.state.verses && this._renderSearchResults()}
           {this.state.sermons && this._renderRelatedSermons()}
           {this.state.verses &&

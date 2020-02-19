@@ -33,6 +33,10 @@ export class VerseCard extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.alreadyLiked !== this.state.alreadyLiked;
+  }
+
   cardToggle = val => {
     if (val != this.state.alreadyLiked) {
       this.setState({
@@ -46,10 +50,12 @@ export class VerseCard extends React.Component {
     return (
       <React.Fragment>
         <TouchableOpacity
-          style={ !scroller && {
-            // alignItems: !scroller && 'center',
-            alignItems:  'center',
-          }}
+          style={
+            !scroller && {
+              // alignItems: !scroller && 'center',
+              alignItems: 'center',
+            }
+          }
           onPress={() => {
             props.navigation.navigate('Detail', {
               verse: verses[0],
@@ -72,7 +78,11 @@ export class VerseCard extends React.Component {
                   padding: 10,
                 },
                 scroller
-                  ? {width: WIDTH * 0.7, marginRight: 20, height: WIDTH * 0.5}
+                  ? {
+                      width: WIDTH * 0.7,
+                      marginRight: 20,
+                      height: WIDTH * 0.5,
+                    }
                   : {width: WIDTH * 0.9},
                 theme.shadow,
               ]}
@@ -80,7 +90,11 @@ export class VerseCard extends React.Component {
                 borderRadius: theme.sizes.border,
               }}
               source={theme.randomImages[imageIndex]}>
-              <Block flex={false} center middle style={{padding: 10,marginBottom: 20}}>
+              <Block
+                flex={false}
+                center
+                middle
+                style={{padding: 10, marginBottom: 20}}>
                 <Block flex={false} center middle>
                   <Transition shared={'versetext' + index}>
                     <Text
@@ -105,7 +119,11 @@ export class VerseCard extends React.Component {
                 row
                 middle
                 justifyContent={'flex-start'}
-                style={{ position: 'absolute', width: '100%', bottom: 10}}>
+                style={{
+                  position: 'absolute',
+                  width: '100%',
+                  bottom: 10,
+                }}>
                 <Transition shared={'likebutton' + index}>
                   <TouchableOpacity>
                     <Icon
@@ -209,14 +227,17 @@ export function _renderPodcast(track, props) {
 
 export function _renderSermon(item, idx, props, center = false) {
   if (
-    typeof item == 'undefined' 
+    typeof item == 'undefined'
     // typeof item.speakerimg == 'undefined' ||
     // typeof item.duration == 'undefined'
   ) {
     return null;
   }
-  let uri =  item.speakerimg != undefined ? item.speakerimg : "https://via.placeholder.com/150/449CD6/FFFFFF?text=Serena.com"
-  let speakerName = item.author ;
+  let uri =
+    item.speakerimg != undefined
+      ? item.speakerimg
+      : 'https://via.placeholder.com/150/449CD6/FFFFFF?text=Serena.com';
+  let speakerName = item.author;
   let duration = item.duration;
   const changeSong = props.screenProps.changeSong;
   return (
@@ -247,9 +268,7 @@ export function _renderSermon(item, idx, props, center = false) {
             borderRadius: theme.sizes.border,
           },
 
-          center
-            ? {width: WIDTH * 0.9}
-            : {width: WIDTH * 0.7, marginRight:20},
+          center ? {width: WIDTH * 0.9} : {width: WIDTH * 0.7, marginRight: 20},
           theme.shadow,
         ]}>
         <Block middle center row style={{marginBottom: 10}}>
