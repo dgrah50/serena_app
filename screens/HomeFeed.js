@@ -82,8 +82,8 @@ export default class HomeFeed extends React.PureComponent {
     if (!this.state.recommendedSermons || !this.state.recommendedSermons) {
       axios
         .post(
-          // 'https://serenaengine333.co.uk/api/verses/recs',
-          'http://localhost:8000/api/verses/recs',
+          'https://serenaengine333.co.uk/api/verses/recs',
+          // 'http://localhost:8000/api/verses/recs',
           qs.stringify({
             userID: firebase.auth().currentUser.uid,
           }),
@@ -145,10 +145,9 @@ export default class HomeFeed extends React.PureComponent {
           ref={ref => {
             this.sectionListRef = ref;
           }}
-          // keyExtractor={item => item.osis ? item.osis : item.title}
-          renderItem={({item, index}) => this._whichCard(item, index)}
+          renderItem={({item, index}) => this.whichCard(item, index)}
           stickySectionHeadersEnabled={false}
-          onEndReached={this._handleLoadMore}
+          onEndReached={this.handleLoadMore}
           onEndReachedThreshold={0.5}
           showsHorizontalScrollIndicator={false}
           ListFooterComponent={this._renderListFooter}
@@ -213,14 +212,14 @@ export default class HomeFeed extends React.PureComponent {
   _renderRecommendedSermon(item, index, prps) {
     return (
       <Block center middle key={index}>
-        {_renderSermon(item, index+2, prps, true)}
+        {_renderSermon(item, index + 2, prps, true)}
       </Block>
     );
   }
-  _renderRecommendedPodcast() {
+  _renderRecommendedPodcast(item, index, prps) {
     return (
       <Block center middle>
-        {_renderSermon(item, index, prps, true)}
+        {_renderPodcast(item, index, prps, true)}
       </Block>
     );
   }
@@ -315,8 +314,10 @@ export default class HomeFeed extends React.PureComponent {
     );
   };
   //****** HELPER FUNCTIONS SECTION
-  _whichCard(item, index) {
-    if (item.hasOwnProperty('title')) {
+  whichCard(item, index) {
+    if (item.hasOwnProperty('description')) {
+      return this._renderRecommendedPodcast(item, index, this.props);
+    } else if (item.hasOwnProperty('title')) {
       return this._renderRecommendedSermon(item, index, this.props);
     } else if (item.hasOwnProperty('osis')) {
       if (item.osis.includes('VOD')) {
@@ -445,23 +446,23 @@ export default class HomeFeed extends React.PureComponent {
         console.log('Error getting documents', err);
       });
   }
-  _handleLoadMore = () => {
+  handleLoadMore = () => {
     this.setState(
       (prevState, nextProps) => ({
         isFetching: true,
       }),
       () => {
-        this._fetchMoreContent();
+        this.fetchMoreContent();
       },
     );
   };
-  _fetchMoreContent = () => {
+  fetchMoreContent = () => {
     let randomTopic = _.sample(this.state.nexttopics).word;
     console.log(randomTopic);
     axios
       .post(
-        // 'https://serenaengine333.co.uk/api/verses/recs',
-        'http://localhost:8000/api/verses',
+        'https://serenaengine333.co.uk/api/verses/recs',
+        // 'http://localhost:8000/api/verses',
         qs.stringify({
           content: randomTopic,
           userID: firebase.auth().currentUser.uid.toString(),

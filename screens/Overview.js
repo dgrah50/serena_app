@@ -150,8 +150,8 @@ export default class Overview extends Component {
     this.setState({fetched: false});
     axios
       .post(
-        // 'https://serenaengine333.co.uk/api/verses',
-        'http://localhost:8000/api/verses',
+        'https://serenaengine333.co.uk/api/verses',
+        // 'http://localhost:8000/api/verses',
         qs.stringify({
           content: query,
           userID: firebase.auth().currentUser.uid.toString(),

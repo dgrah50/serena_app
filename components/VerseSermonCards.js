@@ -160,6 +160,7 @@ export class VerseCard extends React.Component {
     );
   }
 
+
   async toggleFavourites(verseText, bookText, osis) {
     osis = osis.toString();
     if (osis.length == 7) {
@@ -196,36 +197,31 @@ export class VerseCard extends React.Component {
   }
 }
 
-export function _renderPodcast(track, props) {
-  const links = Array.prototype.slice.call(track.getElementsByTagName('link'));
-
-  const titles = Array.prototype.slice.call(
-    track.getElementsByTagName('title'),
-  );
-  const descs = Array.prototype.slice.call(
-    track.getElementsByTagName('description'),
-  );
-  const images = Array.prototype.slice.call(track.getElementsByTagName('url'));
-  console.log(images);
-  return (
-    <View
-      key={links[0].childNodes[0].nodeValue}
-      style={{
-        paddingTop: 10,
-        paddingBottom: 10,
-      }}>
-      <Text
-        style={{
-          color: '#007afb',
-          fontSize: 18,
-        }}>
-        {titles[0].childNodes[0].nodeValue}
-      </Text>
-    </View>
-  );
+export function _renderPodcast(item, idx, props, center = false) {
+  return _renderSermon(item, idx, props, center, false);
 }
 
-export function _renderSermon(item, idx, props, center = false) {
+function formatDuration(duration) {
+  if (duration === undefined) {
+    return null;
+  }
+  if (duration.includes('min')) {
+    return duration;
+  } else if (duration.includes(':')) {
+    let dursplit = duration.split(':');
+    if (dursplit.length == 3) {
+      return duration.split(':')[1] + ' min';
+    } else if (dursplit.length == 2) {
+      return duration.split(':')[0] + ' min';
+    } else {
+      return duration;
+    }
+  } else {
+    return duration / 60 + 'min';
+  }
+}
+
+export function _renderSermon(item, idx, props, center = false, isSermon = true) {
   if (
     typeof item == 'undefined'
     // typeof item.speakerimg == 'undefined' ||
@@ -271,6 +267,11 @@ export function _renderSermon(item, idx, props, center = false) {
           center ? {width: WIDTH * 0.9} : {width: WIDTH * 0.7, marginRight: 20},
           theme.shadow,
         ]}>
+        <Block flex={false} row left style={{width:"100%", paddingBottom:5}}>
+          <Text left body gray>
+            { isSermon ? "Sermon" : "Podcast"} | {formatDuration(duration)}
+          </Text>
+        </Block>
         <Block middle center row style={{marginBottom: 10}}>
           <Image
             style={{
@@ -311,9 +312,6 @@ export function _renderSermon(item, idx, props, center = false) {
             <Icon name="paper-plane" size={20} color={theme.colors.gray} />
           </Block> */}
           <Block flex={false} row center middle>
-            <Text right title gray>
-              {duration}
-            </Text>
             <Block flex={false} row center middle style={styles.playButton}>
               <Text white>PLAY </Text>
               <Icon name="play" size={10} color={theme.colors.white} />
@@ -366,3 +364,4 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.gray2,
   },
 });
+
