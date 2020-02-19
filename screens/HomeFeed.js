@@ -21,6 +21,15 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
+import {
+  Container,
+  Header,
+  Left,
+  Body,
+  Right,
+  Title,
+  Subtitle,
+} from 'native-base';
 
 export default class HomeFeed extends Component {
   static navigationOptions = ({navigation}) => {
@@ -102,6 +111,23 @@ export default class HomeFeed extends Component {
       this._renderLoadingPlaceHolder()
     ) : (
       <View style={styles.welcome}>
+        <Header>
+          <Left>
+            <Icon
+              name="chevron-left"
+              size={25}
+              style={{paddingLeft: 10}}
+              color={theme.colors.black}
+              onPress={() => {
+                this.props.navigation.navigate('Pray');
+              }}
+            />
+          </Left>
+          <Body>
+            <Title>Discover</Title>
+          </Body>
+          <Right />
+        </Header>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text
             h3
@@ -137,7 +163,9 @@ export default class HomeFeed extends Component {
   //****** SUB COMPONENTS SECTION
   _renderLoadingPlaceHolder() {
     return (
-      <Block center style={styles.welcome}>
+      <Block
+        center
+        style={[styles.welcome, {paddingTop: 2 * theme.sizes.padding}]}>
         <ShimmerPlaceHolder
           autoRun={true}
           style={{
@@ -411,7 +439,7 @@ export default class HomeFeed extends Component {
 
 const styles = StyleSheet.create({
   welcome: {
-    paddingTop: 2 * theme.sizes.padding,
+    // paddingTop: 2 * theme.sizes.padding,
     backgroundColor: theme.colors.bg,
 
     flex: 1,

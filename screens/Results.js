@@ -6,8 +6,6 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import axios from 'axios';
-import qs from 'qs';
 import firebase from 'react-native-firebase';
 import {Block, Text} from '../components';
 import {theme, time} from '../constants';
@@ -21,6 +19,16 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
+import {
+  Container,
+  Header,
+  Left,
+  Body,
+  Right,
+  Title,
+  Subtitle,
+} from 'native-base';
+
 
 export default class Results extends Component {
   static navigationOptions = ({navigation}) => {
@@ -78,6 +86,22 @@ export default class Results extends Component {
       this._renderLoadingPlaceHolder()
     ) : (
       <View style={styles.welcome}>
+        <Header>
+          <Left>
+            <Icon
+              name="chevron-left"
+              size={25}
+              style={{paddingLeft: 10}}
+              color={theme.colors.black}
+              onPress={() => {
+                this.props.navigation.navigate("Pray");
+              }}/>
+          </Left>
+          <Body>
+            <Title>Results</Title>
+          </Body>
+          <Right />
+        </Header>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text
             h3
@@ -97,7 +121,6 @@ export default class Results extends Component {
             this._renderRelatedPodcasts()}
           {this._renderFavouritesButton()}
           <View style={styles.hLine} />
-
         </ScrollView>
       </View>
     );
@@ -106,7 +129,9 @@ export default class Results extends Component {
   //****** SUB COMPONENTS SECTION
   _renderLoadingPlaceHolder() {
     return (
-      <Block center style={styles.welcome}>
+      <Block
+        center
+        style={[styles.welcome, {paddingTop: 2 * theme.sizes.padding}]}>
         <ShimmerPlaceHolder
           autoRun={true}
           style={{
@@ -368,7 +393,6 @@ export default class Results extends Component {
 
 const styles = StyleSheet.create({
   welcome: {
-    paddingTop: 2 * theme.sizes.padding,
     backgroundColor: theme.colors.bg,
     // paddingHorizontal: theme.sizes.padding,
     flex: 1,
