@@ -58,6 +58,16 @@ export default class Fetch extends Component {
     header: null,
   };
 
+  // static navigationOptions = ({navigation}) => {
+  //   return {
+  //     title: 'Feed',
+  //     // headerTransparent: true,
+  //     headerTitleStyle: {
+  //       fontWeight: 'bold',
+  //     },
+  //   };
+  // };
+
   render() {
     return (
       <TouchableWithoutFeedback
@@ -190,7 +200,10 @@ export default class Fetch extends Component {
                 return (
                   <Animatable.View
                     animation={'fadeInRight'}
-                    style={{paddingHorizontal: 5, paddingBottom: 3}}
+                    style={{
+                      paddingHorizontal: 5,
+                      paddingBottom: 3,
+                    }}
                     key={topic}>
                     <RNChipView
                       onPress={() => {
@@ -377,8 +390,8 @@ export default class Fetch extends Component {
     this.setState({fetched: false});
     axios
       .post(
-        'https://serenaengine333.co.uk/api/verses',
-        // 'http://localhost:8000/api/verses',
+        // 'https://serenaengine333.co.uk/api/verses',
+        'http://localhost:8000/api/verses',
         qs.stringify({
           content: query,
           userID: firebase.auth().currentUser.uid.toString(),
@@ -391,7 +404,8 @@ export default class Fetch extends Component {
           listening: false,
           ringVisible: false,
         });
-        this.props.navigation.navigate('HomeFeed', {
+        console.log(response.data)
+        this.props.navigation.navigate('Results', {
           response: response.data,
         });
       })

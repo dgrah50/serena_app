@@ -2,31 +2,19 @@ import React from 'react';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FluidNavigator} from 'react-navigation-fluid-transitions';
-import {theme, mocks, time} from '../constants';
+import {theme} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomTabBar from '../components/CustomTabBar';
-import Overview from '../screens/Overview';
+
 import HomeFeed from '../screens/HomeFeed';
 import Detail from '../screens/Detail';
-import Groups from '../screens/Groups';
-import GroupFeed from '../screens/GroupFeed';
-import SinglePostScreen from '../screens/SinglePostScreen';
-import CreateGroup from '../screens/CreateGroup';
+import Results from '../screens/Results';
 import Profile from '../screens/Profile';
 import Fetch from '../screens/Fetch';
 import Favourites from '../screens/Favourites';
 
 export default createBottomTabNavigator(
   {
-    // Overview: {
-    //   screen: Overview,
-    //   navigationOptions: {
-    //     tabBarLabel: 'Home',
-    //     tabBarIcon: ({tintColor}) => (
-    //       <Icon name="home" size={25} color={tintColor} />
-    //     ),
-    //   },
-    // },
     Pray: {
       screen: createStackNavigator(
         {
@@ -42,21 +30,23 @@ export default createBottomTabNavigator(
               },
               {
                 initialRouteName: 'Pray',
+                // headerMode: 'none',
+                header: null,
               },
             ),
           },
-          HomeFeed: {
+          Results: {
             screen: FluidNavigator(
               {
-                HomeFeed: {
-                  screen: HomeFeed,
+                Results: {
+                  screen: Results,
                 },
                 Detail: {
                   screen: Detail,
                 },
               },
               {
-                initialRouteName: 'HomeFeed',
+                initialRouteName: 'Results',
               },
             ),
           },
@@ -78,12 +68,12 @@ export default createBottomTabNavigator(
         },
         {
           initialRouteName: 'Pray',
-          headerMode:'none'
+          headerMode: 'none',
         },
       ),
       navigationOptions: {
         tabBarLabel: 'Pray',
-        header: null,
+        // headerMode: 'none',
         tabBarIcon: ({tintColor}) => (
           <Icon name="home" size={25} color={tintColor} />
         ),
@@ -125,40 +115,10 @@ export default createBottomTabNavigator(
         ),
       },
     },
-
-    // Groups: {
-    //   screen: createStackNavigator(
-    //     {
-    //       Groups: {
-    //         screen: Groups,
-    //       },
-    //       GroupFeed: {
-    //         screen: GroupFeed,
-    //       },
-    //       SinglePostScreen: {
-    //         screen: SinglePostScreen,
-    //       },
-    //       CreateGroup: {
-    //         screen: CreateGroup,
-    //       },
-    //       Profile: {
-    //         screen: Profile,
-    //       },
-    //     },
-    //     {
-    //       initialRouteName: 'Groups',
-    //     },
-    //   ),
-    //   navigationOptions: {
-    //     tabBarLabel: 'Groups',
-    //     tabBarIcon: ({tintColor}) => (
-    //       <Icon name="comments" size={25} color={tintColor} />
-    //     ),
-    //   },
-    // },
   },
   {
-    initialRouteName: 'Discover',
+    initialRouteName: 'Pray',
+    headerMode: 'float',
     tabBarComponent: props => <CustomTabBar {...props} />,
     tabBarOptions: {
       activeTintColor: theme.colors.white,

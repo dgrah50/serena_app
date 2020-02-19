@@ -22,7 +22,7 @@ import {
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
 
-export default class HomeFeed extends Component {
+export default class Results extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Feed',
@@ -36,15 +36,13 @@ export default class HomeFeed extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recommendedPodcasts: null,
-      recommendedVerses: null,
-      recommendedSermons: null,
-      dailyVerse: null,
+      sermons: undefined,
+      verses: null,
+      podcasts: [],
       likedosis: null,
       isLoading: true,
     };
 
-    this.fetchDailyVerse();
     this.fetchLikes();
   }
 
@@ -64,40 +62,18 @@ export default class HomeFeed extends Component {
     } catch (error) {
       console.log(error);
     }
-    if (!this.state.recommendedSermons || !this.state.recommendedSermons) {
-      axios
-        .post(
-          // 'https://serenaengine333.co.uk/api/verses/recs',
-          'http://localhost:8000/api/verses/recs',
-          qs.stringify({
-            userID: firebase.auth().currentUser.uid,
-          }),
-        )
-        .then(res => {
-          this.setState({
-            recommendedSermons: res.data.sermons.current,
-            recommendedVerses: res.data.verses,
-          });
-          console.log(res.data.keyword);
-          this.fetchPodcasts(res.data.keyword, false);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
   }
 
   render() {
     let isLoading = true;
     if (
-      this.state.dailyVerse &&
-      this.state.recommendedVerses &&
-      this.state.recommendedSermons &&
-      this.state.recommendedPodcasts
+      this.state.verses &&
+      this.state.sermons &&
+      this.state.podcasts 
     ) {
-      firebase.analytics().setCurrentScreen('Discover');
+      firebase.analytics().setCurrentScreen('Result');
       isLoading = false;
-    }
+    } 
     return isLoading ? (
       this._renderLoadingPlaceHolder()
     ) : (
@@ -111,24 +87,17 @@ export default class HomeFeed extends Component {
               marginVertical: 8,
               paddingHorizontal: theme.sizes.padding,
             }}>
-            Verse Of The Day
+            {this.state.verses ? 'Related Verses' : 'Verse Of The Day'}
           </Text>
 
-          {this.state.dailyVerse && this._renderDailyVerse()}
+          {this.state.verses && this._renderSearchResults()}
+          {this.state.sermons && this._renderRelatedSermons()}
+          {this.state.verses &&
+            this.state.podcasts &&
+            this._renderRelatedPodcasts()}
           {this._renderFavouritesButton()}
           <View style={styles.hLine} />
-          <Text
-            title
-            black
-            style={{
-              marginVertical: 8,
-              paddingLeft: theme.sizes.padding * 0.75,
-            }}>
-            Serena recommends
-          </Text>
-          {this.state.recommendedVerses && this._renderRecommendedVerses()}
-          {this.state.recommendedSermons && this._renderRecommendedSermons()}
-          {this.state.recommendedPodcasts && this._renderRecommendedPodcasts()}
+
         </ScrollView>
       </View>
     );
@@ -168,37 +137,47 @@ export default class HomeFeed extends Component {
       </Block>
     );
   }
-  _renderDailyVerse() {
+
+  _renderSearchResults() {
     return (
-      <VerseCard
-        likedosis={this.state.likedosis}
-        imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
-        verses={this.state.dailyVerse}
-        index={2}
-        key={2}
-        scroller={false}
-        props={this.props}
-      />
+      <ScrollView
+        style={{width: '100%', marginLeft: 20}}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}>
+        {this.state.verses.map(
+          (verse, index) =>
+            this.state.likedosis && (
+              <VerseCard
+                likedosis={this.state.likedosis}
+                imageIndex={Math.floor(
+                  Math.random() * theme.randomImages.length,
+                )}
+                verses={[verse]}
+                key={index}
+                index={index}
+                scroller={this.state.verses.length > 1}
+                props={this.props}
+              />
+            ),
+        )}
+      </ScrollView>
     );
   }
-  _renderRecommendedVerses() {
-    return this.state.recommendedVerses.map((verse, index) => {
-      return (
-        <VerseCard
-          likedosis={this.state.likedosis}
-          imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
-          verses={[verse]}
-          index={index + 3}
-          key={index + 3}
-          scroller={false}
-          props={this.props}
-        />
-      );
-    });
-  }
-  _renderRecommendedSermons() {
+  _renderRelatedSermons() {
     return (
       <Block>
+        {this.state.sermons.length > 0 && (
+          <Text
+            h3
+            black
+            spacing={1}
+            style={{
+              marginVertical: 8,
+              paddingHorizontal: theme.sizes.padding,
+            }}>
+            Related Sermons
+          </Text>
+        )}
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -206,16 +185,28 @@ export default class HomeFeed extends Component {
             marginVertical: 8,
             paddingHorizontal: theme.sizes.padding,
           }}>
-          {this.state.recommendedSermons.map((sermon, idx) => {
+          {this.state.sermons.map((sermon, idx) => {
             return _renderSermon(sermon, idx, this.props);
           })}
         </ScrollView>
       </Block>
     );
   }
-  _renderRecommendedPodcasts() {
+  _renderRelatedPodcasts() {
     return (
       <Block>
+        {this.state.podcasts.length > 0 && (
+          <Text
+            h3
+            black
+            spacing={1}
+            style={{
+              marginVertical: 8,
+              paddingHorizontal: theme.sizes.padding,
+            }}>
+            Related Podcasts
+          </Text>
+        )}
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -223,32 +214,10 @@ export default class HomeFeed extends Component {
             marginVertical: 8,
             paddingHorizontal: theme.sizes.padding,
           }}>
-          {this.state.recommendedPodcasts.map((podcast, idx) => {
+          {this.state.podcasts.map((podcast, idx) => {
             return _renderSermon(podcast, idx, this.props);
           })}
         </ScrollView>
-      </Block>
-    );
-  }
-  _renderSOD() {
-    return (
-      <Block>
-        <Text
-          h3
-          black
-          spacing={1}
-          style={{
-            paddingHorizontal: theme.sizes.padding,
-            marginBottom: 8,
-          }}>
-          Sermon Of The Day
-        </Text>
-        <View
-          style={{
-            paddingHorizontal: theme.sizes.padding,
-          }}>
-          {_renderSermon(this.state.recommendedSermons[2], 2, this.props, true)}
-        </View>
       </Block>
     );
   }
@@ -293,19 +262,7 @@ export default class HomeFeed extends Component {
 
   //****** HELPER FUNCTIONS SECTION
 
-  fetchDailyVerse() {
-    axios.get('https://beta.ourmanna.com/api/v1/get/?format=json').then(res => {
-      this.setState({
-        dailyVerse: [
-          {
-            verse: res.data.verse.details.text,
-            bookname: res.data.verse.details.reference,
-            osis: time.DateNowOSIS,
-          },
-        ],
-      });
-    });
-  }
+
   logPodTrack = (track, podcastImage) => {
     const titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
@@ -413,11 +370,12 @@ const styles = StyleSheet.create({
   welcome: {
     paddingTop: 2 * theme.sizes.padding,
     backgroundColor: theme.colors.bg,
-
+    // paddingHorizontal: theme.sizes.padding,
     flex: 1,
   },
   // horizontal line
   hLine: {
+    // marginBottom: theme.sizes.base,
     marginHorizontal: WIDTH * 0.1,
     marginTop: 3,
     height: 1,
