@@ -288,7 +288,7 @@ export function _renderSermon(item, idx, props, center = false, isSermon = true)
             <Text title gray>
               {speakerName}
             </Text>
-            <Text h3 numberOfLines={2}>
+            <Text  numberOfLines={2}>
               {item.title}
             </Text>
           </Block>

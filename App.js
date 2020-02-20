@@ -21,6 +21,9 @@ const mocksong = {
   author: null,
   plays: null,
 };
+if (__DEV__) {
+  import('./ReactotronConfig');
+}
 
 export default function Container(props) {
   const [currentSongData, setCurrentSong] = useState(mocksong);

@@ -237,7 +237,7 @@ export default class Results extends Component {
             paddingHorizontal: theme.sizes.padding,
           }}>
           {this.state.podcasts.map((podcast, idx) => {
-            return _renderSermon(podcast, idx, this.props);
+            return _renderPodcast(podcast, idx, this.props);
           })}
         </ScrollView>
       </Block>
