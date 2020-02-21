@@ -101,7 +101,7 @@ export class VerseCard extends React.Component {
                       white
                       center
                       numberOfLines={3}
-                      style={{marginVertical: 8, fontSize: 24}}>
+                      style={{marginVertical: 8, fontSize: 20}}>
                       {verses[0].verse}
                     </Text>
                   </Transition>

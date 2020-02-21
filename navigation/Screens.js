@@ -13,107 +13,163 @@ import Profile from '../screens/Profile';
 import Fetch from '../screens/Fetch';
 import Favourites from '../screens/Favourites';
 
-export default createBottomTabNavigator(
+
+const prayStack = createStackNavigator(
   {
     Pray: {
       screen: createStackNavigator(
         {
           Pray: {
-            screen: createStackNavigator(
-              {
-                Pray: {
-                  screen: Fetch,
-                },
-                Profile: {
-                  screen: Profile,
-                },
-              },
-              {
-                initialRouteName: 'Pray',
-                // headerMode: 'none',
-                header: null,
-              },
-            ),
+            screen: Fetch,
           },
-          Results: {
-            screen: FluidNavigator(
-              {
-                Results: {
-                  screen: Results,
-                },
-                Detail: {
-                  screen: Detail,
-                },
-              },
-              {
-                initialRouteName: 'Results',
-              },
-            ),
-          },
-          Favourites: {
-            screen: FluidNavigator(
-              {
-                Favourites: {
-                  screen: Favourites,
-                },
-                Detail: {
-                  screen: Detail,
-                },
-              },
-              {
-                initialRouteName: 'Favourites',
-              },
-            ),
+          Profile: {
+            screen: Profile,
           },
         },
         {
           initialRouteName: 'Pray',
-          headerMode: 'none',
+          // headerMode: 'none',
+          header: null,
         },
       ),
-      navigationOptions: {
-        tabBarLabel: 'Pray',
-        // headerMode: 'none',
-        tabBarIcon: ({tintColor}) => (
-          <Icon name="home" size={25} color={tintColor} />
-        ),
-      },
     },
-    Discover: {
+    Results: {
       screen: FluidNavigator(
         {
-          HomeFeed: {
-            screen: HomeFeed,
+          Results: {
+            screen: Results,
           },
           Detail: {
             screen: Detail,
-          },
-          Favourites: {
-            screen: FluidNavigator(
-              {
-                Favourites: {
-                  screen: Favourites,
-                },
-                Detail: {
-                  screen: Detail,
-                },
-              },
-              {
-                initialRouteName: 'Favourites',
-              },
-            ),
+            navigationOptions: {
+              tabBarVisible: false,
+              header: null,
+            },
           },
         },
         {
-          initialRouteName: 'HomeFeed',
+          initialRouteName: 'Results',
         },
       ),
-      navigationOptions: {
-        tabBarLabel: 'Discover',
-        tabBarIcon: ({tintColor}) => (
-          <Icon name="search" size={25} color={tintColor} />
+    },
+    Favourites: {
+      screen: FluidNavigator(
+        {
+          Favourites: {
+            screen: Favourites,
+          },
+          Detail: {
+            screen: Detail,
+            navigationOptions: {
+              tabBarVisible: false,
+              header: null,
+            },
+          },
+        },
+        {
+          initialRouteName: 'Favourites',
+        },
+      ),
+    },
+  },
+  {
+    initialRouteName: 'Pray',
+    headerMode: 'none',
+  },
+);
+
+const discoverStack =  FluidNavigator(
+    {
+      HomeFeed: {
+        screen: HomeFeed,
+      },
+      Detail: {
+        screen: Detail,
+        navigationOptions: {
+          tabBarVisible: false,
+          header: null,
+        },
+      },
+      Favourites: {
+        screen: FluidNavigator(
+          {
+            Favourites: {
+              screen: Favourites,
+            },
+            Detail: {
+              screen: Detail,
+              navigationOptions: {
+                tabBarVisible: false,
+                header: null,
+              },
+            },
+          },
+          {
+            initialRouteName: 'Favourites',
+          },
         ),
       },
+    },
+    {
+      initialRouteName: 'HomeFeed',
+    },
+  );
+
+function getDeepestRoute(route) {
+  if (!route.routes) return route.routeName;
+  return getDeepestRoute(route.routes[route.index]);
+}
+
+prayStack.navigationOptions = ({navigation}) => {
+  let tabBarVisible;
+  const deepestRoute = getDeepestRoute(navigation.state);
+  console.log(deepestRoute)
+  if (navigation.state.routes.length > 1) {
+    navigation.state.routes.map(route => {
+      if (deepestRoute == 'Detail') {
+        tabBarVisible = false;
+      } else {
+        tabBarVisible = true;
+      }
+    });
+  }
+  return {
+    tabBarVisible,
+    tabBarLabel: 'Pray',
+    tabBarIcon: ({tintColor}) => (
+      <Icon name="home" size={25} color={tintColor} />
+    ),
+  };
+};
+discoverStack.navigationOptions = ({navigation}) => {
+  let tabBarVisible;
+  const deepestRoute = getDeepestRoute(navigation.state);
+  console.log(deepestRoute);
+  if (navigation.state.routes.length > 1) {
+    navigation.state.routes.map(route => {
+      if (deepestRoute == 'Detail') {
+        tabBarVisible = false;
+      } else {
+        tabBarVisible = true;
+      }
+    });
+  }
+  return {
+    tabBarVisible,
+    tabBarLabel: 'Discover',
+    tabBarIcon: ({tintColor}) => (
+      <Icon name="search" size={25} color={tintColor} />
+    ),
+  };
+};
+
+const defaultStack = createBottomTabNavigator(
+  {
+    Pray: {
+      screen: prayStack,
+    },
+    Discover: {
+      screen: discoverStack,
     },
   },
   {
@@ -131,3 +187,31 @@ export default createBottomTabNavigator(
     },
   },
 );
+
+
+
+
+export default defaultStack;
+
+// StackHome.navigationOptions = ({ navigation }) => {
+//   let tabBarVisible;
+//   if (navigation.state.routes.length > 1) {
+//     navigation.state.routes.map(route => {
+//       if (route.routeName === "CustomHide") {
+//         tabBarVisible = false;
+//       } else {
+//         tabBarVisible = true;
+//       }
+//     }
+//   }
+// StackHome.navigationOptions = ({ navigation }) => {
+//   let tabBarVisible;
+//   if (navigation.state.routes.length > 1) {
+//     navigation.state.routes.map(route => {
+//       if (route.routeName === "CustomHide") {
+//         tabBarVisible = false;
+//       } else {
+//         tabBarVisible = true;
+//       }
+//     }
+//   }
