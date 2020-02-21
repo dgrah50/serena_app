@@ -347,12 +347,14 @@ export default class Results extends Component {
             return this.logPodTrack(item, podcastImage);
           })
           .filter(item => item != undefined)
-          .filter(item => !item.title.includes('Islam'))
-          .filter(item => !item.title.includes('Hindu'))
-          .filter(item => !item.title.includes('Jew'))
-          .filter(item => !item.title.includes('Judaism'))
-          .filter(item => !item.title.includes('Homosexuality'))
-          .filter(item => !item.title.includes('Gay'));
+          .filter(item => !item.title.toLowerCase().includes('islam'))
+          .filter(item => !item.title.toLowerCase().includes('muslim'))
+          .filter(item => !item.author.toLowerCase().includes('wallace'))
+          .filter(item => !item.title.toLowerCase().includes('hindu'))
+          .filter(item => !item.title.toLowerCase().includes('jew'))
+          .filter(item => !item.title.toLowerCase().includes('judaism'))
+          .filter(item => !item.title.toLowerCase().includes('homosexuality'))
+          .filter(item => !item.title.toLowerCase().includes('gay'));
 
         podcastList = [...podcastList, ..._.sample(newcasts, 5)];
       }

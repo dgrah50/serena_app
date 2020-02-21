@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
-  ScrollView,
   StyleSheet,
   Dimensions,
   View,
@@ -24,13 +23,11 @@ import {
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
 import {
-  Container,
   Header,
   Left,
   Body,
   Right,
   Title,
-  Subtitle,
 } from 'native-base';
 
 export default class HomeFeed extends React.PureComponent {
@@ -265,7 +262,7 @@ export default class HomeFeed extends React.PureComponent {
     return (
       <Header>
         <Left>
-          <Icon
+          {/* <Icon
             name="chevron-left"
             size={25}
             style={{paddingLeft: 10}}
@@ -273,7 +270,7 @@ export default class HomeFeed extends React.PureComponent {
             onPress={() => {
               this.props.navigation.navigate('Pray');
             }}
-          />
+          /> */}
         </Left>
         <Body>
           <Title>Discover</Title>
@@ -388,7 +385,7 @@ export default class HomeFeed extends React.PureComponent {
       const json = await result.json();
       let podcasts = json.results;
       sampleIndexs = _.sample([...Array(podcasts.length).keys()], 5);
-
+      console.log("hello")
       podcastList = [];
       let newcasts = null;
       for (const index in sampleIndexs) {
@@ -400,21 +397,23 @@ export default class HomeFeed extends React.PureComponent {
           'text/xml',
         );
         const items = podcastDocument.getElementsByTagName('item');
-
         newcasts = Array.prototype.slice
           .call(items)
           .map(item => {
             return this.logPodTrack(item, podcastImage);
           })
           .filter(item => item != undefined)
-          .filter(item => !item.title.includes('Islam'))
-          .filter(item => !item.title.includes('Hindu'))
-          .filter(item => !item.title.includes('Jew'))
-          .filter(item => !item.title.includes('Judaism'))
-          .filter(item => !item.title.includes('Homosexuality'))
-          .filter(item => !item.title.includes('Gay'));
-
+          .filter(item => !item.title.toLowerCase().includes('islam'))
+          .filter(item => !item.title.toLowerCase().includes('muslim'))
+          .filter(item => !item.author.toLowerCase().includes('wallace'))
+          .filter(item => !item.title.toLowerCase().includes('hindu'))
+          .filter(item => !item.title.toLowerCase().includes('jew'))
+          .filter(item => !item.title.toLowerCase().includes('judaism'))
+          .filter(item => !item.title.toLowerCase().includes('homosexuality'))
+          .filter(item => !item.title.toLowerCase().includes('gay'));
+        console.log(newcasts);
         podcastList = [...podcastList, ..._.sample(newcasts, 5)];
+        console.log(newcasts)
       }
       if (related) {
         this.setState({

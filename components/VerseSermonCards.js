@@ -217,7 +217,7 @@ function formatDuration(duration) {
       return duration;
     }
   } else {
-    return duration / 60 + 'min';
+    return Math.floor(duration / 60) + 'min';
   }
 }
 
@@ -263,13 +263,12 @@ export function _renderSermon(item, idx, props, center = false, isSermon = true)
             width: WIDTH * 0.7,
             borderRadius: theme.sizes.border,
           },
-
           center ? {width: WIDTH * 0.9} : {width: WIDTH * 0.7, marginRight: 20},
           theme.shadow,
         ]}>
-        <Block flex={false} row left style={{width:"100%", paddingBottom:5}}>
+        <Block flex={false} row left style={{width: '100%', paddingBottom: 5}}>
           <Text left body gray>
-            { isSermon ? "Sermon" : "Podcast"} | {formatDuration(duration)}
+            {isSermon ? 'Sermon' : 'Podcast'} | {formatDuration(duration)}
           </Text>
         </Block>
         <Block middle center row style={{marginBottom: 10}}>
@@ -285,12 +284,10 @@ export function _renderSermon(item, idx, props, center = false, isSermon = true)
             }}
           />
           <Block middle>
-            <Text title gray>
+            <Text title gray numberOfLines={2}>
               {speakerName}
             </Text>
-            <Text  numberOfLines={2}>
-              {item.title}
-            </Text>
+            <Text numberOfLines={2}>{item.title}</Text>
           </Block>
         </Block>
         <Block
