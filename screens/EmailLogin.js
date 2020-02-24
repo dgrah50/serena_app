@@ -18,14 +18,11 @@ class EmailLogin extends Component {
   render() {
     const {navigation} = this.props;
     return (
-      <KeyboardAvoidingView
-        enabled
-        behavior="padding"
-        style={{flex: 1, backgroundColor: theme.colors.gray3}}
-        keyboardVerticalOffset={height * 0.2}>
+      <Block
+        style={{flex: 1, backgroundColor: theme.colors.gray3}}>
         {this._renderHeader()}
         {this._renderInputAndButtons()}
-      </KeyboardAvoidingView>
+      </Block>
     );
   }
 
@@ -91,7 +88,7 @@ class EmailLogin extends Component {
   }
   _renderHeader() {
     return (
-      <Block center space={'between'} style={{top: '10%'}}>
+      <Block center space={'between'}>
         <Block
           flex={false}
           center

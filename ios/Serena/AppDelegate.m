@@ -11,6 +11,8 @@
 #import <React/RCTRootView.h>
 #import <Firebase.h>
 #import <OneSignal/OneSignal.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
 
 @implementation AppDelegate
 
@@ -28,6 +30,8 @@
   [OneSignal promptForPushNotificationsWithUserResponse:^(BOOL accepted) {
     NSLog(@"User accepted notifications: %d", accepted);
   }];
+  [[FBSDKApplicationDelegate sharedInstance] application:application
+    didFinishLaunchingWithOptions:launchOptions];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"Serena"
@@ -43,7 +47,14 @@
   return YES;
 }
 
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 
+  BOOL handled =  [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url options:options];
+  // Add any custom logic here.
+  return handled;
+}
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {

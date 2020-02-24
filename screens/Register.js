@@ -32,10 +32,11 @@ class Register extends Component {
         <Block center middle style={{marginBottom: 30, marginTop: 30}}>
           <Image
             source={require('../assets/images/Base/Logo.png')}
-            style={{height: 28, width: 102}}
+            resizeMode="contain"
+            style={{height: 28}}
           />
         </Block>
-        <Block flex center>
+        <Block center>
           <Text h3 style={{marginBottom: 6}}>
             Get started for free
           </Text>
@@ -185,7 +186,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
   },
   icon: {
-    flex: 0,
     height: 48,
     width: 48,
     borderRadius: 48,

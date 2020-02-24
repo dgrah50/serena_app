@@ -34,12 +34,11 @@ class Forgot extends Component {
           <Block middle>
             <Image
               source={require('../assets/images/Base/Logobig.png')}
-              style={{height: 28, width: 102}}
+              resizeMode="contain"
+              style={{height: 28}}
             />
           </Block>
-          <Block
-           style={{flex: 2.5}} 
-           center>
+          <Block style={{flex: 2.5}} center>
             <Text h3 style={{marginBottom: 6}}>
               Reset password
             </Text>
