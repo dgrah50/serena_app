@@ -1,14 +1,22 @@
 import React, {Component} from 'react';
-import {Dimensions, StyleSheet, Alert} from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  Alert,
+  AsyncStorage,
+  Linking,
+} from 'react-native';
 import {Text} from '../components';
 import {theme} from '../constants';
 import firebase from 'react-native-firebase';
 import moment from 'moment';
-const stream = require('getstream');
+import {PERMISSIONS} from 'react-native-permissions';
+
 const {height, width} = Dimensions.get('window');
 import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import OneSignal from 'react-native-onesignal';
 import {
   Content,
   Button,
@@ -37,39 +45,61 @@ export default class Profile extends Component {
       enableNotification: true,
       isDateTimePickerVisible: false,
       notificationTime: null,
+      areNotificationsEnabled: null,
     };
+    OneSignal.getPermissionSubscriptionState(status => {
+      console.log(status);
+    });
   }
 
+  // componentDidMount() {
+  //   client = stream.connect(
+  //     'zgrr2ez3h3yz',
+  //     this.props.screenProps.StreamToken,
+  //     '65075',
+  //   );
+  //   client
+  //     .user(firebase.auth().currentUser.uid)
+  //     .get()
+  //     .then(StreamUser => {
+  //       console.log(StreamUser.data);
+  //       if (StreamUser.data.name == 'Unknown') {
+  //         Alert.alert(
+  //           'Please enter your name before you use Groups.',
+  //           ' ',
+  //           [{text: 'OK'}],
+  //           {
+  //             cancelable: false,
+  //           },
+  //         );
+  //       }
+  //       this.setState({
+  //         name: StreamUser.data.name,
+  //         bio: StreamUser.data.bio,
+  //         profileImage: StreamUser.data.profileImage,
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // }
+
   componentDidMount() {
-    client = stream.connect(
-      'zgrr2ez3h3yz',
-      this.props.screenProps.StreamToken,
-      '65075',
-    );
-    client
-      .user(firebase.auth().currentUser.uid)
-      .get()
-      .then(StreamUser => {
-        console.log(StreamUser.data);
-        if (StreamUser.data.name == 'Unknown') {
-          Alert.alert(
-            'Please enter your name before you use Groups.',
-            ' ',
-            [{text: 'OK'}],
-            {
-              cancelable: false,
-            },
-          );
-        }
-        this.setState({
-          name: StreamUser.data.name,
-          bio: StreamUser.data.bio,
-          profileImage: StreamUser.data.profileImage,
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    AsyncStorage.getItem('notifsEnabled').then(value => {
+      if (value !== null) {
+        console.log(value);
+        this.setState({areNotificationsEnabled: value == 1});
+      } else {
+        this.setState({areNotificationsEnabled: true});
+      }
+    });
+  }
+
+  componentDidUpdate() {
+    AsyncStorage.setItem(
+      'notifsEnabled',
+      this.state.areNotificationsEnabled,
+    )
   }
 
   setNameAndBio() {
@@ -166,6 +196,10 @@ export default class Profile extends Component {
       notificationTime: moment(date),
     });
   };
+  _openWebLink(){
+
+  }
+
 
   render() {
     return (
@@ -173,83 +207,43 @@ export default class Profile extends Component {
       <>
         <Content>
           <ListItem icon>
-            <Left>
-              <Button style={{backgroundColor: '#FF9501'}}>
-                <Icon active name="ios-clock" />
-              </Button>
-            </Left>
             <Body>
               <Text>Daily Notification</Text>
             </Body>
             <Right>
-              <Switch value={false} />
+              <Switch
+                value={this.state.areNotificationsEnabled}
+                onValueChange={value => {
+                  this.setState({areNotificationsEnabled: value});
+                }}
+              />
             </Right>
           </ListItem>
+
           <ListItem
-            icon
             onPress={() => {
-              console.log('tes');
-              this.setState({isDateTimePickerVisible: true});
+              Linking.openURL('https://serena.app');
             }}>
-            <Left>
-              <Button style={{backgroundColor: '#007AFF'}}>
-                <Icon active name="wifi" />
-              </Button>
-            </Left>
-            <Body>
-              <Text>Notification Time</Text>
-            </Body>
-            <Right>
-              <Text>
-                {this.state.notificationTime &&
-                  moment(this.state.notificationTime).format('LT')}
-              </Text>
-              <Icon active name="arrow-forward" />
-            </Right>
-          </ListItem>
-          <ListItem icon>
-            <Left>
-              <Button style={{backgroundColor: '#007AFF'}}>
-                <Icon active name="bluetooth" />
-              </Button>
-            </Left>
             <Body>
               <Text>About</Text>
             </Body>
             <Right>
-              <Text>On</Text>
               <Icon active name="arrow-forward" />
             </Right>
           </ListItem>
-          <ListItem icon>
-            <Left>
-              <Button style={{backgroundColor: '#007AFF'}}>
-                <Icon active name="bluetooth" />
-              </Button>
-            </Left>
+          <ListItem
+            onPress={() => {
+              firebase.auth().signOut();
+            }}>
             <Body>
               <Text>Sign Out</Text>
             </Body>
             <Right>
-              <Text>On</Text>
               <Icon active name="arrow-forward" />
             </Right>
           </ListItem>
         </Content>
-
-        <DateTimePicker
-          isVisible={this.state.isDateTimePickerVisible}
-          onConfirm={this.handleDatePicked}
-          onCancel={this.hideDateTimePicker}
-          mode="time" // show only time picker
-          is24Hour={false}
-          date={new Date(this.state.notificationTime)}
-          titleIOS="Pick your Notification time"
-        />
       </>
-
-      //   {this._renderLogoutButton()}
-      // </View>
     );
   }
   _renderLogoutButton = () => {

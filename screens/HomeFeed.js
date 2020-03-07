@@ -55,7 +55,6 @@ export default class HomeFeed extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log(firebase.auth().currentUser.uid);
     // this.sectionListRef.scrollToOffset({animated: true, offset: 0});
     try {
       if (this.props.navigation.getParam('response') != undefined) {
@@ -81,13 +80,11 @@ export default class HomeFeed extends React.PureComponent {
           }),
         )
         .then(res => {
-          console.log(res.data);
           this.setState({
             recommendedSermons: res.data.sermons.current,
             recommendedVerses: res.data.verses,
             nexttopics: res.data.nexttopics,
           });
-          console.log(res.data.keyword);
           this.fetchPodcasts(res.data.keyword, false);
         })
         .catch(err => {
@@ -308,19 +305,19 @@ export default class HomeFeed extends React.PureComponent {
   //****** HELPER FUNCTIONS SECTION
   whichCard(item, index) {
     if (item.hasOwnProperty('description')) {
-      return this._renderRecommendedPodcast(item, index, this.props);
+      return this._renderRecommendedPodcast(item, index+1, this.props);
     } else if (item.hasOwnProperty('title')) {
-      return this._renderRecommendedSermon(item, index, this.props);
+      return this._renderRecommendedSermon(item, index+1, this.props);
     } else if (item.hasOwnProperty('osis')) {
       if (item.osis.includes('VOD')) {
         return (
           <Block key={index}>
-            {this._renderRecommendedVerse(item, 1)}
+            {this._renderRecommendedVerse(item, 0)}
             {this._renderFavouritesButton()}
           </Block>
         );
       } else {
-        return this._renderRecommendedVerse(item, index);
+        return this._renderRecommendedVerse(item, index+1);
       }
     }
   }
@@ -380,7 +377,6 @@ export default class HomeFeed extends React.PureComponent {
       const json = await result.json();
       let podcasts = json.results;
       sampleIndexs = _.sample([...Array(podcasts.length).keys()], 5);
-      console.log('hello');
       podcastList = [];
       let newcasts = null;
       for (const index in sampleIndexs) {
@@ -406,9 +402,7 @@ export default class HomeFeed extends React.PureComponent {
           .filter(item => !item.title.toLowerCase().includes('judaism'))
           .filter(item => !item.title.toLowerCase().includes('homosexuality'))
           .filter(item => !item.title.toLowerCase().includes('gay'));
-        console.log(newcasts);
         podcastList = [...podcastList, ..._.sample(newcasts, 5)];
-        console.log(newcasts);
       }
       if (related) {
         this.setState({
@@ -452,7 +446,6 @@ export default class HomeFeed extends React.PureComponent {
   };
   fetchMoreContent = () => {
     let randomTopic = _.sample(this.state.nexttopics).word;
-    console.log(randomTopic);
     axios
       .post(
         'https://serenaengine333.co.uk/api/verses/recs',
@@ -464,8 +457,6 @@ export default class HomeFeed extends React.PureComponent {
         }),
       )
       .then(res => {
-        console.log('fetched new');
-        console.log(res.data);
         this.setState({
           recommendedSermons: res.data.sermons.current,
           recommendedVerses: res.data.verses,

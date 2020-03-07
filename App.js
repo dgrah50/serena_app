@@ -1,5 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  AsyncStorage,
+} from 'react-native';
 import AppNavigator from './navigation/AppNavigator';
 import firebase from 'react-native-firebase';
 import TrackPlayer, {
@@ -113,7 +119,7 @@ export default function Container(props) {
 
   useEffect(() => {
     if (didMountRef.current) {
-      TrackPlayer.reset()
+      TrackPlayer.reset();
       // TrackPlayer.reset().then(() => {
       //   TrackPlayer.play();
       // });
@@ -138,9 +144,18 @@ export default function Container(props) {
   }, [authTokenSet]);
 
   useEffect(() => {
+    AsyncStorage.getItem('notifsEnabled').then(value => console.log(value));
+
     OneSignal.setLogLevel(6, 0);
     OneSignal.init('5e8397b0-56ae-422c-98e4-fbba0d7f6fbb'); // set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
-    OneSignal.setSubscription(true);
+    AsyncStorage.getItem('notifsEnabled').then(value => {
+      if (value !== null) {
+        OneSignal.setSubscription(value == 1);
+      } else {
+        OneSignal.setSubscription(true);
+      }
+    });
+
     OneSignal.inFocusDisplaying(2);
     OneSignal.addEventListener('received', onReceived);
     OneSignal.addEventListener('opened', onOpened);

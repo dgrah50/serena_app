@@ -33,6 +33,7 @@ export default class Podcasts extends Component {
     this.state = {
       results: [],
     };
+    this.searchPodcastHandler("")
   }
 
   createiTunesLink(searchQuery, results = 25) {
