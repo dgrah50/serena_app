@@ -148,7 +148,12 @@ export class VerseCard extends React.Component {
                       size={20}
                       color={theme.colors.white}
                       onPress={() =>
-                        onShare(verses[0].verse + ' ' + verses[0].bookname)
+                        onShare(
+                          verses[0].verse +
+                            ' ' +
+                            verses[0].bookname +
+                            'I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
+                        )
                       }></Icon>
                   </TouchableOpacity>
                 </Transition>
@@ -159,7 +164,6 @@ export class VerseCard extends React.Component {
       </React.Fragment>
     );
   }
-
 
   async toggleFavourites(verseText, bookText, osis) {
     osis = osis.toString();
@@ -221,7 +225,13 @@ function formatDuration(duration) {
   }
 }
 
-export function _renderSermon(item, idx, props, center = false, isSermon = true) {
+export function _renderSermon(
+  item,
+  idx,
+  props,
+  center = false,
+  isSermon = true,
+) {
   if (
     typeof item == 'undefined'
     // typeof item.speakerimg == 'undefined' ||
@@ -361,4 +371,3 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.gray2,
   },
 });
-

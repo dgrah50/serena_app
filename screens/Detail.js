@@ -127,7 +127,12 @@ export default class Detail extends Component {
                     color={theme.colors.white}
                     style={{marginRight: 10}}
                     onPress={() =>
-                      this.onShare(verse.verse + ' ' + verse.bookname)
+                      this.onShare(
+                        verse.verse +
+                          ' ' +
+                          verse.bookname +
+                          'I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
+                      )
                     }></Icon>
                 </TouchableOpacity>
               </Transition>
