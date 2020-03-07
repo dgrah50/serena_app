@@ -59,24 +59,19 @@ export default class SinglePodcast extends Component {
     const enclosures = Array.prototype.slice.call(
       track.getElementsByTagName('enclosure'),
     );
-
-    try {
-      return {
-        title: titles[0].childNodes[0].nodeValue,
-        mp3link: enclosures[0].getAttribute('url'),
-        date_uploaded: null,
-        duration: durations[0].childNodes[0].nodeValue,
-        author: author,
-        speakerimg: img,
-        plays: null,
-        description: descriptions[0].childNodes[0].nodeValue.replace(
-          /(<([^>]+)>)/gi,
-          '',
-        ),
-      };
-    } catch (err) {
-      console.log(err);
-    }
+    return {
+      title: titles[0].childNodes[0].nodeValue,
+      mp3link: enclosures[0].getAttribute('url'),
+      date_uploaded: null,
+      duration:  durations.length != 0 ? durations[0].childNodes[0].nodeValue : "",
+      author: author,
+      speakerimg: img,
+      plays: null,
+      description: descriptions[0].childNodes[0].nodeValue.replace(
+        /(<([^>]+)>)/gi,
+        '',
+      ),
+    };
   };
   fetchPodcasts = async podcast => {
     try {
@@ -122,7 +117,6 @@ export default class SinglePodcast extends Component {
   }
   _renderHeader() {
     let pod = this.state.podcastDetail;
-    console.log(pod);
     return (
       <Block key={0}>
         <Block center row style={styles.header}>
@@ -145,14 +139,14 @@ export default class SinglePodcast extends Component {
             <Text small>{pod.artistName}</Text>
           </Block>
         </Block>
-        <Button
+        {/* <Button
           full
           style={{width: width * 0.2, height: width * 0.1, marginBottom: 10}}
           onPress={() => console.log('followed')}>
           <Text button white>
             Follow
           </Text>
-        </Button>
+        </Button> */}
       </Block>
     );
   }

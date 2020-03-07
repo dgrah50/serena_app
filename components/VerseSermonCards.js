@@ -206,6 +206,10 @@ export function _renderPodcast(item, idx, props, center = false) {
 }
 
 function formatDuration(duration) {
+  console.log(duration)
+  if(duration==""){
+    return ""
+  }
   if (duration === undefined) {
     return null;
   }

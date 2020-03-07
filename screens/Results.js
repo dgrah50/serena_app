@@ -322,7 +322,7 @@ export default class Results extends Component {
   };
   fetchPodcasts = async (term, related) => {
     const result = await fetch(
-      `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1314`,
+      `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1439`,
     );
     try {
       const json = await result.json();

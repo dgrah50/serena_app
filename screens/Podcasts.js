@@ -33,14 +33,14 @@ export default class Podcasts extends Component {
     this.state = {
       results: [],
     };
-    this.searchPodcastHandler("")
+    this.searchPodcastHandler("podcast")
   }
 
   createiTunesLink(searchQuery, results = 25) {
     return (
       'https://itunes.apple.com/search?term=' +
       encodeURIComponent(searchQuery) +
-      '&entity=podcast&genreId=1314&limit=' +
+      '&entity=podcast&genreId=1439&limit=' +
       results
       // '&entity=podcast&genreId=1314&attribute=titleTerm&limit=' +
       // results
@@ -85,9 +85,6 @@ export default class Podcasts extends Component {
           />
         </Block>
 
-        {/* <Text h3 left>
-            Podcasts
-          </Text> */}
         <FlatList
           style={styles.welcome}
           numColumns={2}
@@ -152,9 +149,4 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.sizes.base * 2,
     height: 1,
   },
-  // vertical line
-  vLine: {
-    marginVertical: theme.sizes.base / 2,
-    width: 1,
-  }
 });

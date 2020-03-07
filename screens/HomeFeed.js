@@ -371,7 +371,7 @@ export default class HomeFeed extends React.PureComponent {
   };
   fetchPodcasts = async (term, related) => {
     const result = await fetch(
-      `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1314&limit=100`,
+      `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1439&limit=100`,
     );
     try {
       const json = await result.json();
