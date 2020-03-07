@@ -1,21 +1,24 @@
 import React, {Component} from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import {Text, Card, Input, Button} from '../components';
+import {Dimensions, StyleSheet, Alert} from 'react-native';
+import {Text} from '../components';
 import {theme} from '../constants';
 import firebase from 'react-native-firebase';
-
+import moment from 'moment';
 const stream = require('getstream');
 const {height, width} = Dimensions.get('window');
 import ImagePicker from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
-import {ThemeColors} from 'react-navigation';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import {
+  Content,
+  Button,
+  ListItem,
+  Icon,
+  Left,
+  Body,
+  Right,
+  Switch,
+} from 'native-base';
 
 export default class Profile extends Component {
   static navigationOptions = {
@@ -23,7 +26,6 @@ export default class Profile extends Component {
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-
   };
 
   constructor(props) {
@@ -32,6 +34,9 @@ export default class Profile extends Component {
       bio: null,
       name: null,
       profileImage: null,
+      enableNotification: true,
+      isDateTimePickerVisible: false,
+      notificationTime: null,
     };
   }
 
@@ -144,88 +149,107 @@ export default class Profile extends Component {
       .catch(error => console.log(error));
   };
 
+  enableNotification = value => {
+    this.setState({
+      enableNotification: value,
+    });
+  };
+  showDateTimePicker = () => {
+    this.setState({isDateTimePickerVisible: true});
+  };
+  hideDateTimePicker = () => {
+    this.setState({isDateTimePickerVisible: false});
+  };
+  handleDatePicked = date => {
+    this.hideDateTimePicker();
+    this.setState({
+      notificationTime: moment(date),
+    });
+  };
+
   render() {
     return (
-      <View style={styles.welcome}>
-        {/* <TouchableOpacity
-          style={{
-            alignItems: 'center',
-          }}
-          onPress={this.uploadPhoto}>
-          {this.state.profileImage ? (
-            <Image
-              source={{
-                uri: this.state.profileImage,
-              }}
-              style={{
-                height: height * 0.2,
-                width: height * 0.2,
-                borderRadius: height * 0.1,
-              }}
-            />
-          ) : (
-            <Image
-              source={require('../assets/images/avatar.jpeg')}
-              style={{
-                height: height * 0.2,
-                width: height * 0.2,
-                borderRadius: height * 0.1,
-              }}
-            />
-          )}
-          <Button
-          onPress={this.uploadPhoto}
-            shadow
-            style={{
-              marginVertical: 12,
-              width: width * 0.5,
+      // <View style={styles.welcome}>
+      <>
+        <Content>
+          <ListItem icon>
+            <Left>
+              <Button style={{backgroundColor: '#FF9501'}}>
+                <Icon active name="ios-clock" />
+              </Button>
+            </Left>
+            <Body>
+              <Text>Daily Notification</Text>
+            </Body>
+            <Right>
+              <Switch value={false} />
+            </Right>
+          </ListItem>
+          <ListItem
+            icon
+            onPress={() => {
+              console.log('tes');
+              this.setState({isDateTimePickerVisible: true});
             }}>
-            <Text button white>
-              CHANGE PROFILE PICTURE
-            </Text>
-          </Button>
-        </TouchableOpacity>
+            <Left>
+              <Button style={{backgroundColor: '#007AFF'}}>
+                <Icon active name="wifi" />
+              </Button>
+            </Left>
+            <Body>
+              <Text>Notification Time</Text>
+            </Body>
+            <Right>
+              <Text>
+                {this.state.notificationTime &&
+                  moment(this.state.notificationTime).format('LT')}
+              </Text>
+              <Icon active name="arrow-forward" />
+            </Right>
+          </ListItem>
+          <ListItem icon>
+            <Left>
+              <Button style={{backgroundColor: '#007AFF'}}>
+                <Icon active name="bluetooth" />
+              </Button>
+            </Left>
+            <Body>
+              <Text>About</Text>
+            </Body>
+            <Right>
+              <Text>On</Text>
+              <Icon active name="arrow-forward" />
+            </Right>
+          </ListItem>
+          <ListItem icon>
+            <Left>
+              <Button style={{backgroundColor: '#007AFF'}}>
+                <Icon active name="bluetooth" />
+              </Button>
+            </Left>
+            <Body>
+              <Text>Sign Out</Text>
+            </Body>
+            <Right>
+              <Text>On</Text>
+              <Icon active name="arrow-forward" />
+            </Right>
+          </ListItem>
+        </Content>
 
-        <Input
-          full
-          label="Name"
-          defaultValue={this.state.name != 'Unknown' ? this.state.name : null}
-          style={{
-            backgroundColor: theme.colors.white,
-            marginBottom: 25,
-            color: theme.colors.black,
-            borderColor: theme.colors.white,
-          }}
-          onChangeTextHandler={this.nameHandler}
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this.handleDatePicked}
+          onCancel={this.hideDateTimePicker}
+          mode="time" // show only time picker
+          is24Hour={false}
+          date={new Date(this.state.notificationTime)}
+          titleIOS="Pick your Notification time"
         />
-        <Input
-          full
-          label="Bio"
-          defaultValue={this.state.bio}
-          multiline={true}
-          style={{
-            marginBottom: 25,
-            backgroundColor: theme.colors.white,
-            color: theme.colors.black,
-            borderColor: theme.colors.white,
-            height: height * 0.1,
-          }}
-          onChangeTextHandler={this.bioHandler}
-        />
-        <Button
-          shadow
-          style={{
-            marginBottom: 12,
-            width: width * 0.5,
-          }}
-          onPress={() => this.setNameAndBio()}>
-          <Text button white>
-            UPDATE PROFILE
-          </Text>
-        </Button> */}
+      </>
 
-        {this._renderLogoutButton()}
-      </View>
+      //   {this._renderLogoutButton()}
+      // </View>
     );
   }
   _renderLogoutButton = () => {
@@ -259,6 +283,6 @@ const styles = StyleSheet.create({
     paddingTop: '20%',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: theme.colors.bg
+    backgroundColor: theme.colors.bg,
   },
 });

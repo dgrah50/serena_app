@@ -1,20 +1,25 @@
 import React from 'react';
-import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import firebase from 'react-native-firebase';
-
+import axios from 'axios';
+import qs from 'qs';
 export default class Loading extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      this.props.navigation.navigate(user ? 'Pray' : 'Auth');
+      user
+        .getIdToken()
+        .then(function(idToken) {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
+        })
+        .then(() => {
+          this.props.navigation.navigate(user ? 'Discover' : 'Auth');
+        });
     });
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-      </View>
-    );
-  }
+    return <View style={styles.container}></View>;
+  } 
 }
 
 const styles = StyleSheet.create({

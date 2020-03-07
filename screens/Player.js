@@ -5,7 +5,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  Platform
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Block, Text, Card} from '../components';
@@ -139,26 +139,38 @@ export default function Player(props) {
       <TouchableOpacity onPress={() => navigation.goBack(null)}>
         <Block
           flex={false}
-          shadow
           center
           style={{
             marginHorizontal: '5%',
             backgroundColor: theme.colors.white,
             width: '90%',
-            height: height*0.1,
+            height: height * 0.1,
           }}>
-          {(Platform.OS === 'android') &&    <Icon
-          hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
-          name="arrow-left"
-          size={25}
-          style={{ position:"absolute", left:0,top:10}}
-          color={theme.colors.black}
-          onPress={() => {
-            navigation.goBack(null);
-          }}
-        />}
-          <View style={{height:6, borderRadius:3, width:width*0.3, top:0, backgroundColor:"black", marginHorizontal:width*0.2, marginTop:5, marginBottom:15}}/>
-          <Text center bold middle h3 black>
+          {Platform.OS === 'android' && (
+            <Icon
+              hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
+              name="arrow-left"
+              size={25}
+              style={{position: 'absolute', left: 0, top: 10}}
+              color={theme.colors.black}
+              onPress={() => {
+                navigation.goBack(null);
+              }}
+            />
+          )}
+          <View
+            style={{
+              height: 6,
+              borderRadius: 3,
+              width: width * 0.3,
+              top: 0,
+              backgroundColor: 'black',
+              marginHorizontal: width * 0.2,
+              marginTop: 5,
+              marginBottom: 15,
+            }}
+          />
+          <Text center bold middle title black>
             {currentSongData.title}
           </Text>
         </Block>
@@ -173,10 +185,9 @@ export default function Player(props) {
           marginHorizontal: width * 0.05,
           padding: 0,
         }}
-        middle
-        shadow>
+        middle>
         <Block flex={false} center middle>
-          <Block flex={false} row  center style={{width:"100%"}}>
+          <Block flex={false} row center style={{width: '100%'}}>
             <Image
               style={{
                 width: width * 0.2,
@@ -210,9 +221,9 @@ export default function Player(props) {
   //****** HELPER FUNCTONS SECTION
   function togglePlay() {
     if (State[playbackState] == 'Playing') {
-      TrackPlayer.pause()
+      TrackPlayer.pause();
     } else {
-      TrackPlayer.play()
+      TrackPlayer.play();
     }
   }
 }

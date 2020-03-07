@@ -5,14 +5,14 @@ import {FluidNavigator} from 'react-navigation-fluid-transitions';
 import {theme} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomTabBar from '../components/CustomTabBar';
-
 import HomeFeed from '../screens/HomeFeed';
 import Detail from '../screens/Detail';
 import Results from '../screens/Results';
 import Profile from '../screens/Profile';
 import Fetch from '../screens/Fetch';
 import Favourites from '../screens/Favourites';
-
+import Podcasts from '../screens/Podcasts';
+import SinglePodcast from '../screens/SinglePodcast';
 
 const prayStack = createStackNavigator(
   {
@@ -77,53 +77,60 @@ const prayStack = createStackNavigator(
     headerMode: 'none',
   },
 );
+const podcastStack = createStackNavigator(
+  {
+    Podcasts: {
+      screen: Podcasts,
+    },
+    SinglePodcast: {
+      screen: SinglePodcast,
+    },
+  },
+  {
+    initialRouteName: 'Podcasts',
+  },
+);
 
-const discoverStack =  FluidNavigator(
-    {
-      HomeFeed: {
-        screen: HomeFeed,
+const discoverStack = FluidNavigator(
+  {
+    HomeFeed: {
+      screen: HomeFeed,
+    },
+    Detail: {
+      screen: Detail,
+      navigationOptions: {
+        tabBarVisible: false,
+        header: null,
       },
-      Detail: {
-        screen: Detail,
-        navigationOptions: {
-          tabBarVisible: false,
-          header: null,
+    },
+    Favourites: {
+      screen: FluidNavigator(
+        {
+          Favourites: {
+            screen: Favourites,
+          },
+          Detail: {
+            screen: Detail,
+            navigationOptions: {
+              tabBarVisible: false,
+              header: null,
+            },
+          },
         },
-      },
-      Favourites: {
-        screen: FluidNavigator(
-          {
-            Favourites: {
-              screen: Favourites,
-            },
-            Detail: {
-              screen: Detail,
-              navigationOptions: {
-                tabBarVisible: false,
-                header: null,
-              },
-            },
-          },
-          {
-            initialRouteName: 'Favourites',
-          },
-        ),
-      },
+        {
+          initialRouteName: 'Favourites',
+        },
+      ),
     },
-    {
-      initialRouteName: 'HomeFeed',
-    },
-  );
-
-function getDeepestRoute(route) {
-  if (!route.routes) return route.routeName;
-  return getDeepestRoute(route.routes[route.index]);
-}
+  },
+  {
+    initialRouteName: 'HomeFeed',
+  },
+);
 
 prayStack.navigationOptions = ({navigation}) => {
   let tabBarVisible;
   const deepestRoute = getDeepestRoute(navigation.state);
-  console.log(deepestRoute)
   if (navigation.state.routes.length > 1) {
     navigation.state.routes.map(route => {
       if (deepestRoute == 'Detail') {
@@ -144,7 +151,6 @@ prayStack.navigationOptions = ({navigation}) => {
 discoverStack.navigationOptions = ({navigation}) => {
   let tabBarVisible;
   const deepestRoute = getDeepestRoute(navigation.state);
-  console.log(deepestRoute);
   if (navigation.state.routes.length > 1) {
     navigation.state.routes.map(route => {
       if (deepestRoute == 'Detail') {
@@ -162,6 +168,31 @@ discoverStack.navigationOptions = ({navigation}) => {
     ),
   };
 };
+podcastStack.navigationOptions = ({navigation}) => {
+  let tabBarVisible;
+  const deepestRoute = getDeepestRoute(navigation.state);
+  if (navigation.state.routes.length > 1) {
+    navigation.state.routes.map(route => {
+      if (deepestRoute == 'Detail') {
+        tabBarVisible = false;
+      } else {
+        tabBarVisible = true;
+      }
+    });
+  }
+  return {
+    tabBarVisible,
+    tabBarLabel: 'Podcasts',
+    tabBarIcon: ({tintColor}) => (
+      <Icon name="music" size={25} color={tintColor} />
+    ),
+  };
+};
+
+function getDeepestRoute(route) {
+  if (!route.routes) return route.routeName;
+  return getDeepestRoute(route.routes[route.index]);
+}
 
 const defaultStack = createBottomTabNavigator(
   {
@@ -171,9 +202,12 @@ const defaultStack = createBottomTabNavigator(
     Discover: {
       screen: discoverStack,
     },
+    Podcasts: {
+      screen: podcastStack,
+    },
   },
   {
-    initialRouteName: 'Pray',
+    initialRouteName: 'Discover',
     headerMode: 'float',
     tabBarComponent: props => <CustomTabBar {...props} />,
     tabBarOptions: {
@@ -187,9 +221,6 @@ const defaultStack = createBottomTabNavigator(
     },
   },
 );
-
-
-
 
 export default defaultStack;
 

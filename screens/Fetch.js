@@ -290,6 +290,24 @@ export default class Fetch extends Component {
             <Text h2 white>
               {this.state.typedText}
             </Text>
+            <Animatable.View
+              animation={'fadeIn'}
+              style={{
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                // paddingTop: 5,
+              }}>
+              <Icon
+                name={this.state.typedText ? 'search' : 'times-circle'}
+                size={30}
+                color={'rgba(240, 240, 247, 0.66)'}
+                onPress={() => {
+                  console.log('animation done');
+                  this.circularProgress.reAnimate(0, 0, Easing.quad);
+                  this.stopListen();
+                }}
+              />
+            </Animatable.View>
           </Block>
         )}
       </Animatable.View>
@@ -404,7 +422,7 @@ export default class Fetch extends Component {
           listening: false,
           ringVisible: false,
         });
-        console.log(response.data)
+        console.log(response.data);
         this.props.navigation.navigate('Results', {
           response: response.data,
         });

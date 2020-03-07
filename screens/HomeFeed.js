@@ -22,13 +22,8 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
-import {
-  Header,
-  Left,
-  Body,
-  Right,
-  Title,
-} from 'native-base';
+
+import {Header, Left, Body, Right, Title} from 'native-base';
 
 export default class HomeFeed extends React.PureComponent {
   static navigationOptions = ({navigation}) => {
@@ -379,13 +374,13 @@ export default class HomeFeed extends React.PureComponent {
   };
   fetchPodcasts = async (term, related) => {
     const result = await fetch(
-      `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1314`,
+      `https://itunes.apple.com/search?term=${term}&entity=podcast&genreId=1314&limit=100`,
     );
     try {
       const json = await result.json();
       let podcasts = json.results;
       sampleIndexs = _.sample([...Array(podcasts.length).keys()], 5);
-      console.log("hello")
+      console.log('hello');
       podcastList = [];
       let newcasts = null;
       for (const index in sampleIndexs) {
@@ -413,7 +408,7 @@ export default class HomeFeed extends React.PureComponent {
           .filter(item => !item.title.toLowerCase().includes('gay'));
         console.log(newcasts);
         podcastList = [...podcastList, ..._.sample(newcasts, 5)];
-        console.log(newcasts)
+        console.log(newcasts);
       }
       if (related) {
         this.setState({

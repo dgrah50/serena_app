@@ -113,9 +113,10 @@ export default function Container(props) {
 
   useEffect(() => {
     if (didMountRef.current) {
-      TrackPlayer.reset().then(() => {
-        TrackPlayer.play();
-      });
+      TrackPlayer.reset()
+      // TrackPlayer.reset().then(() => {
+      //   TrackPlayer.play();
+      // });
     } else {
       didMountRef.current = true;
     }

@@ -272,10 +272,5 @@ const styles = StyleSheet.create({
   vLine: {
     marginVertical: theme.sizes.base / 2,
     width: 1,
-  },
-  endTrip: {
-    position: 'absolute',
-    width: width,
-    bottom: 0,
-  },
+  }
 });
