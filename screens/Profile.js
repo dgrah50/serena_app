@@ -47,9 +47,7 @@ export default class Profile extends Component {
       notificationTime: null,
       areNotificationsEnabled: null,
     };
-    OneSignal.getPermissionSubscriptionState(status => {
-      console.log(status);
-    });
+ 
   }
 
   // componentDidMount() {
@@ -87,9 +85,9 @@ export default class Profile extends Component {
   componentDidMount() {
 
     AsyncStorage.getItem('notifsEnabled').then(value => {
-      if (value !== null) {
+      if (value != null) {
         console.log(value);
-        this.setState({areNotificationsEnabled: value == 1});
+        this.setState({areNotificationsEnabled: value == "true" });
       } else {
         this.setState({areNotificationsEnabled: true});
       }
@@ -102,7 +100,7 @@ export default class Profile extends Component {
   componentDidUpdate() {
     AsyncStorage.setItem(
       'notifsEnabled',
-      this.state.areNotificationsEnabled,
+      JSON.stringify(this.state.areNotificationsEnabled),
     ).catch(err => console.log(err))
   }
 
