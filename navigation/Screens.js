@@ -86,9 +86,9 @@ const podcastStack = createStackNavigator(
     SinglePodcast: {
       screen: SinglePodcast,
     },
-    Give: {
-      screen: Give,
-    },
+    // Give: {
+    //   screen: Give,
+    // },
   },
   {
     initialRouteName: 'Podcasts',

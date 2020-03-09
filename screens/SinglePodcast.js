@@ -140,7 +140,7 @@ export default class SinglePodcast extends Component {
             <Text small>{pod.artistName}</Text>
           </Block>
         </Block>
-        <Button
+        {/* <Button
           full
           style={{width: width * 0.3, height: width * 0.1, marginBottom: 10, flexDirection: 'row'}}
           onPress={() => this.props.navigation.navigate("Give")}>
@@ -152,7 +152,7 @@ export default class SinglePodcast extends Component {
           <Text button white>
              {" "}Give
           </Text>
-        </Button>
+        </Button> */}
       </Block>
     );
   }
