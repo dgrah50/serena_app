@@ -287,7 +287,7 @@ export default class Fetch extends Component {
               marginHorizontal: WIDTH * 0.1,
               height: HEIGHT * 0.2,
             }}>
-            <Text h2 white>
+            <Text h3 white center style={{marginVertical:25}}>
               {this.state.typedText}
             </Text>
             <Animatable.View

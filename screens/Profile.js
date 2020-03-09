@@ -85,6 +85,7 @@ export default class Profile extends Component {
   // }
 
   componentDidMount() {
+
     AsyncStorage.getItem('notifsEnabled').then(value => {
       if (value !== null) {
         console.log(value);
@@ -92,14 +93,17 @@ export default class Profile extends Component {
       } else {
         this.setState({areNotificationsEnabled: true});
       }
-    });
+    }).catch(err => {
+      console.log(err);
+      this.setState({areNotificationsEnabled: true});
+    })
   }
 
   componentDidUpdate() {
     AsyncStorage.setItem(
       'notifsEnabled',
       this.state.areNotificationsEnabled,
-    )
+    ).catch(err => console.log(err))
   }
 
   setNameAndBio() {

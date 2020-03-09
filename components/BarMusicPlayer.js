@@ -12,11 +12,12 @@ function BarMusicPlayer(props) {
   const playbackState = usePlaybackState();
 
   function togglePlay() {
-    if (State[playbackState] == 'Playing') {
-      TrackPlayer.pause();
-    } else {
-      TrackPlayer.play();
-    }
+    console.log(State[playbackState])
+    // if (State[playbackState] == 'Playing') {
+    //   TrackPlayer.pause();
+    // } else {
+    //   TrackPlayer.play();
+    // }
   }
 
   const {navigation, song} = props;

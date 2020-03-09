@@ -12,11 +12,12 @@ import {theme} from '../constants';
 import {DOMParser} from 'xmldom';
 const {width} = Dimensions.get('window');
 import {_renderPodcast} from '../components/VerseSermonCards';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default class SinglePodcast extends Component {
   static navigationOptions = ({navigation}) => {
     return {
-      title: 'Single Podcast',
+      title: 'Sadie Robertson',
       // headerTransparent: true,
       headerTitleStyle: {
         fontWeight: 'bold',
@@ -139,14 +140,19 @@ export default class SinglePodcast extends Component {
             <Text small>{pod.artistName}</Text>
           </Block>
         </Block>
-        {/* <Button
+        <Button
           full
-          style={{width: width * 0.2, height: width * 0.1, marginBottom: 10}}
-          onPress={() => console.log('followed')}>
+          style={{width: width * 0.3, height: width * 0.1, marginBottom: 10, flexDirection: 'row'}}
+          onPress={() => this.props.navigation.navigate("Give")}>
+          <Icon
+            name={'gift'}
+            size={20}
+            color={theme.colors.white}
+          />
           <Text button white>
-            Follow
+             {" "}Give
           </Text>
-        </Button> */}
+        </Button>
       </Block>
     );
   }

@@ -57,6 +57,7 @@ export default class Detail extends Component {
               }}>
               <Icon
                 name="arrow-left"
+                light
                 size={35}
                 color={theme.colors.white}
                 onPress={() => {

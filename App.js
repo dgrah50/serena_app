@@ -115,18 +115,18 @@ export default function Container(props) {
         compactCapabilities: [Capability.Play, Capability.Pause],
       });
     }
-  });
+  },[currentSongData]);
 
-  useEffect(() => {
-    if (didMountRef.current) {
-      TrackPlayer.reset();
-      // TrackPlayer.reset().then(() => {
-      //   TrackPlayer.play();
-      // });
-    } else {
-      didMountRef.current = true;
-    }
-  }, [currentSongData]);
+  // useEffect(() => {
+  //   if (didMountRef.current) {
+  //     TrackPlayer.reset();
+  //     // TrackPlayer.reset().then(() => {
+  //     //   TrackPlayer.play();
+  //     // });
+  //   } else {
+  //     didMountRef.current = true;
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (authTokenSet) {
@@ -165,7 +165,7 @@ export default function Container(props) {
       OneSignal.removeEventListener('opened', onOpened);
       OneSignal.removeEventListener('ids', onIds);
     };
-  });
+  },[]);
   const onReceived = notification => {
     console.log('Notification received: ', notification);
   };

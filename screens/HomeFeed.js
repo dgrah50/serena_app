@@ -55,6 +55,7 @@ export default class HomeFeed extends React.PureComponent {
   }
 
   componentDidMount() {
+    console.log("rendering")
     // this.sectionListRef.scrollToOffset({animated: true, offset: 0});
     try {
       if (this.props.navigation.getParam('response') != undefined) {

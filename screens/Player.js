@@ -69,8 +69,11 @@ export default function Player(props) {
       ret += '' + secs;
       return ret;
     }
-
-    if (State[playbackState] == 'Buffering') {
+    console.log(State[playbackState]);
+    if (
+      State[playbackState] == 'Buffering' ||
+      State[playbackState] == 'Connecting'
+    ) {
       return (
         <Block center middle>
           <Spinner type={'Bounce'} />
@@ -95,7 +98,7 @@ export default function Player(props) {
 
           <Block row space={'between'} flex={false}>
             {State[playbackState] != 'Buffering' &&
-              State[playbackState] != 'loading' && (
+              State[playbackState] != 'Connecting' && (
                 <React.Fragment>
                   <Text caption black>
                     {convertToMinutes(progress.position)}

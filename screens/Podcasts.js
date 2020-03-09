@@ -15,7 +15,7 @@ const {width} = Dimensions.get('window');
 export default class Podcasts extends Component {
   static navigationOptions = ({navigation}) => {
     return {
-      title: 'Podcasts',
+      title: 'Serena Creators',
       headerTitleStyle: {
         fontWeight: 'bold',
       },
@@ -71,7 +71,7 @@ export default class Podcasts extends Component {
         }}>
         <Block style={{paddingHorizontal: '5%', paddingTop: '5%'}} flex={false}>
           <Input
-            label={'Search for Podcasts'}
+            label={'Search for Creators'}
             onFocus={() => this.setState({searching: true})}
             rightLabel={
               <TouchableOpacity
