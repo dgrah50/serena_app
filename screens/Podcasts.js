@@ -5,12 +5,14 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  ScrollView,
 } from 'react-native';
 
 import {Block, Card, Text, Input} from '../components';
 import {theme} from '../constants';
 import firebase from 'react-native-firebase';
 const {width} = Dimensions.get('window');
+import Headroom from 'react-native-headroom';
 
 export default class Podcasts extends Component {
   static navigationOptions = ({navigation}) => {
@@ -23,7 +25,7 @@ export default class Podcasts extends Component {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Profile');
-          }}></TouchableOpacity>
+          }}/>
       ),
     };
   };
@@ -32,8 +34,13 @@ export default class Podcasts extends Component {
     super(props);
     this.state = {
       results: [],
+      inputValue:""
     };
-    this.searchPodcastHandler("podcast")
+    
+  }
+
+  componentDidMount(){
+    this.searchPodcastHandler("podcast");
   }
 
   createiTunesLink(searchQuery, results = 25) {
@@ -42,8 +49,6 @@ export default class Podcasts extends Component {
       encodeURIComponent(searchQuery) +
       '&entity=podcast&genreId=1439&limit=' +
       results
-      // '&entity=podcast&genreId=1314&attribute=titleTerm&limit=' +
-      // results
     );
   }
 
@@ -63,36 +68,50 @@ export default class Podcasts extends Component {
   };
 
   render() {
-    return (
+    const header = (
       <Block
-        style={{
-          width: '100%',
-          backgroundColor: theme.colors.bg,
-        }}>
-        <Block style={{paddingHorizontal: '5%', paddingTop: '5%'}} flex={false}>
-          <Input
-            label={'Search for Creators'}
-            onFocus={() => this.setState({searching: true})}
-            rightLabel={
-              <TouchableOpacity
-                onPress={() => {
-                  this.setState({results: []});
-                }}>
-                <Text style={{color: 'red'}}>Cancel</Text>
-              </TouchableOpacity>
-            }
-            onChangeTextHandler={this.searchPodcastHandler}
+        style={{paddingHorizontal: '5%', backgroundColor: theme.colors.bg}}
+        flex={false}>
+        <Input
+          label={'Search for Creators'}
+          onFocus={() => this.setState({searching: true})}
+          value={this.state.inputValue}
+          onChangeText={inputValue => this.setState({inputValue}, () =>{
+            this.searchPodcastHandler(inputValue)
+          })}
+          rightLabel={
+            <TouchableOpacity
+              onPress={() => {
+                // this.setState({results: []});
+                this.setState({inputValue:""}, () => {
+                  this.searchPodcastHandler("podcast");
+                });
+              }}>
+              <Text style={{color: 'red'}}>Cancel</Text>
+            </TouchableOpacity>
+          }
+          onChangeTextHandler={this.searchPodcastHandler}
+        />
+      </Block>
+    );
+    return (
+        <Block
+          style={{
+            width: '100%',
+            backgroundColor: theme.colors.bg,
+          }}>
+          {header}
+          <FlatList
+            style={styles.container}
+            numColumns={2}
+            data={this.state.results}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => {
+              return this._renderPodcastTile(item);
+            }}
           />
         </Block>
 
-        <FlatList
-          style={styles.welcome}
-          numColumns={2}
-          data={this.state.results}
-          renderItem={({item}) => {
-            return this._renderPodcastTile(item);
-          }}></FlatList>
-      </Block>
     );
   }
   _renderPodcastTile(item) {
@@ -138,7 +157,7 @@ export default class Podcasts extends Component {
 }
 
 const styles = StyleSheet.create({
-  welcome: {
+  container: {
     alignContent: 'center',
     height: '100%',
     flex: 1,
