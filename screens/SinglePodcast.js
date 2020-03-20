@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 export default class SinglePodcast extends Component {
   static navigationOptions = ({navigation}) => {
     return {
-      title: 'Sadie Robertson',
+      title: 'Podcast',
       // headerTransparent: true,
       headerTitleStyle: {
         fontWeight: 'bold',

@@ -40,13 +40,13 @@ const prayStack = createStackNavigator(
           Results: {
             screen: Results,
           },
-          Detail: {
-            screen: Detail,
-            navigationOptions: {
-              tabBarVisible: false,
-              header: null,
-            },
-          },
+          // Detail: {
+          //   screen: Detail,
+          //   navigationOptions: {
+          //     tabBarVisible: false,
+          //     header: null,
+          //   },
+          // },
         },
         {
           initialRouteName: 'Results',
@@ -59,13 +59,13 @@ const prayStack = createStackNavigator(
           Favourites: {
             screen: Favourites,
           },
-          Detail: {
-            screen: Detail,
-            navigationOptions: {
-              tabBarVisible: false,
-              header: null,
-            },
-          },
+          // Detail: {
+          //   screen: Detail,
+          //   navigationOptions: {
+          //     tabBarVisible: false,
+          //     header: null,
+          //   },
+          // },
         },
         {
           initialRouteName: 'Favourites',
@@ -100,26 +100,26 @@ const discoverStack = FluidNavigator(
     HomeFeed: {
       screen: HomeFeed,
     },
-    Detail: {
-      screen: Detail,
-      navigationOptions: {
-        tabBarVisible: false,
-        header: null,
-      },
-    },
+    // Detail: {
+    //   screen: Detail,
+    //   navigationOptions: {
+    //     tabBarVisible: false,
+    //     header: null,
+    //   },
+    // },
     Favourites: {
       screen: FluidNavigator(
         {
           Favourites: {
             screen: Favourites,
           },
-          Detail: {
-            screen: Detail,
-            navigationOptions: {
-              tabBarVisible: false,
-              header: null,
-            },
-          },
+          // Detail: {
+          //   screen: Detail,
+          //   navigationOptions: {
+          //     tabBarVisible: false,
+          //     header: null,
+          //   },
+          // },
         },
         {
           initialRouteName: 'Favourites',

@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {
-Image,
+  Image,
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
   Dimensions,
-  Share
+  Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
@@ -21,7 +21,6 @@ export default class Detail extends Component {
     this.state = {
       alreadyLiked: false,
     };
-    
   }
 
   componentDidMount(props) {
@@ -70,7 +69,7 @@ export default class Detail extends Component {
             <Block flex={false} style={{paddingTop: '10%'}}>
               <Block flex={false} center>
                 <Transition shared={'versetext' + index}>
-                  <Text h2 white center style={{marginVertical: 8}}>
+                  <Text h3 white center style={{marginVertical: 8}}>
                     {verse.verse}
                   </Text>
                 </Transition>
@@ -132,7 +131,7 @@ export default class Detail extends Component {
                         verse.verse +
                           ' ' +
                           verse.bookname +
-                          'I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
+                          ' I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
                       )
                     }></Icon>
                 </TouchableOpacity>
@@ -145,7 +144,6 @@ export default class Detail extends Component {
   }
 
   async toggleFavourites(verseText, bookText, osis) {
-    
     osis = osis.toString();
     if (osis.length == 7) {
       osis = '0' + osis.toString();
@@ -180,25 +178,25 @@ export default class Detail extends Component {
     }
   }
 
-  async  onShare(message) {
-  try {
-    const result = await Share.share({
-      message: message,
-    });
+  async onShare(message) {
+    try {
+      const result = await Share.share({
+        message: message,
+      });
 
-    if (result.action === Share.sharedAction) {
-      if (result.activityType) {
-        // shared with activity type of result.activityType
-      } else {
-        // shared
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
       }
-    } else if (result.action === Share.dismissedAction) {
-      // dismissed
+    } catch (error) {
+      alert(error.message);
     }
-  } catch (error) {
-    alert(error.message);
   }
-}
 }
 
 const styles = StyleSheet.create({

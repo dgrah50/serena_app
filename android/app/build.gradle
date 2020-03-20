@@ -149,7 +149,7 @@ android {
     applicationId "com.serenaltd.serena"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 7
+    versionCode 9
     versionName "1.0.2"
     manifestPlaceholders = [
       onesignal_app_id: '5e8397b0-56ae-422c-98e4-fbba0d7f6fbb',
