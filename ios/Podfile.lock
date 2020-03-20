@@ -292,6 +292,8 @@ PODS:
     - React
   - react-native-track-player (2.0.0-rc13):
     - React
+  - react-native-view-shot (3.1.2):
+    - React
   - react-native-voice (0.3.0):
     - React
   - React-RCTActionSheet (0.60.5):
@@ -393,6 +395,7 @@ DEPENDENCIES:
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-spinkit (from `../node_modules/react-native-spinkit`)
   - react-native-track-player (from `../node_modules/react-native-track-player`)
+  - react-native-view-shot (from `../node_modules/react-native-view-shot`)
   - react-native-voice (from `../node_modules/react-native-voice`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -505,6 +508,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-spinkit"
   react-native-track-player:
     :path: "../node_modules/react-native-track-player"
+  react-native-view-shot:
+    :path: "../node_modules/react-native-view-shot"
   react-native-voice:
     :path: "../node_modules/react-native-voice"
   React-RCTActionSheet:
@@ -616,6 +621,7 @@ SPEC CHECKSUMS:
   react-native-onesignal: 5ee6834ff54b56fc8ea33877803e8fa92633c87b
   react-native-spinkit: da294fd828216ad211fe36a5c14c1e09f09e62db
   react-native-track-player: bb3a3f8251cfe7f4cbc5746e5a67d0951a4a5e39
+  react-native-view-shot: 08c46c9e8e92f6681e8f2ffa55ac3d06e7e99070
   react-native-voice: 9829ac5dc9300687c5f215bddf6c9645e82923fc
   React-RCTActionSheet: b0f1ea83f4bf75fb966eae9bfc47b78c8d3efd90
   React-RCTAnimation: 359ba1b5690b1e87cc173558a78e82d35919333e

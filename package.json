@@ -71,6 +71,7 @@
     "react-native-track-player": "^2.0.0-rc13",
     "react-native-typography": "^1.4.1",
     "react-native-vector-icons": "^6.6.0",
+    "react-native-view-shot": "^3.1.2",
     "react-native-voice": "^0.3.0",
     "react-navigation": "^4.0.10",
     "react-navigation-drawer": "^2.2.2",

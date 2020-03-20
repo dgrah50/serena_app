@@ -15,12 +15,12 @@ import Podcasts from '../screens/Podcasts';
 import SinglePodcast from '../screens/SinglePodcast';
 import Give from '../screens/Give';
 
-const prayStack = createStackNavigator(
+const homeStack = createStackNavigator(
   {
-    Pray: {
+    Home: {
       screen: createStackNavigator(
         {
-          Pray: {
+          Home: {
             screen: Fetch,
           },
           Profile: {
@@ -28,7 +28,7 @@ const prayStack = createStackNavigator(
           },
         },
         {
-          initialRouteName: 'Pray',
+          initialRouteName: 'Home',
           // headerMode: 'none',
           header: null,
         },
@@ -74,7 +74,7 @@ const prayStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'Pray',
+    initialRouteName: 'Home',
     headerMode: 'none',
   },
 );
@@ -132,7 +132,7 @@ const discoverStack = FluidNavigator(
   },
 );
 
-prayStack.navigationOptions = ({navigation}) => {
+homeStack.navigationOptions = ({navigation}) => {
   let tabBarVisible;
   const deepestRoute = getDeepestRoute(navigation.state);
   if (navigation.state.routes.length > 1) {
@@ -146,7 +146,7 @@ prayStack.navigationOptions = ({navigation}) => {
   }
   return {
     tabBarVisible,
-    tabBarLabel: 'Pray',
+    tabBarLabel: 'Home',
     tabBarIcon: ({tintColor}) => (
       <Icon name="home" size={25} color={tintColor} />
     ),
@@ -200,8 +200,8 @@ function getDeepestRoute(route) {
 
 const defaultStack = createBottomTabNavigator(
   {
-    Pray: {
-      screen: prayStack,
+    Home: {
+      screen: homeStack,
     },
     Discover: {
       screen: discoverStack,

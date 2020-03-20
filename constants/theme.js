@@ -50,15 +50,15 @@ const sizes = {
 };
 
 const shadow = {
-  // shadowColor: '#000',
-  // shadowOffset: {
-  //   width: 0,
-  //   height: 3,
-  // },
-  // shadowOpacity: 0.2,
-  // shadowRadius: 4.65,
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 3,
+  },
+  shadowOpacity: 0.2,
+  shadowRadius: 2.65,
 
-  // elevation: 7,
+  elevation: 7,
 };
 
 const randomImages = [

@@ -5,14 +5,16 @@ import {
   TouchableOpacity,
   ImageBackground,
   Dimensions,
-  Share,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
 import {theme} from '../constants';
-import {Transition} from 'react-navigation-fluid-transitions';
+import Share from 'react-native-share';
 import firebase from 'react-native-firebase';
-const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
+import ViewShot, {captureRef} from 'react-native-view-shot';
+const {height, width} = Dimensions.get('window');
 
 export default class Detail extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ export default class Detail extends Component {
     console.log();
     this.state = {
       alreadyLiked: false,
+      showButtons: true,
     };
   }
 
@@ -31,118 +34,152 @@ export default class Detail extends Component {
 
   render() {
     let verse = this.props.navigation.getParam('verse');
-    let index = this.props.navigation.getParam('index');
     let imageIndex = this.props.navigation.getParam('imageIndex');
+
     return (
-      <Transition shared={'image' + index}>
-        <ImageBackground
-          style={{width: '100%'}}
-          source={theme.randomImages[imageIndex]}>
-          <Block
-            flex={false}
-            center
-            middle
-            style={{
-              padding: 10,
-              height: '100%',
-              borderRadius: theme.sizes.border,
-            }}>
-            <TouchableOpacity
-              hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
-              style={{
-                position: 'absolute',
-                top: 50,
-                left: 30,
-              }}>
-              <Icon
-                name="arrow-left"
-                light
-                size={35}
-                color={theme.colors.white}
-                onPress={() => {
-                  this.props.navigation.goBack();
-                  this.props.navigation.state.params.cardToggle(
-                    this.state.alreadyLiked,
-                  );
-                }}></Icon>
-            </TouchableOpacity>
-            <Block flex={false} style={{paddingTop: '10%'}}>
-              <Block flex={false} center>
-                <Transition shared={'versetext' + index}>
-                  <Text h3 white center style={{marginVertical: 8}}>
-                    {verse.verse}
-                  </Text>
-                </Transition>
-              </Block>
-              <Block flex={false} center>
-                <Transition shared={'booktext' + index}>
-                  <Text h3 white center style={{marginVertical: 8}}>
-                    {verse.bookname}
-                  </Text>
-                </Transition>
-                <Image
-                  source={require('../assets/images/whiteicon.png')}
-                  resizeMode="cover"
-                  style={{
-                    height: 40,
-                    width: 40,
-                    bottom: 0,
-                  }}
-                />
-              </Block>
-            </Block>
+      <>
+        <ViewShot ref="viewShot">
+          <ImageBackground
+            style={{width: '100%'}}
+            source={theme.randomImages[imageIndex]}>
             <Block
               flex={false}
-              row
+              center
               middle
               style={{
-                width: '100%',
-                position: 'absolute',
-                bottom: 25,
-              }}
-              space={'between'}>
-              <Transition shared={'likebutton' + index}>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.toggleFavourites(
-                      verse.verse,
-                      verse.bookname,
-                      verse.osis,
-                    )
-                  }>
-                  <Icon
-                    name="heart"
-                    solid={this.state.alreadyLiked}
-                    size={40}
-                    color={theme.colors.white}
-                    style={{marginLeft: 10}}></Icon>
-                </TouchableOpacity>
-              </Transition>
-
-              <Transition shared={'sharebutton' + index}>
-                <TouchableOpacity>
-                  <Icon
-                    name="paper-plane"
-                    size={40}
-                    color={theme.colors.white}
-                    style={{marginRight: 10}}
-                    onPress={() =>
-                      this.onShare(
-                        verse.verse +
-                          ' ' +
-                          verse.bookname +
-                          ' I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
-                      )
-                    }></Icon>
-                </TouchableOpacity>
-              </Transition>
+                height: '100%',
+                borderRadius: theme.sizes.border,
+              }}>
+              {this.state.showButtons && this._renderTopButtons()}
+              {this._renderBibleText(verse)}
             </Block>
-          </Block>
-        </ImageBackground>
-      </Transition>
+          </ImageBackground>
+        </ViewShot>
+        {this._renderLikeAndShare(verse)}
+      </>
     );
   }
 
+  _renderTopButtons() {
+    return (
+      <>
+        <TouchableOpacity
+          hitSlop={{bottom: 100, left: 100, right: 100, top: 100}}
+          style={{
+            height: 6,
+            borderRadius: 3,
+            width: width * 0.3,
+            top: '5%',
+            backgroundColor: 'white',
+            marginHorizontal: width * 0.35,
+            marginTop: 5,
+            marginBottom: 15,
+            position: 'absolute',
+          }}
+          onPress={() => {
+            this.props.navigation.goBack();
+            this.props.navigation.state.params.cardToggle(
+              this.state.alreadyLiked,
+            );
+          }}
+        />
+        <TouchableOpacity
+          hitSlop={{bottom: 100, left: 100, right: 100, top: 100}}
+          style={{
+            position: 'absolute',
+            top: 50,
+            left: 30,
+          }}>
+          <Icon
+            name="arrow-left"
+            light
+            size={35}
+            color={theme.colors.white}
+            onPress={() => {
+              console.log('test');
+              this.props.navigation.goBack();
+              this.props.navigation.state.params.cardToggle(
+                this.state.alreadyLiked,
+              );
+            }}
+          />
+        </TouchableOpacity>
+      </>
+    );
+  }
+  _renderBibleText(verse) {
+    return (
+      <Block flex={false}>
+        <Block flex={false} center>
+          <Text
+            white
+            center
+            style={{
+              marginVertical: 8,
+              marginHorizontal: 15,
+              fontSize: 0.07 * width,
+            }}>
+            {verse.verse}
+          </Text>
+          <Text h3 white center style={{marginVertical: 8}}>
+            {verse.bookname}
+          </Text>
+          <Image
+            source={require('../assets/images/whiteicon.png')}
+            resizeMode="cover"
+            style={{
+              height: 40,
+              width: 40,
+              bottom: 0,
+            }}
+          />
+        </Block>
+      </Block>
+    );
+  }
+  _renderLikeAndShare(verse) {
+    return (
+      <Block
+        flex={false}
+        row
+        middle
+        style={{
+          width: '100%',
+          position: 'absolute',
+          bottom: 25,
+          paddingHorizontal: '5%',
+        }}
+        space={'between'}>
+        <TouchableOpacity
+          onPress={() =>
+            this.toggleFavourites(verse.verse, verse.bookname, verse.osis)
+          }>
+          <Icon
+            name="heart"
+            solid={this.state.alreadyLiked}
+            size={40}
+            color={theme.colors.white}
+            style={{marginLeft: 10}}></Icon>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Icon
+            name="paper-plane"
+            size={40}
+            color={theme.colors.white}
+            style={{marginRight: 10}}
+            onPress={() =>
+              this.onShare(
+                verse.verse +
+                  ' ' +
+                  verse.bookname +
+                  ' I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
+              )
+            }></Icon>
+        </TouchableOpacity>
+      </Block>
+    );
+  }
   async toggleFavourites(verseText, bookText, osis) {
     osis = osis.toString();
     if (osis.length == 7) {
@@ -179,23 +216,44 @@ export default class Detail extends Component {
   }
 
   async onShare(message) {
-    try {
-      const result = await Share.share({
-        message: message,
-      });
+    this.setState({showButtons: false}, () => {
+      captureRef(this.refs.viewShot, {
+        format: 'base64',
+        quality: 0.8,
+      }).then(
+        uri => {
+          const shareOptions = {
+            title: 'Share via',
+            message: message,
+            url: uri,
+            // social: Share.Social.WHATSAPP,
+            // filename: 'SerenaVerseOfTheDay', // only for base64 file in Android
+          };
+          Share.open(shareOptions);
+          this.setState({showButtons: true});
+        },
+        error => console.error('Oops, snapshot failed', error),
+      );
+    });
+   
 
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
+    // try {
+    //   const result = await Share.share({
+    //     message: message,
+    //   });
+
+    //   if (result.action === Share.sharedAction) {
+    //     if (result.activityType) {
+    //       // shared with activity type of result.activityType
+    //     } else {
+    //       // shared
+    //     }
+    //   } else if (result.action === Share.dismissedAction) {
+    //     // dismissed
+    //   }
+    // } catch (error) {
+    //   alert(error.message);
+    // }
   }
 }
 

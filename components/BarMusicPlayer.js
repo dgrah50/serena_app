@@ -12,12 +12,12 @@ function BarMusicPlayer(props) {
   const playbackState = usePlaybackState();
 
   function togglePlay() {
-    console.log(State[playbackState])
-    // if (State[playbackState] == 'Playing') {
-    //   TrackPlayer.pause();
-    // } else {
-    //   TrackPlayer.play();
-    // }
+
+    if (State[playbackState] == 'Playing') {
+      TrackPlayer.pause();
+    } else {
+      TrackPlayer.play();
+    }
   }
 
   const {navigation, song} = props;
@@ -35,13 +35,13 @@ function BarMusicPlayer(props) {
       activeOpacity={1}
       onPress={() => navigation.navigate('Player')}
       style={styles.container}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         // activeOpacity={gStyle.activeOpacity}
         hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
         onPress={this.toggleFavorite}
         style={styles.containerIcon}>
         <Icon color={favoriteColor} name={favoriteIcon} size={20} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       {song && (
         <Block  center middle style={styles.containerSong}>
           <Text
