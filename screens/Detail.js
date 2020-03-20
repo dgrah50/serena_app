@@ -85,24 +85,19 @@ export default class Detail extends Component {
         />
         <TouchableOpacity
           hitSlop={{bottom: 100, left: 100, right: 100, top: 100}}
+          onPress={() => {
+            console.log('test');
+            this.props.navigation.goBack();
+            this.props.navigation.state.params.cardToggle(
+              this.state.alreadyLiked,
+            );
+          }}
           style={{
             position: 'absolute',
             top: 50,
             left: 30,
           }}>
-          <Icon
-            name="arrow-left"
-            light
-            size={35}
-            color={theme.colors.white}
-            onPress={() => {
-              console.log('test');
-              this.props.navigation.goBack();
-              this.props.navigation.state.params.cardToggle(
-                this.state.alreadyLiked,
-              );
-            }}
-          />
+          <Icon name="arrow-left" light size={35} color={theme.colors.white} />
         </TouchableOpacity>
       </>
     );
