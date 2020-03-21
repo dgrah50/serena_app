@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   View,
+  // Share
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
@@ -213,7 +214,7 @@ export default class Detail extends Component {
   async onShare(message) {
     this.setState({showButtons: false}, () => {
       captureRef(this.refs.viewShot, {
-        format: 'base64',
+        result: 'data-uri',
         quality: 0.8,
       }).then(
         uri => {
@@ -221,6 +222,7 @@ export default class Detail extends Component {
             title: 'Share via',
             message: message,
             url: uri,
+            subject: 'Serena Verse',
             // social: Share.Social.WHATSAPP,
             // filename: 'SerenaVerseOfTheDay', // only for base64 file in Android
           };

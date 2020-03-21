@@ -18,7 +18,6 @@ export default class SinglePodcast extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Podcast',
-      // headerTransparent: true,
       headerTitleStyle: {
         fontWeight: 'bold',
       },
@@ -26,7 +25,8 @@ export default class SinglePodcast extends Component {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Profile');
-          }}></TouchableOpacity>
+          }}
+        />
       ),
     };
   };
@@ -43,7 +43,9 @@ export default class SinglePodcast extends Component {
       this.props.navigation.getParam('podcastDetail', {}),
     );
     podcastDetail = JSON.parse(podcastDetail);
-    this.setState({podcastDetail: podcastDetail});
+    this.setState({podcastDetail: podcastDetail},()=>{
+      console.log(podcastDetail)
+    })
     this.fetchPodcasts(podcastDetail);
   }
 
@@ -64,7 +66,8 @@ export default class SinglePodcast extends Component {
       title: titles[0].childNodes[0].nodeValue,
       mp3link: enclosures[0].getAttribute('url'),
       date_uploaded: null,
-      duration:  durations.length != 0 ? durations[0].childNodes[0].nodeValue : "",
+      duration:
+        durations.length != 0 ? durations[0].childNodes[0].nodeValue : '',
       author: author,
       speakerimg: img,
       plays: null,
@@ -87,7 +90,7 @@ export default class SinglePodcast extends Component {
         return this.logPodTrack(
           item,
           podcast.artistName,
-          podcast.artworkUrl100,
+          podcast.artworkUrl600,
         );
       });
 
@@ -129,7 +132,7 @@ export default class SinglePodcast extends Component {
                 borderRadius: theme.sizes.border,
               }}
               source={{
-                uri: pod.artworkUrl100,
+                uri: pod.artworkUrl600,
               }}
             />
           </Block>
@@ -166,7 +169,7 @@ export default class SinglePodcast extends Component {
             height: 100,
           }}
           source={{
-            uri: item.artworkUrl100,
+            uri: item.artworkUrl600,
           }}
         />
         <Text caption center>

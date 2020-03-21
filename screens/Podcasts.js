@@ -107,6 +107,7 @@ export default class Podcasts extends Component {
             data={this.state.results}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
+              console.log(item)
               return this._renderPodcastTile(item);
             }}
           />
@@ -132,7 +133,7 @@ export default class Podcasts extends Component {
               borderRadius: theme.sizes.border,
             }}
             source={{
-              uri: item.artworkUrl100,
+              uri: item.artworkUrl600,
             }}
           />
           <Text
