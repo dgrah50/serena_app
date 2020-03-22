@@ -74,6 +74,8 @@ class Forgot extends Component {
     );
   }
 
+
+
   //****** HELPER FUNCTIONS SECTION
   emailAddressTextHandler = e => {
     this.setState({

@@ -41,15 +41,6 @@ export default class Fetch extends Component {
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
     Voice.onSpeechError = this.onSpeechError.bind(this);
     firebase.analytics().setCurrentScreen('Home');
-    // firebase.auth().onAuthStateChanged(function(user) {
-    //   if (user) {
-    //     user.getIdToken().then(function(idToken) {
-    //       console.log(idToken)
-    //       axios.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
-    //       return idToken;
-    //     });
-    //   }
-    // });
   }
 
   handleViewRef = ref => (this.view = ref);
@@ -57,16 +48,6 @@ export default class Fetch extends Component {
   static navigationOptions = {
     header: null,
   };
-
-  // static navigationOptions = ({navigation}) => {
-  //   return {
-  //     title: 'Feed',
-  //     // headerTransparent: true,
-  //     headerTitleStyle: {
-  //       fontWeight: 'bold',
-  //     },
-  //   };
-  // };
 
   render() {
     return (

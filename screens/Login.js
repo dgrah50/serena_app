@@ -228,13 +228,11 @@ class Onboarding extends Component {
         'public_profile',
         'email',
       ]);
-
       if (result.isCancelled) {
         // handle this however suites the flow of your app
         // throw new Error('User cancelled request');
         return null;
       }
-
       console.log(
         `Login success with permissions: ${result.grantedPermissions.toString()}`,
       );

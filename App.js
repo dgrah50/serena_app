@@ -16,7 +16,6 @@ import TrackPlayer, {
   usePlaybackState,
 } from 'react-native-track-player';
 import axios from 'axios';
-import qs from 'qs';
 import OneSignal from 'react-native-onesignal';
 const mocksong = {
   title: ` `,
@@ -33,14 +32,10 @@ if (__DEV__) {
 
 export default function Container(props) {
   const [currentSongData, setCurrentSong] = useState(mocksong);
-  const [authTokenSet, setAuthTokenStatus] = useState(false);
-  const [StreamToken, setStreamToken] = useState(null);
+
   const [tabBarVisible, showTabBar] = useState(false);
   const playbackState = usePlaybackState();
-  const [recommendedVerses, setRecs] = useState({
-    verses: null,
-    sermons: {current: null},
-  });
+
   const didMountRef = useRef(false);
   const events = [
     Event.PlaybackError,
@@ -80,26 +75,28 @@ export default function Container(props) {
   });
 
   useEffect(() => {
+    //If you are logged in, attach the authorisation token to all API requests
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         user.getIdToken().then(function(idToken) {
           axios.defaults.headers.common['Authorization'] = `Bearer ${idToken}`;
-          setAuthTokenStatus(true);
         });
       }
     });
   });
 
+//Initialise the audio player when the audio source changes
   useEffect(() => {
     if (currentSongData.mp3link) {
+      //Initialises Trackplayer - the audio playing module
       TrackPlayer.setupPlayer().then(async () => {
         // Adds a track to the queue
         let url = currentSongData.mp3link;
+        //Little hack to scrape sermonaudio data
         url = url.replace(
           '//mp3.sermonaudio.com/download/',
           'https://mp3.sermonaudio.com/filearea/',
         );
-
         await TrackPlayer.add({
           id: '1',
           url: url,
@@ -117,35 +114,9 @@ export default function Container(props) {
     }
   },[currentSongData]);
 
-  // useEffect(() => {
-  //   if (didMountRef.current) {
-  //     TrackPlayer.reset();
-  //     // TrackPlayer.reset().then(() => {
-  //     //   TrackPlayer.play();
-  //     // });
-  //   } else {
-  //     didMountRef.current = true;
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    if (authTokenSet) {
-      axios
-        .post(
-          'https://serenaengine333.co.uk/api/users/token',
-          qs.stringify({
-            content: firebase.auth().currentUser.uid,
-          }),
-        )
-        .then(res => {
-          setStreamToken(res.data);
-        });
-    }
-  }, [authTokenSet]);
-
+//intialise the capabilty to receive notifications
   useEffect(() => {
     AsyncStorage.getItem('notifsEnabled').then(value => console.log(value));
-
     OneSignal.setLogLevel(6, 0);
     OneSignal.init('5e8397b0-56ae-422c-98e4-fbba0d7f6fbb'); // set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
     AsyncStorage.getItem('notifsEnabled').then(value => {
@@ -169,24 +140,23 @@ export default function Container(props) {
   const onReceived = notification => {
     console.log('Notification received: ', notification);
   };
-
   const onOpened = openResult => {
     // console.log('Message: ', openResult.notification.payload.body);
     // console.log('Data: ', openResult.notification.payload.additionalData);
     // console.log('isActive: ', openResult.notification.isAppInFocus);
     // console.log('openResult: ', openResult);
   };
-
   const onIds = device => {
     // console.log('Device info: ', device);
   };
+
+  //Return the main app
   return (
     <View style={styles.container}>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
       <AppNavigator
         screenProps={{
           currentSongData,
-          StreamToken,
           changeSong: setCurrentSong,
           setToggleTabBar: setToggleTabBar,
         }}

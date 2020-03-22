@@ -282,7 +282,7 @@ export function _renderSermon(
           theme.shadow,
         ]}>
         <Block flex={false} row right style={{width: '100%', paddingBottom: 5}}>
-          <Text>{moment(uploaddate).format('LL')}</Text>
+          <Text>{moment(uploaddate).isValid() ? moment(uploaddate).format('LL'):""}</Text>
         </Block>
         <Block middle center row style={{marginBottom: 10}}>
           <Image

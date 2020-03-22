@@ -3,7 +3,7 @@ import {Image, KeyboardAvoidingView, Dimensions, Alert} from 'react-native';
 import firebase from 'react-native-firebase';
 import {Button, Block, Text, Input} from '../components';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {theme, mocks, time} from '../constants';
+import {theme, time} from '../constants';
 
 const {height, width} = Dimensions.get('window');
 

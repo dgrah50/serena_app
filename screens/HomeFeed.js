@@ -329,6 +329,7 @@ export default class HomeFeed extends React.PureComponent {
       </Block>
     );
   };
+  
   //****** HELPER FUNCTIONS SECTION
   whichCard(item, index) {
     if (item.hasOwnProperty('description')) {
