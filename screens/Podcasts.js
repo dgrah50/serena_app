@@ -141,16 +141,17 @@ export default class Podcasts extends Component {
             center
             space={'between'}
             flex={false}>
-            <Text title>New from subscriptions</Text>
-
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('SubscribedPodcasts');
-              }}>
-              <Text button style={{color: theme.colors.primary}}>
-                View All
-              </Text>
-            </TouchableOpacity>
+            {this.state.subs.length > 0 && <>
+              <Text title>New from Subscriptions</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('SubscribedPodcasts');
+                }}>
+                <Text button style={{color: theme.colors.primary}}>
+                  View All
+                </Text>
+              </TouchableOpacity>
+            </>}
           </Block>
 
           {_renderPodcast(this.state.subs[0], 1, this.props, true)}
@@ -160,7 +161,7 @@ export default class Podcasts extends Component {
             center
             space={'between'}
             flex={false}>
-            <Text title style={styles.sectionHeader}>
+            <Text title >
               Podcasts
             </Text>
           </Block>

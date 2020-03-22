@@ -31,7 +31,7 @@ export default class Input extends Component {
     return (
       <View>
         <View style={styles.labelContainer}>
-          <Text caption medium style={styles.label}>
+          <Text title medium style={styles.label}>
             {label}
           </Text>
           {rightLabel}
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   label: {
-    textTransform: 'uppercase',
+    // textTransform: 'uppercase',
   },
   labelContainer: {
     flexDirection: 'row',

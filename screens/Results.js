@@ -94,7 +94,7 @@ export default class Results extends Component {
               style={{paddingLeft: 10}}
               color={theme.colors.black}
               onPress={() => {
-                this.props.navigation.navigate("Pray");
+                this.props.navigation.navigate("Home");
               }}/>
           </Left>
           <Body>
@@ -301,13 +301,20 @@ export default class Results extends Component {
     const enclosures = Array.prototype.slice.call(
       track.getElementsByTagName('enclosure'),
     );
-
+    const pubDates = Array.prototype.slice.call(
+      track.getElementsByTagName('pubDate'),
+    );
     try {
       return {
         title: titles[0].childNodes[0].nodeValue,
         mp3link: enclosures[0].getAttribute('url'),
         speakerimg: podcastImage,
-        date_uploaded: null,
+        date_uploaded:
+          pubDates.length != 0
+            ? moment(pubDates[0].childNodes[0].nodeValue)
+                .local()
+                .format()
+            : '',
         duration: durations[0].childNodes[0].nodeValue,
         author: authors[0].childNodes[0].nodeValue,
         plays: null,
