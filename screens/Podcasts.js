@@ -4,8 +4,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  FlatList,
-  SectionList,
   ScrollView,
 } from 'react-native';
 import firebase from 'react-native-firebase';
@@ -145,7 +143,10 @@ export default class Podcasts extends Component {
             flex={false}>
             <Text title>New from subscriptions</Text>
 
-            <TouchableOpacity onPress={() => { this.props.navigation.navigate("Home")}}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('SubscribedPodcasts');
+              }}>
               <Text button style={{color: theme.colors.primary}}>
                 View All
               </Text>
@@ -166,7 +167,6 @@ export default class Podcasts extends Component {
 
           <Block style={styles.podContainer}>
             {this.state.results.map(item => {
-              console.log(item);
               return this._renderPodcastTile(item);
             })}
           </Block>
@@ -285,7 +285,7 @@ export default class Podcasts extends Component {
     );
     console.log(subbedDetails);
     return await subbedDetails.sort((a, b) =>
-      a.date_uploaded > b.date_uploaded ? 1 : -1,
+      a.date_uploaded < b.date_uploaded ? 1 : -1,
     );
   }
 }

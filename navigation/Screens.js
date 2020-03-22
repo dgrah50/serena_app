@@ -12,6 +12,7 @@ import Profile from '../screens/Profile';
 import Fetch from '../screens/Fetch';
 import Favourites from '../screens/Favourites';
 import Podcasts from '../screens/Podcasts';
+import SubscribedPodcasts from '../screens/SubscribedPodcasts';
 import SinglePodcast from '../screens/SinglePodcast';
 
 
@@ -40,13 +41,6 @@ const homeStack = createStackNavigator(
           Results: {
             screen: Results,
           },
-          // Detail: {
-          //   screen: Detail,
-          //   navigationOptions: {
-          //     tabBarVisible: false,
-          //     header: null,
-          //   },
-          // },
         },
         {
           initialRouteName: 'Results',
@@ -59,13 +53,6 @@ const homeStack = createStackNavigator(
           Favourites: {
             screen: Favourites,
           },
-          // Detail: {
-          //   screen: Detail,
-          //   navigationOptions: {
-          //     tabBarVisible: false,
-          //     header: null,
-          //   },
-          // },
         },
         {
           initialRouteName: 'Favourites',
@@ -86,6 +73,9 @@ const podcastStack = createStackNavigator(
     SinglePodcast: {
       screen: SinglePodcast,
     },
+    SubscribedPodcasts: {
+      screen: SubscribedPodcasts,
+    },
   },
   {
     initialRouteName: 'Podcasts',
@@ -97,26 +87,12 @@ const discoverStack = FluidNavigator(
     HomeFeed: {
       screen: HomeFeed,
     },
-    // Detail: {
-    //   screen: Detail,
-    //   navigationOptions: {
-    //     tabBarVisible: false,
-    //     header: null,
-    //   },
-    // },
     Favourites: {
       screen: FluidNavigator(
         {
           Favourites: {
             screen: Favourites,
           },
-          // Detail: {
-          //   screen: Detail,
-          //   navigationOptions: {
-          //     tabBarVisible: false,
-          //     header: null,
-          //   },
-          // },
         },
         {
           initialRouteName: 'Favourites',
@@ -224,26 +200,3 @@ const defaultStack = createBottomTabNavigator(
 );
 
 export default defaultStack;
-
-// StackHome.navigationOptions = ({ navigation }) => {
-//   let tabBarVisible;
-//   if (navigation.state.routes.length > 1) {
-//     navigation.state.routes.map(route => {
-//       if (route.routeName === "CustomHide") {
-//         tabBarVisible = false;
-//       } else {
-//         tabBarVisible = true;
-//       }
-//     }
-//   }
-// StackHome.navigationOptions = ({ navigation }) => {
-//   let tabBarVisible;
-//   if (navigation.state.routes.length > 1) {
-//     navigation.state.routes.map(route => {
-//       if (route.routeName === "CustomHide") {
-//         tabBarVisible = false;
-//       } else {
-//         tabBarVisible = true;
-//       }
-//     }
-//   }
