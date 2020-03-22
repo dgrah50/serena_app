@@ -137,13 +137,33 @@ export default class Podcasts extends Component {
           style={styles.container}
           numColumns={2}
           showsVerticalScrollIndicator={false}>
-          <Text title style={styles.sectionHeader}>
-            New from your Subscriptions
-          </Text>
+          <Block
+            style={styles.sectionHeader}
+            row
+            center
+            space={'between'}
+            flex={false}>
+            <Text title>New from subscriptions</Text>
+
+            <TouchableOpacity onPress={() => { this.props.navigation.navigate("Home")}}>
+              <Text button style={{color: theme.colors.primary}}>
+                View All
+              </Text>
+            </TouchableOpacity>
+          </Block>
+
           {_renderPodcast(this.state.subs[0], 1, this.props, true)}
-          <Text title style={styles.sectionHeader}>
-            Podcasts
-          </Text>
+          <Block
+            style={styles.sectionHeader}
+            row
+            center
+            space={'between'}
+            flex={false}>
+            <Text title style={styles.sectionHeader}>
+              Podcasts
+            </Text>
+          </Block>
+
           <Block style={styles.podContainer}>
             {this.state.results.map(item => {
               console.log(item);

@@ -13,7 +13,7 @@ import Fetch from '../screens/Fetch';
 import Favourites from '../screens/Favourites';
 import Podcasts from '../screens/Podcasts';
 import SinglePodcast from '../screens/SinglePodcast';
-import Give from '../screens/Give';
+
 
 const homeStack = createStackNavigator(
   {
@@ -86,9 +86,6 @@ const podcastStack = createStackNavigator(
     SinglePodcast: {
       screen: SinglePodcast,
     },
-    // Give: {
-    //   screen: Give,
-    // },
   },
   {
     initialRouteName: 'Podcasts',
