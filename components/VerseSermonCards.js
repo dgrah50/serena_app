@@ -15,6 +15,7 @@ import {Transition} from 'react-navigation-fluid-transitions';
 import firebase from 'react-native-firebase';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
+import moment, {relativeTimeThreshold} from 'moment';
 
 export class VerseCard extends React.Component {
   constructor(props) {
@@ -248,6 +249,7 @@ export function _renderSermon(
       : 'https://via.placeholder.com/150/449CD6/FFFFFF?text=Serena.com';
   let speakerName = item.author;
   let duration = item.duration;
+  let uploaddate = item.date_uploaded;
   const changeSong = props.screenProps.changeSong;
   return (
     <TouchableOpacity
@@ -279,11 +281,9 @@ export function _renderSermon(
           center ? {width: WIDTH * 0.9} : {width: WIDTH * 0.7, marginRight: 20},
           theme.shadow,
         ]}>
-        <Block
-          flex={false}
-          row
-          left
-          style={{width: '100%', paddingBottom: 5}}></Block>
+        <Block flex={false} row right style={{width: '100%', paddingBottom: 5}}>
+          <Text>{moment(uploaddate).format('LL')}</Text>
+        </Block>
         <Block middle center row style={{marginBottom: 10}}>
           <Image
             style={{
@@ -323,7 +323,12 @@ export function _renderSermon(
             />
             <Icon name="paper-plane" size={20} color={theme.colors.gray} />
           </Block> */}
-          <Block flex={false} row center space={'between'} style={{width:"100%"}}>
+          <Block
+            flex={false}
+            row
+            center
+            space={'between'}
+            style={{width: '100%'}}>
             <Text left body gray>
               {isSermon ? 'Sermon' : 'Podcast'} | {formatDuration(duration)}
             </Text>

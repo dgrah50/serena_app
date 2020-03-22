@@ -12,6 +12,7 @@ import {DOMParser} from 'xmldom';
 const {width} = Dimensions.get('window');
 import {_renderPodcast} from '../components/VerseSermonCards';
 import firebase from 'react-native-firebase';
+import moment, {relativeTimeThreshold} from 'moment';
 
 export default class SinglePodcast extends Component {
   static navigationOptions = ({navigation}) => {
@@ -161,10 +162,18 @@ export default class SinglePodcast extends Component {
     const enclosures = Array.prototype.slice.call(
       track.getElementsByTagName('enclosure'),
     );
+      const pubDates = Array.prototype.slice.call(
+        track.getElementsByTagName('pubDate'),
+      );
     return {
       title: titles[0].childNodes[0].nodeValue,
       mp3link: enclosures[0].getAttribute('url'),
-      date_uploaded: null,
+      date_uploaded:
+        pubDates.length != 0
+          ? moment(pubDates[0].childNodes[0].nodeValue)
+              .local()
+              .format()
+          : '',
       duration:
         durations.length != 0 ? durations[0].childNodes[0].nodeValue : '',
       author: author,

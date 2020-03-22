@@ -15,6 +15,7 @@ import {theme, time} from '../constants';
 import {DOMParser} from 'xmldom';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import moment, {relativeTimeThreshold} from 'moment';
 import {
   VerseCard,
   _renderSermon,
@@ -340,7 +341,6 @@ export default class HomeFeed extends React.PureComponent {
           <Block key={index}>
             {this._renderRecommendedVerse(item, 0)}
             {this._renderFavouritesButton()}
-            {/* {this._renderSubscribedPodcasts()} */}
           </Block>
         );
       } else {
@@ -377,13 +377,20 @@ export default class HomeFeed extends React.PureComponent {
     const enclosures = Array.prototype.slice.call(
       track.getElementsByTagName('enclosure'),
     );
-
+    const pubDates = Array.prototype.slice.call(
+      track.getElementsByTagName('pubDate'),
+    );
     try {
       return {
         title: titles[0].childNodes[0].nodeValue,
         mp3link: enclosures[0].getAttribute('url'),
         speakerimg: podcastImage,
-        date_uploaded: null,
+        date_uploaded:
+          pubDates.length != 0
+            ? moment(pubDates[0].childNodes[0].nodeValue)
+                .local()
+                .format()
+            : '',
         duration: durations[0].childNodes[0].nodeValue,
         author: authors[0].childNodes[0].nodeValue,
         plays: null,

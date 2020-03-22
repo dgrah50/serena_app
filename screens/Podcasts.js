@@ -160,7 +160,6 @@ export default class Podcasts extends Component {
         style={{
           width: width * 0.5,
           height: width * 0.6,
-          // marginVertical: 10,
         }}
         onPress={() => {
           this.props.navigation.navigate('SinglePodcast', {
