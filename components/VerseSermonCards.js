@@ -279,11 +279,11 @@ export function _renderSermon(
           center ? {width: WIDTH * 0.9} : {width: WIDTH * 0.7, marginRight: 20},
           theme.shadow,
         ]}>
-        <Block flex={false} row left style={{width: '100%', paddingBottom: 5}}>
-          <Text left body gray>
-            {isSermon ? 'Sermon' : 'Podcast'} | {formatDuration(duration)}
-          </Text>
-        </Block>
+        <Block
+          flex={false}
+          row
+          left
+          style={{width: '100%', paddingBottom: 5}}></Block>
         <Block middle center row style={{marginBottom: 10}}>
           <Image
             style={{
@@ -297,10 +297,12 @@ export function _renderSermon(
             }}
           />
           <Block middle>
-            <Text title gray numberOfLines={2}>
+            <Text gray numberOfLines={2}>
               {speakerName}
             </Text>
-            <Text numberOfLines={2}>{item.title}</Text>
+            <Text title numberOfLines={2}>
+              {item.title}
+            </Text>
           </Block>
         </Block>
         <Block
@@ -321,7 +323,10 @@ export function _renderSermon(
             />
             <Icon name="paper-plane" size={20} color={theme.colors.gray} />
           </Block> */}
-          <Block flex={false} row center middle>
+          <Block flex={false} row center space={'between'} style={{width:"100%"}}>
+            <Text left body gray>
+              {isSermon ? 'Sermon' : 'Podcast'} | {formatDuration(duration)}
+            </Text>
             <Block flex={false} row center middle style={styles.playButton}>
               <Text white>PLAY </Text>
               <Icon name="play" size={10} color={theme.colors.white} />

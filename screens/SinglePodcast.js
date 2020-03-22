@@ -3,7 +3,6 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   Image,
   FlatList,
 } from 'react-native';
@@ -12,7 +11,7 @@ import {theme} from '../constants';
 import {DOMParser} from 'xmldom';
 const {width} = Dimensions.get('window');
 import {_renderPodcast} from '../components/VerseSermonCards';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import firebase from 'react-native-firebase';
 
 export default class SinglePodcast extends Component {
   static navigationOptions = ({navigation}) => {
@@ -36,6 +35,7 @@ export default class SinglePodcast extends Component {
     this.state = {
       podcasts: [],
       podcastDetail: null,
+      following: false,
     };
   }
   componentDidMount() {
@@ -43,12 +43,111 @@ export default class SinglePodcast extends Component {
       this.props.navigation.getParam('podcastDetail', {}),
     );
     podcastDetail = JSON.parse(podcastDetail);
-    this.setState({podcastDetail: podcastDetail},()=>{
-      console.log(podcastDetail)
-    })
+    this.setState({podcastDetail: podcastDetail});
     this.fetchPodcasts(podcastDetail);
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('Info')
+      .doc('followedPodcasts')
+      .get()
+      .then(res => {
+        this.setState({
+          following: res.data().subscribed.includes(podcastDetail.collectionId),
+        });
+      })
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
   }
 
+  render() {
+    return (
+      <FlatList
+        style={styles.welcome}
+        data={this.state.podcasts}
+        extraData={this.state.following}
+        renderItem={({item, index}) => {
+          return this.whichCard(item, index);
+        }}
+      />
+    );
+  }
+  _renderHeader() {
+    let pod = this.state.podcastDetail;
+    return (
+      <Block key={0}>
+        <Block center row style={styles.header}>
+          <Block flex={false}>
+            <Image
+              style={{
+                width: width * 0.3,
+                height: width * 0.3,
+                borderRadius: theme.sizes.border,
+              }}
+              source={{
+                uri: pod.artworkUrl600,
+              }}
+            />
+          </Block>
+          <Block middle style={{paddingLeft: 20, height: width * 0.3}}>
+            <Text body bold>
+              {pod.collectionName}
+            </Text>
+            <Text small>{pod.artistName}</Text>
+          </Block>
+        </Block>
+
+        <Button
+          onPress={() => {
+            this.followPodcast();
+          }}
+          full
+          style={{
+            width: width * 0.3,
+            height: width * 0.1,
+            marginBottom: 10,
+            flexDirection: 'row',
+            backgroundColor: this.state.following
+              ? theme.colors.accent
+              : 'rgba(68, 156, 214, 0.5)',
+          }}>
+          <Text button white>
+            {this.state.following ? 'Following' : 'Follow'}
+          </Text>
+        </Button>
+      </Block>
+    );
+  }
+
+
+  followPodcast() {
+    let firestoreref = firebase
+      .firestore()
+      .collection('users')
+      .doc(firebase.auth().currentUser.uid)
+      .collection('Info')
+      .doc('followedPodcasts');
+    if (this.state.following) {
+      this.setState({following: false});
+      firestoreref.update({
+        subscribed: firebase.firestore.FieldValue.arrayRemove(
+          this.state.podcastDetail.collectionId,
+        ),
+      });
+    } else {
+      this.setState({following: true});
+      firestoreref.set(
+        {
+          subscribed: firebase.firestore.FieldValue.arrayUnion(
+            this.state.podcastDetail.collectionId,
+          ),
+        },
+        {merge: true},
+      );
+    }
+  }
   logPodTrack = (track, author, img) => {
     const titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
@@ -107,79 +206,6 @@ export default class SinglePodcast extends Component {
       return this._renderHeader();
     }
     return _renderPodcast(item, index, this.props, true);
-  }
-
-  render() {
-    return (
-      <FlatList
-        style={styles.welcome}
-        data={this.state.podcasts}
-        renderItem={({item, index}) => {
-          return this.whichCard(item, index);
-        }}></FlatList>
-    );
-  }
-  _renderHeader() {
-    let pod = this.state.podcastDetail;
-    return (
-      <Block key={0}>
-        <Block center row style={styles.header}>
-          <Block flex={false}>
-            <Image
-              style={{
-                width: width * 0.3,
-                height: width * 0.3,
-                borderRadius: theme.sizes.border,
-              }}
-              source={{
-                uri: pod.artworkUrl600,
-              }}
-            />
-          </Block>
-          <Block middle style={{paddingLeft: 20, height: width * 0.3}}>
-            <Text body bold>
-              {pod.collectionName}
-            </Text>
-            <Text small>{pod.artistName}</Text>
-          </Block>
-        </Block>
-        {/* <Button
-          full
-          style={{width: width * 0.3, height: width * 0.1, marginBottom: 10, flexDirection: 'row'}}
-          onPress={() => this.props.navigation.navigate("Give")}>
-          <Icon
-            name={'gift'}
-            size={20}
-            color={theme.colors.white}
-          />
-          <Text button white>
-             {" "}Give
-          </Text>
-        </Button> */}
-      </Block>
-    );
-  }
-
-  _renderPodcastTile(item) {
-    return (
-      <Block style={{width: width * 0.5}} center middle>
-        <Image
-          style={{
-            width: 100,
-            height: 100,
-          }}
-          source={{
-            uri: item.artworkUrl600,
-          }}
-        />
-        <Text caption center>
-          {item.collectionName}
-        </Text>
-        <Text caption center>
-          {item.artistName}
-        </Text>
-      </Block>
-    );
   }
 }
 

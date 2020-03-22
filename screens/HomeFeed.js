@@ -55,7 +55,6 @@ export default class HomeFeed extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log("rendering")
     // this.sectionListRef.scrollToOffset({animated: true, offset: 0});
     try {
       if (this.props.navigation.getParam('response') != undefined) {
@@ -251,24 +250,50 @@ export default class HomeFeed extends React.PureComponent {
       </TouchableOpacity>
     );
   }
+  _renderSubscribedPodcasts() {
+    return (
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('Favourites')}>
+        <Block
+          space={'between'}
+          middle
+          row
+          style={[
+            {
+              backgroundColor: theme.colors.gray3,
+              padding: 15,
+              paddingBottom: 13,
+              marginHorizontal: WIDTH * 0.05,
+              marginBottom: WIDTH * 0.05,
+              width: WIDTH * 0.9,
+              borderRadius: theme.sizes.border,
+            },
+            theme.shadow,
+          ]}>
+          <Icon
+            name="heart"
+            size={20}
+            solid={true}
+            color={'red'}
+            style={{marginRight: 10}}
+          />
+          <Text h3>Favourites</Text>
+          <Icon
+            name="chevron-right"
+            size={20}
+            color={theme.colors.black}
+            style={{marginRight: 10}}
+          />
+        </Block>
+      </TouchableOpacity>
+    );
+  }
   _renderHeader() {
     return (
       <Header>
-        <Left>
-          {/* <Icon
-            name="chevron-left"
-            size={25}
-            style={{paddingLeft: 10}}
-            color={theme.colors.black}
-            onPress={() => {
-              this.props.navigation.navigate('Pray');
-            }}
-          /> */}
-        </Left>
         <Body>
           <Title>Discover</Title>
         </Body>
-        <Right />
       </Header>
     );
   }
@@ -315,6 +340,7 @@ export default class HomeFeed extends React.PureComponent {
           <Block key={index}>
             {this._renderRecommendedVerse(item, 0)}
             {this._renderFavouritesButton()}
+            {/* {this._renderSubscribedPodcasts()} */}
           </Block>
         );
       } else {
@@ -495,7 +521,6 @@ const styles = StyleSheet.create({
   welcome: {
     // paddingTop: 2 * theme.sizes.padding,
     backgroundColor: theme.colors.bg,
-
     flex: 1,
   },
   // horizontal line
