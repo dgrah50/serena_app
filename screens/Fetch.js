@@ -20,7 +20,6 @@ import {Block, RippleAnim, Text, AnimatedCircularProgress} from '../components';
 import {theme, time, emotions} from '../constants';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import LinearGradient from 'react-native-linear-gradient';
-import SliderEntry from '../components/SliderEntry';
 import firebase from 'react-native-firebase';
 import * as Animatable from 'react-native-animatable';
 
@@ -373,15 +372,7 @@ export default class Fetch extends Component {
       </Animatable.View>
     );
   }
-  _renderItem({item, index}) {
-    return (
-      <SliderEntry
-        data={item}
-        even={(index + 1) % 2 === 0}
-        navigation={this.props.navigation}
-      />
-    );
-  }
+
 
   //****** HELPER FUNCTIONS SECTION
   apiCall(query) {
