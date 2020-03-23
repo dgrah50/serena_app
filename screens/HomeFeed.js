@@ -361,7 +361,7 @@ export default class HomeFeed extends React.PureComponent {
       });
     });
   }
-  logPodTrack = (track, author, img) => {
+  logPodTrack = (track, podcastImage) => {
     let titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
     );
@@ -377,6 +377,9 @@ export default class HomeFeed extends React.PureComponent {
     let descriptions = Array.prototype.slice.call(
       track.getElementsByTagName('description'),
     );
+    const authors = Array.prototype.slice.call(
+      track.getElementsByTagName('itunes:author'),
+    );
 
     const getSafe = list => {
       try {
@@ -385,19 +388,25 @@ export default class HomeFeed extends React.PureComponent {
         return '';
       }
     };
+    const getSafe2 = list => {
+      try {
+        return list[0].getAttribute('url');
+      } catch (error) {
+        return '';
+      }
+    };
 
     return {
       title: getSafe(titles),
-      mp3link: enclosures[0].getAttribute('url'),
+      mp3link: getSafe2(enclosures),
       date_uploaded: moment(getSafe(pubDates))
         .local()
         .format(),
       duration: getSafe(durations),
-      author: author,
-      speakerimg: img,
+      author: getSafe(authors),
+      speakerimg: podcastImage,
       plays: null,
-      description:  getSafe(descriptions).replace(/(<([^>]+)>)/gi, '')
-       ,
+      description: getSafe(descriptions).replace(/(<([^>]+)>)/gi, ''),
     };
   };
   fetchPodcasts = async (term, related) => {

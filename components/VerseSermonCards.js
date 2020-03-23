@@ -246,7 +246,7 @@ export function _renderSermon(
   let uri =
     item.speakerimg != undefined
       ? item.speakerimg
-      : 'https://via.placeholder.com/150/449CD6/FFFFFF?text=Serena.com';
+      : 'https://via.placeholder.com/150/449CD6/FFFFFF?text=Serena.app';
   let speakerName = item.author;
   let duration = item.duration;
   let uploaddate = item.date_uploaded;

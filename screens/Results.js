@@ -278,7 +278,7 @@ export default class Results extends Component {
   }
 
   //****** HELPER FUNCTIONS SECTION
-  logPodTrack = (track, author, img) => {
+  logPodTrack = (track, podcastImage) => {
     let titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
     );
@@ -294,6 +294,9 @@ export default class Results extends Component {
     let descriptions = Array.prototype.slice.call(
       track.getElementsByTagName('description'),
     );
+    const authors = Array.prototype.slice.call(
+      track.getElementsByTagName('itunes:author'),
+    );
 
     const getSafe = list => {
       try {
@@ -302,16 +305,23 @@ export default class Results extends Component {
         return '';
       }
     };
+    const getSafe2 = list => {
+      try {
+        return list[0].getAttribute('url');
+      } catch (error) {
+        return '';
+      }
+    };
 
     return {
       title: getSafe(titles),
-      mp3link: enclosures[0].getAttribute('url'),
+      mp3link: getSafe2(enclosures),
       date_uploaded: moment(getSafe(pubDates))
         .local()
         .format(),
       duration: getSafe(durations),
-      author: author,
-      speakerimg: img,
+      author: getSafe(authors),
+      speakerimg: podcastImage,
       plays: null,
       description: getSafe(descriptions).replace(/(<([^>]+)>)/gi, ''),
     };
