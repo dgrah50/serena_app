@@ -18,9 +18,7 @@ export default class SinglePodcast extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Podcast',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
+      headerTitleStyle: theme.fonts.title,
       headerRight: () => (
         <TouchableOpacity
           onPress={() => {

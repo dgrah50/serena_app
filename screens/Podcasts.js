@@ -18,9 +18,7 @@ export default class Podcasts extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Serena Creators',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
+      headerTitleStyle: theme.fonts.title,
       headerRight: () => (
         <TouchableOpacity
           onPress={() => {
@@ -119,7 +117,7 @@ export default class Podcasts extends Component {
       </Block>
     );
   }
-//****** SUB COMPONENTS SECTION
+  //****** SUB COMPONENTS SECTION
   _renderPodcastTile(item) {
     return (
       <TouchableOpacity
@@ -174,6 +172,7 @@ export default class Podcasts extends Component {
       <Block
         style={{
           paddingHorizontal: '5%',
+          paddingVertical: 10,
           backgroundColor: theme.colors.bg,
         }}
         flex={false}>
@@ -201,7 +200,7 @@ export default class Podcasts extends Component {
       </Block>
     );
   };
- //****** HELPER FUNCTIONS SECTION
+  //****** HELPER FUNCTIONS SECTION
   createiTunesLink(searchQuery, results = 25) {
     return (
       'https://itunes.apple.com/search?term=' +
@@ -223,7 +222,7 @@ export default class Podcasts extends Component {
           };
         });
       });
-    }
+  };
   logPodTrack = (track, author, img) => {
     const titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
@@ -289,7 +288,6 @@ export default class Podcasts extends Component {
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {

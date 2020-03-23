@@ -4,9 +4,10 @@ import {
   StyleSheet,
   Dimensions,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import firebase from 'react-native-firebase';
-import {Block} from '../components';
+import {Block, Text} from '../components';
 import {theme} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
@@ -17,13 +18,7 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
-import {
-  Header,
-  Left,
-  Body,
-  Right,
-  Title,
-} from 'native-base';
+import {Header, Left, Body, Right} from 'native-base';
 
 export default class Favourites extends Component {
   constructor(props) {
@@ -43,18 +38,28 @@ export default class Favourites extends Component {
       <View style={styles.welcome}>
         <Header>
           <Left>
-            <Icon
-              name="chevron-left"
-              size={25}
-              style={{paddingLeft: 10}}
-              color={theme.colors.black}
+            <TouchableOpacity
+              hitSlop={{
+                bottom: 30,
+                left: 30,
+                right: 30,
+                top: 30,
+              }}
               onPress={() => {
                 this.props.navigation.goBack(null);
-              }}
-            />
+              }}>
+              <Icon
+                name="chevron-left"
+                size={25}
+                style={{paddingLeft: 10}}
+                color={theme.colors.black}
+              />
+            </TouchableOpacity>
           </Left>
           <Body>
-            <Title>Favourites</Title>
+            <Text title bold>
+              Favourites
+            </Text>
           </Body>
           <Right />
         </Header>

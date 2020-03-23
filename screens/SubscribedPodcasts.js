@@ -11,9 +11,7 @@ export default class SubscribedPodcasts extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Subscribed Podcasts',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
+      headerTitleStyle: theme.fonts.title,
       headerRight: () => (
         <TouchableOpacity
           onPress={() => {

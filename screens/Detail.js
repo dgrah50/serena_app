@@ -5,9 +5,6 @@ import {
   TouchableOpacity,
   ImageBackground,
   Dimensions,
-  TouchableWithoutFeedback,
-  View,
-  // Share
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
@@ -15,7 +12,7 @@ import {theme} from '../constants';
 import Share from 'react-native-share';
 import firebase from 'react-native-firebase';
 import ViewShot, {captureRef} from 'react-native-view-shot';
-const {height, width} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export default class Detail extends Component {
   constructor(props) {

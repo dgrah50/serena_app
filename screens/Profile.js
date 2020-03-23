@@ -1,28 +1,15 @@
 import React, {Component} from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  Alert,
-  AsyncStorage,
-  Linking,
-} from 'react-native';
+import {Dimensions, StyleSheet, AsyncStorage, Linking} from 'react-native';
 import {Text} from '../components';
 import {theme} from '../constants';
 import firebase from 'react-native-firebase';
-import moment from 'moment';
-import {PERMISSIONS} from 'react-native-permissions';
+const {width} = Dimensions.get('window');
 
-const {height, width} = Dimensions.get('window');
-import ImagePicker from 'react-native-image-picker';
-import ImageResizer from 'react-native-image-resizer';
-import DateTimePicker from 'react-native-modal-datetime-picker';
-import OneSignal from 'react-native-onesignal';
 import {
   Content,
   Button,
   ListItem,
   Icon,
-  Left,
   Body,
   Right,
   Switch,
@@ -31,9 +18,7 @@ import {
 export default class Profile extends Component {
   static navigationOptions = {
     title: 'Profile Settings',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
+    headerTitleStyle: theme.fonts.title,
   };
 
   constructor(props) {

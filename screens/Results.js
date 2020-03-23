@@ -24,16 +24,13 @@ import {
   Left,
   Body,
   Right,
-  Title,
 } from 'native-base';
 
 export default class Results extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Feed',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
+      headerTitleStyle: theme.fonts.title,
     };
   };
 
@@ -83,17 +80,29 @@ export default class Results extends Component {
       <View style={styles.welcome}>
         <Header>
           <Left>
-            <Icon
-              name="chevron-left"
-              size={25}
-              style={{paddingLeft: 10}}
-              color={theme.colors.black}
+            <TouchableOpacity
+              hitSlop={{
+                bottom: 30,
+                left: 30,
+                right: 30,
+                top: 30,
+              }}
               onPress={() => {
-                this.props.navigation.navigate("Home");
-              }}/>
+                this.props.navigation.navigate('Home');
+              }}>
+              
+              <Icon
+                name="chevron-left"
+                size={25}
+                style={{paddingLeft: 10}}
+                color={theme.colors.black}
+              />
+            </TouchableOpacity>
           </Left>
           <Body>
-            <Title>Results</Title>
+            <Text title bold>
+              Results
+            </Text>
           </Body>
           <Right />
         </Header>

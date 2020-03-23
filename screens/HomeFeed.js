@@ -24,16 +24,13 @@ import {
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
 
-import {Header, Body,  Title} from 'native-base';
+import {Header, Body} from 'native-base';
 
 export default class HomeFeed extends React.PureComponent {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Feed',
-      // headerTransparent: true,
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
+      headerTitleStyle: theme.fonts.title,
     };
   };
 
@@ -293,7 +290,7 @@ export default class HomeFeed extends React.PureComponent {
     return (
       <Header>
         <Body>
-          <Title>Discover</Title>
+          <Text title bold>Discover</Text>
         </Body>
       </Header>
     );

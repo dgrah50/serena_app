@@ -101,23 +101,23 @@ const randomImages = [
 
 const fonts = {
   h1: {
-    fontFamily: 'Rubik-Light',
+    fontFamily: 'Lato-Light',
     fontSize: sizes.h1,
   },
   h2: {
-    fontFamily: 'Rubik-Medium',
+    fontFamily: 'Lato-Medium',
     fontSize: sizes.h2,
   },
   h3: {
-    fontFamily: 'Rubik-Regular',
+    fontFamily: 'Lato-Regular',
     fontSize: sizes.h3,
   },
   header: {
-    fontFamily: 'Rubik-Light',
+    fontFamily: 'Lato-Light',
     fontSize: sizes.header,
   },
   title: {
-    fontFamily: 'Rubik-Regular',
+    fontFamily: 'Lato-Regular',
     fontSize: sizes.title,
   },
   body: {
