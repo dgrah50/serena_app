@@ -2,16 +2,12 @@ import React, {Component} from 'react';
 import {
   Image,
   StyleSheet,
-  Dimensions,
-  TouchableWithoutFeedback,
   Alert,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import firebase from 'react-native-firebase';
 import {Button, Block, Text, Input} from '../components';
 import * as theme from '../constants/theme';
-
-const {height} = Dimensions.get('window');
 
 class Register extends Component {
   constructor(props) {
@@ -24,7 +20,6 @@ class Register extends Component {
   }
   render() {
     const {navigation} = this.props;
-
     return (
       <KeyboardAwareScrollView
         style={{marginVertical: 40}}
@@ -88,7 +83,6 @@ class Register extends Component {
   }
 
   //****** HELPER FUNCTIONS SECTION
-
   handleType = id => {
     const {active} = this.state;
     this.setState({active: active === id ? null : id});

@@ -12,7 +12,7 @@ import {DOMParser} from 'xmldom';
 const {width} = Dimensions.get('window');
 import {_renderPodcast} from '../components/VerseSermonCards';
 import firebase from 'react-native-firebase';
-import moment, {relativeTimeThreshold} from 'moment';
+import moment from 'moment';
 
 export default class SinglePodcast extends Component {
   static navigationOptions = ({navigation}) => {
@@ -75,6 +75,7 @@ export default class SinglePodcast extends Component {
       />
     );
   }
+  //****** SUB COMPONENTS SECTION
   _renderHeader() {
     let pod = this.state.podcastDetail;
     return (
@@ -121,8 +122,7 @@ export default class SinglePodcast extends Component {
       </Block>
     );
   }
-
-
+  //****** HELPER FUNCTIONS SECTION
   followPodcast() {
     let firestoreref = firebase
       .firestore()
@@ -162,9 +162,9 @@ export default class SinglePodcast extends Component {
     const enclosures = Array.prototype.slice.call(
       track.getElementsByTagName('enclosure'),
     );
-      const pubDates = Array.prototype.slice.call(
-        track.getElementsByTagName('pubDate'),
-      );
+    const pubDates = Array.prototype.slice.call(
+      track.getElementsByTagName('pubDate'),
+    );
     return {
       title: titles[0].childNodes[0].nodeValue,
       mp3link: enclosures[0].getAttribute('url'),
@@ -209,7 +209,6 @@ export default class SinglePodcast extends Component {
       console.log(e);
     }
   };
-
   whichCard(item, index) {
     if (index == 0) {
       return this._renderHeader();

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Dimensions,
   Image,
@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Block, Text, Card} from '../components';
+import {Block, Text} from '../components';
 import {theme} from '../constants';
 import Spinner from 'react-native-spinkit';
 import TrackPlayer, {

@@ -15,7 +15,7 @@ import {theme, time} from '../constants';
 import {DOMParser} from 'xmldom';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import moment, {relativeTimeThreshold} from 'moment';
+import moment from 'moment';
 import {
   VerseCard,
   _renderSermon,
@@ -24,7 +24,7 @@ import {
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
 
-import {Header, Left, Body, Right, Title} from 'native-base';
+import {Header, Body,  Title} from 'native-base';
 
 export default class HomeFeed extends React.PureComponent {
   static navigationOptions = ({navigation}) => {

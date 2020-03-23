@@ -161,7 +161,7 @@ export default function Container(props) {
     </View>
   );
 
-  //****** HELPER FUNCTONS SECTION
+  //****** HELPER FUNCTIONS SECTION
   function setToggleTabBar() {
     if (tabBarVisible) {
       showTabBar(false);

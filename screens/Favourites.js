@@ -4,10 +4,9 @@ import {
   StyleSheet,
   Dimensions,
   View,
-  SafeAreaView,
 } from 'react-native';
 import firebase from 'react-native-firebase';
-import {Block, Text} from '../components';
+import {Block} from '../components';
 import {theme} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
@@ -18,15 +17,12 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
-import Headroom from 'react-native-headroom';
 import {
-  Container,
   Header,
   Left,
   Body,
   Right,
   Title,
-  Subtitle,
 } from 'native-base';
 
 export default class Favourites extends Component {
@@ -121,7 +117,6 @@ export default class Favourites extends Component {
   }
 
   //****** HELPER FUNCTIONS SECTION
-
   fetchLikes() {
     let firestoreref = firebase
       .firestore()
@@ -153,7 +148,6 @@ export default class Favourites extends Component {
 const styles = StyleSheet.create({
   welcome: {
     backgroundColor: theme.colors.bg,
-    // paddingHorizontal: theme.sizes.padding,
     flex: 1,
   },
   // horizontal line

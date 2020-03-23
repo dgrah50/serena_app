@@ -42,170 +42,39 @@ export default class Profile extends Component {
       bio: null,
       name: null,
       profileImage: null,
-      enableNotification: true,
       isDateTimePickerVisible: false,
       notificationTime: null,
       areNotificationsEnabled: null,
     };
- 
   }
 
-  // componentDidMount() {
-  //   client = stream.connect(
-  //     'zgrr2ez3h3yz',
-  //     this.props.screenProps.StreamToken,
-  //     '65075',
-  //   );
-  //   client
-  //     .user(firebase.auth().currentUser.uid)
-  //     .get()
-  //     .then(StreamUser => {
-  //       console.log(StreamUser.data);
-  //       if (StreamUser.data.name == 'Unknown') {
-  //         Alert.alert(
-  //           'Please enter your name before you use Groups.',
-  //           ' ',
-  //           [{text: 'OK'}],
-  //           {
-  //             cancelable: false,
-  //           },
-  //         );
-  //       }
-  //       this.setState({
-  //         name: StreamUser.data.name,
-  //         bio: StreamUser.data.bio,
-  //         profileImage: StreamUser.data.profileImage,
-  //       });
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // }
-
   componentDidMount() {
-
-    AsyncStorage.getItem('notifsEnabled').then(value => {
-      if (value != null) {
-        console.log(value);
-        this.setState({areNotificationsEnabled: value == "true" });
-      } else {
+    AsyncStorage.getItem('notifsEnabled')
+      .then(value => {
+        if (value != null) {
+          console.log(value);
+          this.setState({
+            areNotificationsEnabled: value == 'true',
+          });
+        } else {
+          this.setState({areNotificationsEnabled: true});
+        }
+      })
+      .catch(err => {
+        console.log(err);
         this.setState({areNotificationsEnabled: true});
-      }
-    }).catch(err => {
-      console.log(err);
-      this.setState({areNotificationsEnabled: true});
-    })
+      });
   }
 
   componentDidUpdate() {
     AsyncStorage.setItem(
       'notifsEnabled',
       JSON.stringify(this.state.areNotificationsEnabled),
-    ).catch(err => console.log(err))
+    ).catch(err => console.log(err));
   }
-
-  setNameAndBio() {
-    if (!this.state.name || !this.state.bio) {
-      Alert.alert('Incomplete details entered ', 'Try again!', [{text: 'OK'}], {
-        cancelable: false,
-      });
-    } else {
-      client.user(firebase.auth().currentUser.uid).update({
-        name: this.state.name,
-        bio: this.state.bio,
-        profileImage: this.state.profileImage,
-      });
-    }
-  }
-
-  nameHandler = e => {
-    this.setState({name: e});
-  };
-  bioHandler = e => {
-    this.setState({bio: e});
-  };
-
-  uploadImageToFirebase = (uri, mime = 'image/jpeg', fileName) =>
-    new Promise((resolve, reject) => {
-      const imageRef = firebase
-        .storage()
-        .ref(`/${firebase.auth().currentUser.uid}`);
-      imageRef
-        .put(uri, {contentType: mime, name: fileName})
-        .then(() => {
-          return imageRef.getDownloadURL();
-        })
-        .then(url => {
-          resolve(url);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-
-  uploadPhotoFromGallery = () =>
-    new Promise((resolve, reject) => {
-      ImagePicker.launchImageLibrary(
-        {
-          noData: true,
-        },
-        photo => {
-          if (photo.uri) {
-            resolve(photo);
-          }
-
-          reject(photo.error);
-        },
-      );
-    });
-
-  uploadPhoto = () => {
-    this.uploadPhotoFromGallery()
-      .then(photo => {
-        return ImageResizer.createResizedImage(photo.uri, 400, 400, 'JPEG', 50);
-      })
-      .then(photo => {
-        return this.uploadImageToFirebase(photo.uri, 'image/jpeg', photo.name);
-      })
-      .then(resultURL => {
-        console.log(resultURL);
-        client.user(firebase.auth().currentUser.uid).update({
-          name: this.state.name,
-          bio: this.state.bio,
-          profileImage: resultURL,
-        });
-        this.setState({
-          profileImage: resultURL,
-        });
-      })
-      .catch(error => console.log(error));
-  };
-
-  enableNotification = value => {
-    this.setState({
-      enableNotification: value,
-    });
-  };
-  showDateTimePicker = () => {
-    this.setState({isDateTimePickerVisible: true});
-  };
-  hideDateTimePicker = () => {
-    this.setState({isDateTimePickerVisible: false});
-  };
-  handleDatePicked = date => {
-    this.hideDateTimePicker();
-    this.setState({
-      notificationTime: moment(date),
-    });
-  };
-  _openWebLink(){
-
-  }
-
 
   render() {
     return (
-      // <View style={styles.welcome}>
       <>
         <Content>
           <ListItem icon>
@@ -216,7 +85,9 @@ export default class Profile extends Component {
               <Switch
                 value={this.state.areNotificationsEnabled}
                 onValueChange={value => {
-                  this.setState({areNotificationsEnabled: value});
+                  this.setState({
+                    areNotificationsEnabled: value,
+                  });
                 }}
               />
             </Right>
@@ -248,6 +119,7 @@ export default class Profile extends Component {
       </>
     );
   }
+  //****** SUB COMPONENTS SECTION
   _renderLogoutButton = () => {
     return (
       <Button

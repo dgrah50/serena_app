@@ -12,7 +12,7 @@ import {theme} from '../constants';
 const {width} = Dimensions.get('window');
 import {_renderPodcast} from '../components/VerseSermonCards';
 import {DOMParser} from 'xmldom';
-import moment, {relativeTimeThreshold} from 'moment';
+import moment from 'moment';
 
 export default class Podcasts extends Component {
   static navigationOptions = ({navigation}) => {
@@ -67,62 +67,6 @@ export default class Podcasts extends Component {
       });
   }
 
-  createiTunesLink(searchQuery, results = 25) {
-    return (
-      'https://itunes.apple.com/search?term=' +
-      encodeURIComponent(searchQuery) +
-      '&entity=podcast&genreId=1439&limit=' +
-      results
-    );
-  }
-
-  searchPodcastHandler = e => {
-    iTunesLink = this.createiTunesLink(e);
-    fetch(iTunesLink)
-      .then(response => {
-        return response.json();
-      })
-      .then(jsonData => {
-        this.setState(oldState => {
-          return {
-            results: jsonData['results'],
-          };
-        });
-      });
-  };
-  header = () => {
-    return (
-      <Block
-        style={{
-          paddingHorizontal: '5%',
-          backgroundColor: theme.colors.bg,
-        }}
-        flex={false}>
-        <Input
-          label={'Search'}
-          onFocus={() => this.setState({searching: true})}
-          value={this.state.inputValue}
-          onChangeText={inputValue =>
-            this.setState({inputValue}, () => {
-              this.searchPodcastHandler(inputValue);
-            })
-          }
-          rightLabel={
-            <TouchableOpacity
-              onPress={() => {
-                this.setState({inputValue: ''}, () => {
-                  this.searchPodcastHandler('podcast');
-                });
-              }}>
-              <Text style={{color: 'red'}}>Cancel</Text>
-            </TouchableOpacity>
-          }
-          onChangeTextHandler={this.searchPodcastHandler}
-        />
-      </Block>
-    );
-  };
-
   render() {
     return (
       <Block
@@ -130,7 +74,7 @@ export default class Podcasts extends Component {
           width: '100%',
           backgroundColor: 'theme.colors.bg',
         }}>
-        {this.header()}
+        {this._renderHeader()}
         <ScrollView
           style={styles.container}
           numColumns={2}
@@ -141,17 +85,19 @@ export default class Podcasts extends Component {
             center
             space={'between'}
             flex={false}>
-            {this.state.subs.length > 0 && <>
-              <Text title>New from Subscriptions</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate('SubscribedPodcasts');
-                }}>
-                <Text button style={{color: theme.colors.primary}}>
-                  View All
-                </Text>
-              </TouchableOpacity>
-            </>}
+            {this.state.subs.length > 0 && (
+              <>
+                <Text title>New from Subscriptions</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('SubscribedPodcasts');
+                  }}>
+                  <Text button style={{color: theme.colors.primary}}>
+                    View All
+                  </Text>
+                </TouchableOpacity>
+              </>
+            )}
           </Block>
 
           {_renderPodcast(this.state.subs[0], 1, this.props, true)}
@@ -161,9 +107,7 @@ export default class Podcasts extends Component {
             center
             space={'between'}
             flex={false}>
-            <Text title >
-              Podcasts
-            </Text>
+            <Text title>Podcasts</Text>
           </Block>
 
           <Block style={styles.podContainer}>
@@ -175,6 +119,7 @@ export default class Podcasts extends Component {
       </Block>
     );
   }
+//****** SUB COMPONENTS SECTION
   _renderPodcastTile(item) {
     return (
       <TouchableOpacity
@@ -224,7 +169,61 @@ export default class Podcasts extends Component {
       </Block>
     );
   }
-
+  _renderHeader = () => {
+    return (
+      <Block
+        style={{
+          paddingHorizontal: '5%',
+          backgroundColor: theme.colors.bg,
+        }}
+        flex={false}>
+        <Input
+          label={'Search'}
+          onFocus={() => this.setState({searching: true})}
+          value={this.state.inputValue}
+          onChangeText={inputValue =>
+            this.setState({inputValue}, () => {
+              this.searchPodcastHandler(inputValue);
+            })
+          }
+          rightLabel={
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({inputValue: ''}, () => {
+                  this.searchPodcastHandler('podcast');
+                });
+              }}>
+              <Text style={{color: 'red'}}>Cancel</Text>
+            </TouchableOpacity>
+          }
+          onChangeTextHandler={this.searchPodcastHandler}
+        />
+      </Block>
+    );
+  };
+ //****** HELPER FUNCTIONS SECTION
+  createiTunesLink(searchQuery, results = 25) {
+    return (
+      'https://itunes.apple.com/search?term=' +
+      encodeURIComponent(searchQuery) +
+      '&entity=podcast&genreId=1439&limit=' +
+      results
+    );
+  }
+  searchPodcastHandler = e => {
+    iTunesLink = this.createiTunesLink(e);
+    fetch(iTunesLink)
+      .then(response => {
+        return response.json();
+      })
+      .then(jsonData => {
+        this.setState(oldState => {
+          return {
+            results: jsonData['results'],
+          };
+        });
+      });
+    }
   logPodTrack = (track, author, img) => {
     const titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
@@ -290,6 +289,7 @@ export default class Podcasts extends Component {
     );
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {

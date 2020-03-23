@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import {Block, Text} from '../components';
-import {theme, time} from '../constants';
+import {theme} from '../constants';
 import {DOMParser} from 'xmldom';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -20,21 +20,17 @@ import {
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
 import {
-  Container,
   Header,
   Left,
   Body,
   Right,
   Title,
-  Subtitle,
 } from 'native-base';
-
 
 export default class Results extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Feed',
-      // headerTransparent: true,
       headerTitleStyle: {
         fontWeight: 'bold',
       },
@@ -50,7 +46,6 @@ export default class Results extends Component {
       likedosis: null,
       isLoading: true,
     };
-
     this.fetchLikes();
   }
 
@@ -283,8 +278,6 @@ export default class Results extends Component {
   }
 
   //****** HELPER FUNCTIONS SECTION
-
-
   logPodTrack = (track, podcastImage) => {
     const titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),

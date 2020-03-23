@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import firebase from 'react-native-firebase';
 import {Block} from '../components';
 import {theme} from '../constants';
@@ -37,7 +33,6 @@ export default class SubscribedPodcasts extends Component {
       subs: [],
     };
   }
-
   componentDidMount() {
     firebase
       .firestore()
@@ -62,7 +57,6 @@ export default class SubscribedPodcasts extends Component {
         console.log('Error getting documents', err);
       });
   }
-
   render() {
     return (
       <Block
@@ -81,9 +75,7 @@ export default class SubscribedPodcasts extends Component {
     );
   }
 
-  
- 
-
+  //****** HELPER FUNCTIONS SECTION
   logPodTrack = (track, author, img) => {
     const titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
@@ -120,7 +112,6 @@ export default class SubscribedPodcasts extends Component {
       ),
     };
   };
-
   async fetchSubscriptions() {
     let subbedDetails = await Promise.all(
       this.state.followedPodcasts.map(async collectionId => {
@@ -140,14 +131,14 @@ export default class SubscribedPodcasts extends Component {
           'text/xml',
         );
         const items = podcastDocument.getElementsByTagName('item');
-        console.log(items)
-        console.log(typeof(items).toString())
+        console.log(items);
+        console.log(typeof items.toString());
         return Array.prototype.slice
           .call(items)
           .map(i => this.logPodTrack(i, res.artistName, res.artworkUrl600));
       }),
     );
-    
+
     subbedDetails = [].concat.apply([], subbedDetails);
     console.log(subbedDetails);
     return await subbedDetails.sort((a, b) =>

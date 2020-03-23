@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {
   Image,
-  KeyboardAvoidingView,
   Dimensions,
   Alert,
   View,
@@ -10,8 +9,7 @@ import {
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
-import {Button, Block, Text, Input} from '../components';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {Button, Block, Text} from '../components';
 import {theme} from '../constants';
 import LottieView from 'lottie-react-native';
 import {request, PERMISSIONS} from 'react-native-permissions';

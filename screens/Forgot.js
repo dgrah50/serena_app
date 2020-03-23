@@ -4,17 +4,11 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   Alert,
-  StyleSheet,
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import {Button, Block, Text, Input} from '../components';
 const {height} = Dimensions.get('window');
 
-const styles = StyleSheet.create({
-  forgot: {
-    flex: 1,
-  },
-});
 
 class Forgot extends Component {
   constructor(props) {
@@ -73,8 +67,6 @@ class Forgot extends Component {
       </KeyboardAvoidingView>
     );
   }
-
-
 
   //****** HELPER FUNCTIONS SECTION
   emailAddressTextHandler = e => {

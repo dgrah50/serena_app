@@ -17,7 +17,7 @@ import axios from 'axios';
 import qs from 'qs';
 import Voice from 'react-native-voice';
 import {Block, RippleAnim, Text, AnimatedCircularProgress} from '../components';
-import {theme, time, emotions} from '../constants';
+import {theme, emotions} from '../constants';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import LinearGradient from 'react-native-linear-gradient';
 import firebase from 'react-native-firebase';
@@ -372,7 +372,6 @@ export default class Fetch extends Component {
       </Animatable.View>
     );
   }
-
 
   //****** HELPER FUNCTIONS SECTION
   apiCall(query) {
