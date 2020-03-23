@@ -86,7 +86,7 @@ export default function Container(props) {
   useEffect(() => {
     if (currentSongData.mp3link) {
       //Initialises Trackplayer - the audio playing module
-      TrackPlayer.setupPlayer().then(async () => {
+      TrackPlayer.setupPlayer().then(()=> TrackPlayer.reset()).then(async () => {
         // Adds a track to the queue
         let url = currentSongData.mp3link;
         //Little hack to scrape sermonaudio data
