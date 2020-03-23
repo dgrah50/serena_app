@@ -49,14 +49,12 @@ export default class Podcasts extends Component {
       .doc('followedPodcasts')
       .get()
       .then(res => {
-        console.log(res.data());
         this.setState({
           followedPodcasts: res.data().subscribed,
         });
       })
       .then(() => {
         this.fetchSubscriptions().then(subs => {
-          console.log(subs);
           this.setState({subs: subs});
         });
       })
@@ -78,6 +76,7 @@ export default class Podcasts extends Component {
           numColumns={2}
           showsVerticalScrollIndicator={false}>
           <Block
+            key={0}
             style={styles.sectionHeader}
             row
             center
@@ -101,6 +100,7 @@ export default class Podcasts extends Component {
           {_renderPodcast(this.state.subs[0], 1, this.props, true)}
           <Block
             style={styles.sectionHeader}
+            key={2}
             row
             center
             space={'between'}
@@ -108,7 +108,7 @@ export default class Podcasts extends Component {
             <Text title>Podcasts</Text>
           </Block>
 
-          <Block style={styles.podContainer}>
+          <Block key={3} style={styles.podContainer}>
             {this.state.results.map(item => {
               return this._renderPodcastTile(item);
             })}
@@ -224,39 +224,41 @@ export default class Podcasts extends Component {
       });
   };
   logPodTrack = (track, author, img) => {
-    const titles = Array.prototype.slice.call(
+    let titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
     );
-    const durations = Array.prototype.slice.call(
-      track.getElementsByTagName('itunes:duration'),
-    );
-    const descriptions = Array.prototype.slice.call(
-      track.getElementsByTagName('description'),
-    );
-    const enclosures = Array.prototype.slice.call(
+    let enclosures = Array.prototype.slice.call(
       track.getElementsByTagName('enclosure'),
     );
-    const pubDates = Array.prototype.slice.call(
+    let pubDates = Array.prototype.slice.call(
       track.getElementsByTagName('pubDate'),
     );
+    let durations = Array.prototype.slice.call(
+      track.getElementsByTagName('itunes:duration'),
+    );
+    let descriptions = Array.prototype.slice.call(
+      track.getElementsByTagName('description'),
+    );
+
+    const getSafe = list => {
+      try {
+        return list[0].childNodes[0].nodeValue;
+      } catch (error) {
+        return '';
+      }
+    };
+
     return {
-      title: titles[0].childNodes[0].nodeValue,
+      title: getSafe(titles),
       mp3link: enclosures[0].getAttribute('url'),
-      date_uploaded:
-        pubDates.length != 0
-          ? moment(pubDates[0].childNodes[0].nodeValue)
-              .local()
-              .format()
-          : '',
-      duration:
-        durations.length != 0 ? durations[0].childNodes[0].nodeValue : '',
+      date_uploaded: moment(getSafe(pubDates))
+        .local()
+        .format(),
+      duration: getSafe(durations),
       author: author,
       speakerimg: img,
       plays: null,
-      description: descriptions[0].childNodes[0].nodeValue.replace(
-        /(<([^>]+)>)/gi,
-        '',
-      ),
+      description: getSafe(descriptions).replace(/(<([^>]+)>)/gi, ''),
     };
   };
 
@@ -282,7 +284,6 @@ export default class Podcasts extends Component {
         return this.logPodTrack(items[0], res.artistName, res.artworkUrl600);
       }),
     );
-    console.log(subbedDetails);
     return await subbedDetails.sort((a, b) =>
       a.date_uploaded < b.date_uploaded ? 1 : -1,
     );

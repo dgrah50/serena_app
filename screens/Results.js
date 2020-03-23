@@ -19,12 +19,8 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
-import {
-  Header,
-  Left,
-  Body,
-  Right,
-} from 'native-base';
+import moment from 'moment';
+import {Header, Left, Body, Right} from 'native-base';
 
 export default class Results extends Component {
   static navigationOptions = ({navigation}) => {
@@ -66,14 +62,10 @@ export default class Results extends Component {
 
   render() {
     let isLoading = true;
-    if (
-      this.state.verses &&
-      this.state.sermons &&
-      this.state.podcasts 
-    ) {
+    if (this.state.verses && this.state.sermons && this.state.podcasts) {
       firebase.analytics().setCurrentScreen('Result');
       isLoading = false;
-    } 
+    }
     return isLoading ? (
       this._renderLoadingPlaceHolder()
     ) : (
@@ -90,7 +82,6 @@ export default class Results extends Component {
               onPress={() => {
                 this.props.navigation.navigate('Home');
               }}>
-              
               <Icon
                 name="chevron-left"
                 size={25}
@@ -287,47 +278,43 @@ export default class Results extends Component {
   }
 
   //****** HELPER FUNCTIONS SECTION
-  logPodTrack = (track, podcastImage) => {
-    const titles = Array.prototype.slice.call(
+  logPodTrack = (track, author, img) => {
+    let titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
     );
-    const authors = Array.prototype.slice.call(
-      track.getElementsByTagName('itunes:author'),
-    );
-    const durations = Array.prototype.slice.call(
-      track.getElementsByTagName('itunes:duration'),
-    );
-    const descriptions = Array.prototype.slice.call(
-      track.getElementsByTagName('description'),
-    );
-    const enclosures = Array.prototype.slice.call(
+    let enclosures = Array.prototype.slice.call(
       track.getElementsByTagName('enclosure'),
     );
-    const pubDates = Array.prototype.slice.call(
+    let pubDates = Array.prototype.slice.call(
       track.getElementsByTagName('pubDate'),
     );
-    try {
-      return {
-        title: titles[0].childNodes[0].nodeValue,
-        mp3link: enclosures[0].getAttribute('url'),
-        speakerimg: podcastImage,
-        date_uploaded:
-          pubDates.length != 0
-            ? moment(pubDates[0].childNodes[0].nodeValue)
-                .local()
-                .format()
-            : '',
-        duration: durations[0].childNodes[0].nodeValue,
-        author: authors[0].childNodes[0].nodeValue,
-        plays: null,
-        description: descriptions[0].childNodes[0].nodeValue.replace(
-          /(<([^>]+)>)/gi,
-          '',
-        ),
-      };
-    } catch (err) {
-      console.log(err);
-    }
+    let durations = Array.prototype.slice.call(
+      track.getElementsByTagName('itunes:duration'),
+    );
+    let descriptions = Array.prototype.slice.call(
+      track.getElementsByTagName('description'),
+    );
+
+    const getSafe = list => {
+      try {
+        return list[0].childNodes[0].nodeValue;
+      } catch (error) {
+        return '';
+      }
+    };
+
+    return {
+      title: getSafe(titles),
+      mp3link: enclosures[0].getAttribute('url'),
+      date_uploaded: moment(getSafe(pubDates))
+        .local()
+        .format(),
+      duration: getSafe(durations),
+      author: author,
+      speakerimg: img,
+      plays: null,
+      description: getSafe(descriptions).replace(/(<([^>]+)>)/gi, ''),
+    };
   };
   fetchPodcasts = async (term, related) => {
     const result = await fetch(

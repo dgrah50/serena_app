@@ -290,7 +290,9 @@ export default class HomeFeed extends React.PureComponent {
     return (
       <Header>
         <Body>
-          <Text title bold>Discover</Text>
+          <Text title bold>
+            Discover
+          </Text>
         </Body>
       </Header>
     );
@@ -326,13 +328,13 @@ export default class HomeFeed extends React.PureComponent {
       </Block>
     );
   };
-  
+
   //****** HELPER FUNCTIONS SECTION
   whichCard(item, index) {
     if (item.hasOwnProperty('description')) {
-      return this._renderRecommendedPodcast(item, index+1, this.props);
+      return this._renderRecommendedPodcast(item, index + 1, this.props);
     } else if (item.hasOwnProperty('title')) {
-      return this._renderRecommendedSermon(item, index+1, this.props);
+      return this._renderRecommendedSermon(item, index + 1, this.props);
     } else if (item.hasOwnProperty('osis')) {
       if (item.osis.includes('VOD')) {
         return (
@@ -342,7 +344,7 @@ export default class HomeFeed extends React.PureComponent {
           </Block>
         );
       } else {
-        return this._renderRecommendedVerse(item, index+1);
+        return this._renderRecommendedVerse(item, index + 1);
       }
     }
   }
@@ -359,47 +361,44 @@ export default class HomeFeed extends React.PureComponent {
       });
     });
   }
-  logPodTrack = (track, podcastImage) => {
-    const titles = Array.prototype.slice.call(
+  logPodTrack = (track, author, img) => {
+    let titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
     );
-    const authors = Array.prototype.slice.call(
-      track.getElementsByTagName('itunes:author'),
-    );
-    const durations = Array.prototype.slice.call(
-      track.getElementsByTagName('itunes:duration'),
-    );
-    const descriptions = Array.prototype.slice.call(
-      track.getElementsByTagName('description'),
-    );
-    const enclosures = Array.prototype.slice.call(
+    let enclosures = Array.prototype.slice.call(
       track.getElementsByTagName('enclosure'),
     );
-    const pubDates = Array.prototype.slice.call(
+    let pubDates = Array.prototype.slice.call(
       track.getElementsByTagName('pubDate'),
     );
-    try {
-      return {
-        title: titles[0].childNodes[0].nodeValue,
-        mp3link: enclosures[0].getAttribute('url'),
-        speakerimg: podcastImage,
-        date_uploaded:
-          pubDates.length != 0
-            ? moment(pubDates[0].childNodes[0].nodeValue)
-                .local()
-                .format()
-            : '',
-        duration: durations[0].childNodes[0].nodeValue,
-        author: authors[0].childNodes[0].nodeValue,
-        plays: null,
-        description: descriptions[0].childNodes[0].nodeValue.replace(
-          /(<([^>]+)>)/gi,
-          '',
-        ),
-      };
-    } catch (err) {
-      console.log(err);
-    }
+    let durations = Array.prototype.slice.call(
+      track.getElementsByTagName('itunes:duration'),
+    );
+    let descriptions = Array.prototype.slice.call(
+      track.getElementsByTagName('description'),
+    );
+
+    const getSafe = list => {
+      try {
+        return list[0].childNodes[0].nodeValue;
+      } catch (error) {
+        return '';
+      }
+    };
+
+    return {
+      title: getSafe(titles),
+      mp3link: enclosures[0].getAttribute('url'),
+      date_uploaded: moment(getSafe(pubDates))
+        .local()
+        .format(),
+      duration: getSafe(durations),
+      author: author,
+      speakerimg: img,
+      plays: null,
+      description:  getSafe(descriptions).replace(/(<([^>]+)>)/gi, '')
+       ,
+    };
   };
   fetchPodcasts = async (term, related) => {
     const result = await fetch(

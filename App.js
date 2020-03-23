@@ -113,7 +113,7 @@ export default function Container(props) {
 
 //intialise the capabilty to receive notifications
   useEffect(() => {
-    AsyncStorage.getItem('notifsEnabled').then(value => console.log(value));
+    AsyncStorage.getItem('notifsEnabled');
     OneSignal.setLogLevel(6, 0);
     OneSignal.init('5e8397b0-56ae-422c-98e4-fbba0d7f6fbb'); // set kOSSettingsKeyAutoPrompt to false prompting manually on iOS
     AsyncStorage.getItem('notifsEnabled').then(value => {

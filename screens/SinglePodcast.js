@@ -148,46 +148,47 @@ export default class SinglePodcast extends Component {
     }
   }
   logPodTrack = (track, author, img) => {
-    const titles = Array.prototype.slice.call(
+    let titles = Array.prototype.slice.call(
       track.getElementsByTagName('title'),
     );
-    const durations = Array.prototype.slice.call(
-      track.getElementsByTagName('itunes:duration'),
-    );
-    const descriptions = Array.prototype.slice.call(
-      track.getElementsByTagName('description'),
-    );
-    const enclosures = Array.prototype.slice.call(
+    let enclosures = Array.prototype.slice.call(
       track.getElementsByTagName('enclosure'),
     );
-    const pubDates = Array.prototype.slice.call(
+    let pubDates = Array.prototype.slice.call(
       track.getElementsByTagName('pubDate'),
     );
+    let durations = Array.prototype.slice.call(
+      track.getElementsByTagName('itunes:duration'),
+    );
+    let descriptions = Array.prototype.slice.call(
+      track.getElementsByTagName('description'),
+    );
+
+    const getSafe = list => {
+      try {
+        return list[0].childNodes[0].nodeValue;
+      } catch (error) {
+        return '';
+      }
+    };
+
     return {
-      title: titles[0].childNodes[0].nodeValue,
+      title: getSafe(titles),
       mp3link: enclosures[0].getAttribute('url'),
-      date_uploaded:
-        pubDates.length != 0
-          ? moment(pubDates[0].childNodes[0].nodeValue)
-              .local()
-              .format()
-          : '',
-      duration:
-        durations.length != 0 ? durations[0].childNodes[0].nodeValue : '',
+      date_uploaded: moment(getSafe(pubDates))
+        .local()
+        .format(),
+      duration: getSafe(durations),
       author: author,
       speakerimg: img,
       plays: null,
-      description: descriptions[0].childNodes[0].nodeValue.replace(
-        /(<([^>]+)>)/gi,
-        '',
-      ),
+      description: getSafe(descriptions).replace(/(<([^>]+)>)/gi, ''),
     };
   };
   fetchPodcasts = async podcast => {
     try {
       podcastList = [];
       let newcasts = null;
-
       const result = await fetch(podcast.feedUrl);
       const text = await result.text();
       const podcastDocument = new DOMParser().parseFromString(text, 'text/xml');

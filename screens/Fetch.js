@@ -249,7 +249,6 @@ export default class Fetch extends Component {
         {this.state.listening && <RippleAnim />}
         <AnimatedCircularProgress
           onAnimationComplete={() => {
-            console.log('animation done');
             this.circularProgress.reAnimate(0, 0, Easing.quad);
             this.stopListen();
           }}
@@ -282,7 +281,6 @@ export default class Fetch extends Component {
                 size={30}
                 color={'rgba(240, 240, 247, 0.66)'}
                 onPress={() => {
-                  console.log('animation done');
                   this.circularProgress.reAnimate(0, 0, Easing.quad);
                   this.stopListen();
                 }}
@@ -393,7 +391,6 @@ export default class Fetch extends Component {
           listening: false,
           ringVisible: false,
         });
-        console.log(response.data);
         this.props.navigation.navigate('Results', {
           response: response.data,
         });
@@ -413,14 +410,12 @@ export default class Fetch extends Component {
     console.log(e);
   }
   onSpeechResults(e) {
-    console.log(e.value);
     this.setState({
       results: e.value,
       typedText: Platform.OS === 'ios' ? e.value.join() : e.value[0],
     });
   }
   stopListen() {
-    console.log('stopping');
     try {
       Voice.stop();
       // this.circularProgress.stopAnimate();
@@ -445,7 +440,6 @@ export default class Fetch extends Component {
   async startListen(e) {
     try {
       await Voice.start('en-US');
-      console.log('voice started');
       this.circularProgress.animate(100, 8000, Easing.quad);
       this.setState({
         results: [],
