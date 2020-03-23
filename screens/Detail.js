@@ -166,7 +166,7 @@ export default class Detail extends Component {
                 verse.verse +
                   ' ' +
                   verse.bookname +
-                  ' I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
+                  '. I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
               )
             }></Icon>
         </TouchableOpacity>
