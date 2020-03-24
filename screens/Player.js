@@ -69,7 +69,7 @@ export default function Player(props) {
       ret += '' + secs;
       return ret;
     }
-    console.log(State[playbackState]);
+
     if (
       State[playbackState] == 'Buffering' ||
       State[playbackState] == 'Connecting'

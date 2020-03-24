@@ -40,14 +40,12 @@ export default class SubscribedPodcasts extends Component {
       .doc('followedPodcasts')
       .get()
       .then(res => {
-        console.log(res.data());
         this.setState({
           followedPodcasts: res.data().subscribed,
         });
       })
       .then(() => {
         this.fetchSubscriptions().then(subs => {
-          console.log(subs);
           this.setState({subs: subs});
         });
       })
@@ -131,8 +129,6 @@ export default class SubscribedPodcasts extends Component {
           'text/xml',
         );
         const items = podcastDocument.getElementsByTagName('item');
-        console.log(items);
-        console.log(typeof items.toString());
         return Array.prototype.slice
           .call(items)
           .map(i => this.logPodTrack(i, res.artistName, res.artworkUrl600));
@@ -140,7 +136,6 @@ export default class SubscribedPodcasts extends Component {
     );
 
     subbedDetails = [].concat.apply([], subbedDetails);
-    console.log(subbedDetails);
     return await subbedDetails.sort((a, b) =>
       a.date_uploaded < b.date_uploaded ? 1 : -1,
     );
