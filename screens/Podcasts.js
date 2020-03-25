@@ -13,6 +13,8 @@ const {width} = Dimensions.get('window');
 import {_renderPodcast} from '../components/VerseSermonCards';
 import {DOMParser} from 'xmldom';
 import moment from 'moment';
+import * as Animatable from 'react-native-animatable';
+AnimatedBlock = Animatable.createAnimatableComponent(Block);
 
 export default class Podcasts extends Component {
   static navigationOptions = ({navigation}) => {
@@ -75,29 +77,30 @@ export default class Podcasts extends Component {
           style={styles.container}
           numColumns={2}
           showsVerticalScrollIndicator={false}>
-          <Block
-            key={0}
-            style={styles.sectionHeader}
-            row
-            center
-            space={'between'}
-            flex={false}>
-            {this.state.subs.length > 0 && (
-              <>
-                <Text title>New from Subscriptions</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('SubscribedPodcasts');
-                  }}>
-                  <Text button style={{color: theme.colors.primary}}>
-                    View All
-                  </Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </Block>
-
-          {_renderPodcast(this.state.subs[0], 1, this.props, true)}
+          {this.state.subs.length > 0 && (
+            <Animatable.View animation="fadeInLeft" delay={400}>
+              <Block
+                key={0}
+                style={styles.sectionHeader}
+                row
+                center
+                space={'between'}
+                flex={false}>
+                <>
+                  <Text title>New from Subscriptions</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('SubscribedPodcasts');
+                    }}>
+                    <Text button style={{color: theme.colors.primary}}>
+                      View All
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              </Block>
+              {_renderPodcast(this.state.subs[0], 1, this.props, true)}
+            </Animatable.View>
+          )}
           <Block
             style={styles.sectionHeader}
             key={2}
@@ -130,7 +133,7 @@ export default class Podcasts extends Component {
             podcastDetail: item,
           });
         }}>
-        <Block center>
+        <AnimatedBlock center animation="fadeInLeft" delay={400}>
           <Image
             style={{
               width: width * 0.4,
@@ -156,17 +159,11 @@ export default class Podcasts extends Component {
             style={{paddingHorizontal: width * 0.05}}>
             {item.artistName}
           </Text>
-        </Block>
+        </AnimatedBlock>
       </TouchableOpacity>
     );
   }
-  _renderSubscribedPodcasts() {
-    return (
-      <Block flex={false} center middle style={{height: width * 0.4}}>
-        {_renderPodcast(this.state.subs[0], 1, this.props, true)}
-      </Block>
-    );
-  }
+
   _renderHeader = () => {
     return (
       <Block

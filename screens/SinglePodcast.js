@@ -13,6 +13,8 @@ const {width} = Dimensions.get('window');
 import {_renderPodcast} from '../components/VerseSermonCards';
 import firebase from 'react-native-firebase';
 import moment from 'moment';
+import * as Animatable from 'react-native-animatable';
+import Spinner from 'react-native-spinkit';
 
 export default class SinglePodcast extends Component {
   static navigationOptions = ({navigation}) => {
@@ -63,14 +65,22 @@ export default class SinglePodcast extends Component {
 
   render() {
     return (
-      <FlatList
-        style={styles.welcome}
-        data={this.state.podcasts}
-        extraData={this.state.following}
-        renderItem={({item, index}) => {
-          return this.whichCard(item, index);
-        }}
-      />
+      <>
+        {this.state.podcasts.length == 0 ? (
+          <Block center middle style={styles.welcome}>
+            <Spinner type={'Bounce'} />
+          </Block>
+        ) : (
+          <FlatList
+            style={styles.welcome}
+            data={this.state.podcasts}
+            extraData={this.state.following}
+            renderItem={({item, index}) => {
+              return this.whichCard(item, index);
+            }}
+          />
+        )}
+      </>
     );
   }
   //****** SUB COMPONENTS SECTION
@@ -212,7 +222,13 @@ export default class SinglePodcast extends Component {
     if (index == 0) {
       return this._renderHeader();
     }
-    return _renderPodcast(item, index, this.props, true);
+    return (
+      <Animatable.View animation="fadeInLeft" delay={(index % 10) * 100}>
+        <Block center middle>
+          {_renderPodcast(item, index, this.props, true)}
+        </Block>
+      </Animatable.View>
+    );
   }
 }
 

@@ -149,8 +149,8 @@ android {
     applicationId "com.serenaltd.serena"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 10
-    versionName "1.0.2"
+    versionCode 11
+    versionName "1.0.3"
     manifestPlaceholders = [
       onesignal_app_id: '5e8397b0-56ae-422c-98e4-fbba0d7f6fbb',
       // Project number pulled from dashboard, local value is ignored.

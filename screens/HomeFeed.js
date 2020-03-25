@@ -16,6 +16,7 @@ import {DOMParser} from 'xmldom';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import moment from 'moment';
+import * as Animatable from 'react-native-animatable';
 import {
   VerseCard,
   _renderSermon,
@@ -23,7 +24,6 @@ import {
 } from '../components/VerseSermonCards';
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 import _ from 'underscore';
-
 import {Header, Body} from 'native-base';
 
 export default class HomeFeed extends React.PureComponent {
@@ -184,71 +184,38 @@ export default class HomeFeed extends React.PureComponent {
   }
   _renderRecommendedVerse(verse, index) {
     return (
-      <VerseCard
-        likedosis={this.state.likedosis}
-        imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
-        verses={[verse]}
-        index={index + 2}
-        key={index + 2}
-        scroller={false}
-        props={this.props}
-      />
+      <Animatable.View animation="fadeInLeft" delay={(index%10 )*100}>
+        <VerseCard
+          likedosis={this.state.likedosis}
+          imageIndex={Math.floor(Math.random() * theme.randomImages.length)}
+          verses={[verse]}
+          index={index + 2}
+          key={index + 2}
+          scroller={false}
+          props={this.props}
+        />
+      </Animatable.View>
     );
-    s;
   }
   _renderRecommendedSermon(item, index, prps) {
     return (
-      <Block center middle key={index}>
-        {_renderSermon(item, index + 2, prps, true)}
-      </Block>
+      <Animatable.View animation="fadeInLeft" delay={(index % 10) * 100}>
+        <Block center middle key={index}>
+          {_renderSermon(item, index + 2, prps, true)}
+        </Block>
+      </Animatable.View>
     );
   }
   _renderRecommendedPodcast(item, index, prps) {
     return (
-      <Block center middle>
-        {_renderPodcast(item, index, prps, true)}
-      </Block>
+      <Animatable.View animation="fadeInLeft" delay={(index % 10) * 100}>
+        <Block center middle>
+          {_renderPodcast(item, index, prps, true)}
+        </Block>
+      </Animatable.View>
     );
   }
   _renderFavouritesButton() {
-    return (
-      <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('Favourites')}>
-        <Block
-          space={'between'}
-          middle
-          row
-          style={[
-            {
-              backgroundColor: theme.colors.gray3,
-              padding: 15,
-              paddingBottom: 13,
-              marginHorizontal: WIDTH * 0.05,
-              marginBottom: WIDTH * 0.05,
-              width: WIDTH * 0.9,
-              borderRadius: theme.sizes.border,
-            },
-            theme.shadow,
-          ]}>
-          <Icon
-            name="heart"
-            size={20}
-            solid={true}
-            color={'red'}
-            style={{marginRight: 10}}
-          />
-          <Text h3>Favourites</Text>
-          <Icon
-            name="chevron-right"
-            size={20}
-            color={theme.colors.black}
-            style={{marginRight: 10}}
-          />
-        </Block>
-      </TouchableOpacity>
-    );
-  }
-  _renderSubscribedPodcasts() {
     return (
       <TouchableOpacity
         onPress={() => this.props.navigation.navigate('Favourites')}>
