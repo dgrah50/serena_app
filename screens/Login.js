@@ -40,11 +40,15 @@ class Onboarding extends Component {
   _renderScreen0() {
     return (
       <Block style={styles.onboarding} flex={false}>
-        <Image
-          resizeMode="contain"
-          source={require('../assets/images/Base/Logobig.png')}
-          style={{height: 40, width: width, position: 'absolute', top: '10%'}}
-        />
+        <Block center middle row style={{position: 'absolute', top: '10%'}}>
+          {/* <Text left style={{position: 'absolute', left:'10%'}}>Back</Text> */}
+          <Image
+            resizeMode="contain"
+            source={require('../assets/images/Base/Logobig.png')}
+            style={{height: 40, width: width}}
+          />
+        </Block>
+
         <Block flex={false} center style={{marginBottom: 20}}>
           <LottieView
             style={{width: width * 0.5}}
@@ -339,7 +343,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     backgroundColor: theme.colors.primary,
-    borderColor: theme.colors.white,
+    borderColor: 'white',
     borderWidth: 2,
     marginBottom: 10,
     width: '80%',

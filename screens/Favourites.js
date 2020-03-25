@@ -11,6 +11,8 @@ import {Block, Text} from '../components';
 import {theme} from '../constants';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
+import * as Animatable from 'react-native-animatable';
+AnimatedShimmer = Animatable.createAnimatableComponent(ShimmerPlaceHolder);
 import {
   VerseCard,
   _renderSermon,
@@ -90,7 +92,9 @@ export default class Favourites extends Component {
   _renderLoadingPlaceHolder() {
     return (
       <Block center style={styles.welcome}>
-        <ShimmerPlaceHolder
+        <AnimatedShimmer
+          animation="fadeInLeft"
+          delay={300}
           autoRun={true}
           style={{
             width: WIDTH * 0.9,
@@ -99,7 +103,9 @@ export default class Favourites extends Component {
             borderRadius: theme.sizes.border,
           }}
         />
-        <ShimmerPlaceHolder
+        <AnimatedShimmer
+          animation="fadeInLeft"
+          delay={600}
           autoRun={true}
           style={{
             width: WIDTH * 0.9,
@@ -108,7 +114,9 @@ export default class Favourites extends Component {
           }}
         />
         <View style={styles.hLine} />
-        <ShimmerPlaceHolder
+        <AnimatedShimmer
+          animation="fadeInLeft"
+          delay={900}
           autoRun={true}
           style={{
             width: WIDTH * 0.9,
