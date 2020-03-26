@@ -67,8 +67,7 @@ class Onboarding extends Component {
           sliderWidth={width}
           itemWidth={width}
           activeAnimationOptions={{
-            friction: 40,
-            tension: 80,
+            duration:1500
           }}
         />
         {/* </Block> */}
