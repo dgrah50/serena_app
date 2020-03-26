@@ -21,7 +21,7 @@ const {height, width} = Dimensions.get('window');
 const anim = [
   require('../assets/anims/levitate.json'),
   require('../assets/anims/happydude.json'),
-  require('../assets/anims/womanonphone.json'),
+  require('../assets/anims/womanonphone2.json'),
 ];
 const bigCaption = ['Discover', 'Speak', 'Share'];
 const caption = [
@@ -39,11 +39,11 @@ class Onboarding extends Component {
   }
   componentDidUpdate() {
     if (this.state.screen == 0) {
-      this.buttons0.fadeIn(3000);
+      this.buttons0.fadeIn(1500);
     } else if (this.state.screen == 1) {
-      this.buttons1.fadeIn(3000);
+      this.buttons1.fadeIn(1500);
     } else if (this.state.screen == 2) {
-      this.buttons2.fadeIn(3000);
+      this.buttons2.fadeIn(1500);
     }
   }
 
