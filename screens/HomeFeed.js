@@ -109,7 +109,7 @@ export default class HomeFeed extends React.PureComponent {
               data: prevState.dailyVerse,
             },
             {
-              title: 'Serena Recommends',
+              title: 'Recommended for you',
               data: _.shuffle(
                 prevState.recommendedPodcasts
                   .concat(prevState.recommendedVerses)
@@ -274,11 +274,11 @@ export default class HomeFeed extends React.PureComponent {
   _renderSectionHeader(title) {
     return (
       <Text
-        h3
+        title
         black
         style={{
           marginVertical: 8,
-          paddingHorizontal: theme.sizes.padding,
+          paddingHorizontal: theme.sizes.padding *0.5,
         }}>
         {title}
       </Text>
@@ -485,7 +485,7 @@ export default class HomeFeed extends React.PureComponent {
                 data: prevState.dailyVerse,
               },
               {
-                title: 'Serena Recommends',
+                title: 'Recommended for you',
                 data: prevState.sectionlistdata[1].data.concat(
                   _.shuffle(
                     prevState.recommendedPodcasts

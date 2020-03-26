@@ -71,7 +71,7 @@ export class VerseCard extends React.Component {
               style={[
                 {
                   width: WIDTH * 0.9,
-                  height: WIDTH * 0.7,
+                  height: WIDTH * 0.4,
                   marginBottom: WIDTH * 0.05,
                   borderRadius: theme.sizes.border,
                   justifyContent: 'center',
@@ -101,7 +101,7 @@ export class VerseCard extends React.Component {
                     <Text
                       white
                       center
-                      numberOfLines={3}
+                      numberOfLines={2}
                       style={{marginVertical: 8, fontSize: 20}}>
                       {verses[0].verse}
                     </Text>
