@@ -9,12 +9,26 @@ import {
 } from 'react-native';
 import firebase from 'react-native-firebase';
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
-import {Button, Block, Text} from '../components';
+import {Button, Block, Card, Text} from '../components';
 import {theme} from '../constants';
 import LottieView from 'lottie-react-native';
 import {request, PERMISSIONS} from 'react-native-permissions';
-
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import * as Animatable from 'react-native-animatable';
+AnimatedBlock = Animatable.createAnimatableComponent(Block);
 const {height, width} = Dimensions.get('window');
+
+const anim = [
+  require('../assets/anims/levitate.json'),
+  require('../assets/anims/happydude.json'),
+  require('../assets/anims/womanonphone.json'),
+];
+const bigCaption = ['Discover', 'Speak', 'Share'];
+const caption = [
+  'Serena recommends Bible verses, sermons & podcasts just for you',
+  'Enable microphone access, and you can even speak aloud to Serena',
+  'Receive a daily Bible Verse and share with your friends to spread the word of God',
+];
 
 class Onboarding extends Component {
   constructor(props) {
@@ -23,203 +37,191 @@ class Onboarding extends Component {
       screen: 0,
     };
   }
-
-  render() {
-    switch (this.state.screen) {
-      case 0:
-        return this._renderScreen0();
-      case 1:
-        return this._renderScreen1();
-      case 2:
-        return this._renderScreen2();
-      default:
-        return this._renderScreen0();
+  componentDidUpdate() {
+    if (this.state.screen == 0) {
+      this.buttons0.fadeIn(3000);
+    } else if (this.state.screen == 1) {
+      this.buttons1.fadeIn(3000);
+    } else if (this.state.screen == 2) {
+      this.buttons2.fadeIn(3000);
     }
   }
 
-  _renderScreen0() {
+  render() {
     return (
-      <Block style={styles.onboarding} flex={false}>
-        <Block center middle row style={{position: 'absolute', top: '10%'}}>
-          {/* <Text left style={{position: 'absolute', left:'10%'}}>Back</Text> */}
+      <Block flex={false} center middle style={styles.onboarding}>
+        <Carousel
+          ref={c => {
+            this._carousel = c;
+          }}
+          layout={'default'}
+          lockScrollTimeoutDuration={3000}
+          // scrollEnabled={false}
+          onSnapToItem={index => {
+            if (index != this.state.screen) {
+              this.setState({screen: index});
+            }
+          }}
+          data={['a', 'b', 'c']}
+          renderItem={this._renderItem}
+          sliderWidth={width}
+          itemWidth={width}
+          activeAnimationOptions={{
+            friction: 40,
+            tension: 80,
+          }}
+        />
+        {/* </Block> */}
+
+        {this._renderDots()}
+        {this._renderButton()}
+      </Block>
+    );
+  }
+
+  _renderItem = ({item, index}) => {
+    return (
+      <>
+        <Card shadow center flex={false} style={{marginHorizontal: 20}}>
           <Image
             resizeMode="contain"
             source={require('../assets/images/Base/Logobig.png')}
             style={{height: 40, width: width}}
           />
-        </Block>
 
-        <Block flex={false} center style={{marginBottom: 20}}>
           <LottieView
             style={{width: width * 0.5}}
-            source={require('../assets/anims/levitate.json')}
+            source={anim[index]}
             autoPlay
             loop
           />
-        </Block>
-        <Block flex={false} style={{paddingHorizontal: '5%'}}>
-          <Text h2 black center style={{marginBottom: 20}}>
-            Welcome {'\n'} to Serena
-          </Text>
-          <Text black center>
-            We want to help every Christian feel closer to God, and live the
-            happiest, most fulfilling life.
-          </Text>
-        </Block>
-        <Block flex={false} center middle style={styles.paginationRow}>
-          <Button
-            style={styles.buttonStyle}
-            onPress={() => this.setState({screen: 1})}>
-            <Text button white>
-              {' '}
-              CONTINUE{' '}
+          <Block flex={false}>
+            <Text h2 bold black right>
+              {bigCaption[index]}
             </Text>
-          </Button>
-          <Dots
-            isLight={true}
-            numPages={3}
-            currentPage={this.state.screen}
-            Dot={Dot}
-            style={styles.dots}
-          />
+          </Block>
+        </Card>
+        <Block>
+          <Text title black center style={{paddingHorizontal: '5%'}}>
+            {caption[index]}
+          </Text>
         </Block>
-      </Block>
+      </>
+    );
+  };
+
+  _renderDots() {
+    return (
+      <Pagination
+        dotsLength={3}
+        activeDotIndex={this.state.screen}
+        dotColor={'rgba(255, 255, 255, 0.92)'}
+        dotStyle={styles.paginationDot}
+        containerStyle={styles.paginationContainer}
+        inactiveDotColor={theme.colors.black}
+        inactiveDotOpacity={0.4}
+        inactiveDotScale={0.6}
+        carouselRef={this._carousel}
+        tappableDots={false}
+      />
     );
   }
-  _renderScreen1() {
-    return (
-      <Block style={styles.onboarding}>
-        <Image
-          resizeMode="contain"
-          source={require('../assets/images/Base/Logobig.png')}
-          style={{height: 40, width: width, position: 'absolute', top: '10%'}}
-        />
-        <Block flex={false} space={'between'} style={{height: height * 0.6}}>
-          <Block
-            flex={false}
+
+  _renderButton() {
+    switch (this.state.screen) {
+      case 0:
+        return (
+          <Animatable.View
+            ref={ci => (this.buttons0 = ci)}
+
             center
-            middle
-            style={{
-              marginBottom: 20,
-              height: width * 0.5,
-            }}>
-            <LottieView
-              style={{width: width * 0.5}}
-              source={require('../assets/anims/happydude.json')}
-              autoPlay
-              loop
-            />
-          </Block>
-          <Text h2 black center style={{margin: 20}}>
-            Personalised {'\n'} for You.
-          </Text>
-          <Block
-            flex={false}
-            style={{
-              padding: '2.5%',
-              height: width * 0.5,
-            }}>
-            <Text black center>
-              Serena recommends Bible verses, sermons & podcasts just for you.
-              Enable microphone access, and you can even speak aloud to Serena.
-            </Text>
-          </Block>
-        </Block>
-
-        <Block flex={false} center style={styles.paginationRow}>
-          <Button
-            style={styles.buttonStyle}
-            onPress={() => this.requestPermissions()}>
-            <Text button white>
-              {' '}
-              ALLOW MICROPHONE ACCESS{' '}
-            </Text>
-          </Button>
-          <Dots
-            isLight={true}
-            numPages={3}
-            currentPage={this.state.screen}
-            Dot={Dot}
-            style={styles.dots}
-          />
-        </Block>
-      </Block>
-    );
-  }
-  _renderScreen2() {
-    return (
-      <Block style={styles.onboarding}>
-        <Image
-          resizeMode="contain"
-          source={require('../assets/images/Base/Logobig.png')}
-          style={{height: 40, width: width, position: 'absolute', top: '10%'}}
-        />
-        <Block flex={false} center middle style={{marginBottom: 20}}>
-          <LottieView
-            style={{width: width * 0.5}}
-            source={require('../assets/anims/womanonphone.json')}
-            autoPlay
-            loop
-          />
-        </Block>
-        <Block flex={false} style={{paddingHorizontal: '5%'}}>
-          <Text h2 black center style={{marginBottom: 20}}>
-            Share with friends and family.
-          </Text>
-          <Text black center>
-            Receive a daily Bible Verse and share with your friends to spread
-            the word of God.
-          </Text>
-        </Block>
-        <Block
-          flex={false}
-          center
-          justifyContent={'flex-end'}
-          style={[styles.paginationRow, {height: '25%'}]}>
-          <Block flex={false} row style={{width: '80%'}}>
+            justifyContent={'flex-end'}
+            style={[styles.paginationRow, {height: '25%'}]}>
             <Button
-              style={[styles.buttonStyle, {width: '50%', marginBottom: 0}]}
-              onPress={() => this.props.navigation.navigate('EmailLogin')}>
+              style={styles.buttonStyle}
+              onPress={() =>
+                this.setState({screen: 1}, () => this._carousel.snapToItem(1))
+              }>
               <Text button white>
-                LOG IN
+                {' '}
+                CONTINUE{' '}
               </Text>
             </Button>
+          </Animatable.View>
+        );
+      case 1:
+        return (
+          <Animatable.View
+            ref={ci => (this.buttons1 = ci)}
+
+            center
+            justifyContent={'flex-end'}
+            style={[styles.paginationRow, {height: '25%'}]}>
             <Button
-              style={[styles.buttonStyle, {width: '50%', marginBottom: 0}]}
-              onPress={() => this.props.navigation.navigate('Register')}>
+              style={styles.buttonStyle}
+              onPress={() => this.requestPermissions()}>
               <Text button white>
-                SIGN UP
+                {' '}
+                ALLOW MICROPHONE ACCESS{' '}
               </Text>
             </Button>
-          </Block>
+          </Animatable.View>
+        );
+      case 2:
+        return (
+          <Animatable.View
+            ref={ci => (this.buttons2 = ci)}
+            delay={300}
 
-          <Button
-            style={[styles.buttonStyle, {backgroundColor: '#3b5998'}]}
-            onPress={() => this.facebookLogin()}>
-            <Text button white>
-              OR CONTINUE WITH FACEBOOK
-            </Text>
-          </Button>
-          <Dots
-            isLight={true}
-            numPages={3}
-            currentPage={this.state.screen}
-            Dot={Dot}
-            style={styles.dots}
-          />
-        </Block>
-      </Block>
-    );
+            center
+            justifyContent={'flex-end'}
+            style={[styles.paginationRow]}>
+            <Block flex={false} row style={{width: '100%', marginBottom: 5}}>
+              <Block center middle style={{width: '45%', paddingRight: 5}}>
+                <Button
+                  style={[styles.buttonStyle]}
+                  onPress={() => this.props.navigation.navigate('EmailLogin')}>
+                  <Text button white>
+                    LOG IN
+                  </Text>
+                </Button>
+              </Block>
+
+              <Block center middle style={{width: '45%', paddingLeft: 5}}>
+                <Button
+                  style={[styles.buttonStyle]}
+                  onPress={() => this.props.navigation.navigate('Register')}>
+                  <Text button white>
+                    SIGN UP
+                  </Text>
+                </Button>
+              </Block>
+            </Block>
+
+            <Block center middle style={[{width: '100%'}]}>
+              <Button
+                style={[styles.buttonStyle, {backgroundColor: '#3b5998'}]}
+                onPress={() => this.facebookLogin()}>
+                <Text button white>
+                  FACEBOOK
+                </Text>
+              </Button>
+            </Block>
+          </Animatable.View>
+        );
+      default:
+        return this._renderScreen0();
+    }
   }
 
   requestPermissions() {
     if (Platform.OS === 'android') {
       request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
-        this.setState({screen: 2});
+        this.setState({screen: 2}, () => this._carousel.snapToItem(2));
       });
     } else {
       request(PERMISSIONS.IOS.SPEECH_RECOGNITION).then(result => {
-        this.setState({screen: 2});
+        this.setState({screen: 2}, () => this._carousel.snapToItem(2));
       });
     }
   }
@@ -290,50 +292,28 @@ class Onboarding extends Component {
   }
 }
 
-const Dots = ({isLight, numPages, currentPage, Dot}) => (
-  <View style={styles.container}>
-    {[...Array(numPages)].map((_, index) => (
-      <Dot key={index} selected={index === currentPage} isLight={isLight} />
-    ))}
-  </View>
-);
-
-const Dot = ({isLight, selected}) => {
-  let backgroundColor;
-  if (isLight) {
-    backgroundColor = selected ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.3)';
-  } else {
-    backgroundColor = selected ? '#fff' : 'rgba(255, 255, 255, 0.5)';
-  }
-  return (
-    <View
-      style={{
-        ...styles.dot,
-        backgroundColor,
-      }}
-    />
-  );
-};
-
 const styles = StyleSheet.create({
   onboarding: {
     width: '100%',
     // flex: 1,
     height: '100%',
     backgroundColor: theme.colors.bg,
-    paddingTop: '30%',
+    paddingTop: '20%',
   },
   container: {
-    flex: 0,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginHorizontal: 3,
-    backgroundColor: 'red',
+  paginationContainer: {
+    paddingVertical: 8,
+    position: 'absolute',
+    bottom: '30%',
+  },
+  paginationDot: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    marginHorizontal: 4,
   },
   paginationRow: {
     position: 'absolute',
@@ -343,10 +323,8 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     backgroundColor: theme.colors.primary,
-    borderColor: 'white',
-    borderWidth: 2,
-    marginBottom: 10,
-    width: '80%',
+    width: '100%',
+    borderRadius: theme.sizes.border,
   },
 });
 
