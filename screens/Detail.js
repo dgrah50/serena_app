@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   Dimensions,
+  AsyncStorage,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {Block, Text} from '../components';
@@ -12,7 +13,7 @@ import {theme} from '../constants';
 import Share from 'react-native-share';
 import firebase from 'react-native-firebase';
 import ViewShot, {captureRef} from 'react-native-view-shot';
-import {Coachmark} from 'react-native-coachmark';
+import {Coachmark, CoachmarkComposer} from 'react-native-coachmark';
 
 const {width} = Dimensions.get('window');
 
@@ -23,12 +24,36 @@ export default class Detail extends Component {
     this.state = {
       alreadyLiked: false,
       showButtons: true,
+      micCoach2: false,
     };
+    this.coachmark1 = React.createRef();
   }
 
   componentDidMount(props) {
     if (this.props.navigation.getParam('alreadyLiked')) {
       this.setState({alreadyLiked: true});
+    }
+    const composer = new CoachmarkComposer([this.coachmark1]);
+    AsyncStorage.getItem('micCoach2')
+      .then(value => {
+        console.log(value);
+        if (value == null) {
+          composer.show();
+          this.setState({micCoach2: true});
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        composer.show();
+        this.setState({micCoach2: true});
+      });
+  }
+
+  componentDidUpdate() {
+    if (this.state.micCoach2) {
+      AsyncStorage.setItem('micCoach2', JSON.stringify('true')).catch(err =>
+        console.log(err),
+      );
     }
   }
 
@@ -64,7 +89,12 @@ export default class Detail extends Component {
     return (
       <>
         <TouchableOpacity
-          hitSlop={{bottom: 100, left: 100, right: 100, top: 100}}
+          hitSlop={{
+            bottom: 100,
+            left: 100,
+            right: 100,
+            top: 100,
+          }}
           style={{
             height: 6,
             borderRadius: 3,
@@ -84,7 +114,12 @@ export default class Detail extends Component {
           }}
         />
         <TouchableOpacity
-          hitSlop={{bottom: 100, left: 100, right: 100, top: 100}}
+          hitSlop={{
+            bottom: 100,
+            left: 100,
+            right: 100,
+            top: 100,
+          }}
           onPress={() => {
             console.log('test');
             this.props.navigation.goBack();
@@ -156,7 +191,9 @@ export default class Detail extends Component {
             color={theme.colors.white}
             style={{marginLeft: 10}}></Icon>
         </TouchableOpacity>
-        <Coachmark autoShow message="Click here to share this verse!">
+        <Coachmark
+          ref={this.coachmark1}
+          message="Click here to share this verse!">
           <TouchableOpacity>
             <Icon
               name="paper-plane"
@@ -232,7 +269,6 @@ export default class Detail extends Component {
         error => console.error('Oops, snapshot failed', error),
       );
     });
-   
 
     // try {
     //   const result = await Share.share({
