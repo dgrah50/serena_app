@@ -40,11 +40,22 @@ const CustomTabBar = props => {
 
   return (
     <React.Fragment>
-      <BarMusicPlayer navigation={navigation} song={currentSongData} />
+      <BarMusicPlayer
+        navigation={navigation}
+        song={currentSongData}
+        backgroundColor={
+          deepestRoute == 'Home' ? '#2474A8' : theme.colors.gray4
+        }
+      />
       <BottomTabBar
         {...props}
         activeTintColor={theme.colors.black}
         inactiveTintColor={
+          deepestRoute == 'Home'
+            ? 'rgba(255, 255, 255, 0.3)'
+            : 'rgba(0,0,0, 0.3)'
+        }
+        darkText={
           deepestRoute == 'Home'
             ? 'rgba(255, 255, 255, 0.3)'
             : 'rgba(0,0,0, 0.3)'

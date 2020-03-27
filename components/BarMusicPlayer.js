@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, TouchableOpacity,  Dimensions} from 'react-native';
+import {StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Block,Text} from './';
-import {theme,} from '../constants';
+import {Block, Text} from './';
+import {theme} from '../constants';
 import TrackPlayer, {State, usePlaybackState} from 'react-native-track-player';
 
 const {width} = Dimensions.get('window');
@@ -12,7 +12,6 @@ function BarMusicPlayer(props) {
   const playbackState = usePlaybackState();
 
   function togglePlay() {
-
     if (State[playbackState] == 'Playing') {
       TrackPlayer.pause();
     } else {
@@ -23,18 +22,18 @@ function BarMusicPlayer(props) {
   const {navigation, song} = props;
   const iconPlay =
     State[playbackState] != 'Playing' ? 'play-circle' : 'pause-circle';
-  const favoriteColor = theme.colors.white
+  const favoriteColor = props.darkText
+    ? theme.colors.black
+    : theme.colors.white;
   const favoriteIcon = 'heart';
   // const favoriteColor = favorited ? theme.colors.white : theme.colors.white;
   // const favoriteIcon = favorited ? 'heart' : 'heart-o';
-
-
 
   return song.mp3link ? (
     <TouchableOpacity
       activeOpacity={1}
       onPress={() => navigation.navigate('Player')}
-      style={styles.container}>
+      style={[{backgroundColor: props.backgroundColor}, styles.container]}>
       {/* <TouchableOpacity
         // activeOpacity={gStyle.activeOpacity}
         hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
@@ -43,17 +42,17 @@ function BarMusicPlayer(props) {
         <Icon color={favoriteColor} name={favoriteIcon} size={20} />
       </TouchableOpacity> */}
       {song && (
-        <Block  center middle style={styles.containerSong}>
+        <Block center middle style={styles.containerSong}>
           <Text
             center
             middle
-            white
+            black
             title
             numberOfLines={1}>{`${song.title}`}</Text>
           <Text
             center
             middle
-            white
+            black
             title
             numberOfLines={1}>{`${song.author} `}</Text>
         </Block>
@@ -63,7 +62,7 @@ function BarMusicPlayer(props) {
         hitSlop={{bottom: 10, left: 10, right: 10, top: 10}}
         onPress={togglePlay}
         style={(styles.containerIcon, {justifyContent: 'flex-end'})}>
-        <Icon color={theme.colors.white} name={iconPlay} size={28} />
+        <Icon color={theme.colors.black} name={iconPlay} size={28} />
       </TouchableOpacity>
     </TouchableOpacity>
   ) : (
@@ -90,8 +89,10 @@ const styles = StyleSheet.create({
   container: {
     alignSelf: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.black,
+    // backgroundColor: theme.colors.black,
+    // borderTopColor: theme.colors.blackBg,
     borderBottomColor: theme.colors.blackBg,
+    // borderTopWidth: StyleSheet.hairlineWidth *2,
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     paddingVertical: 8,
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   containerSong: {
     overflow: 'hidden',
     width: width - 100,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   device: {
     color: theme.colors.primary,
