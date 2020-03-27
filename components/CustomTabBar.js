@@ -11,7 +11,7 @@ const CustomTabBar = props => {
     screenProps: {currentSongData, toggleTabBarState},
   } = props;
 
-  //   return toggleTabBarState ? null : (
+
   return (
     <React.Fragment>
       <BarMusicPlayer navigation={navigation} song={currentSongData} />

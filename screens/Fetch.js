@@ -10,6 +10,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Platform,
+  AsyncStorage,
 } from 'react-native';
 import {RNChipView} from 'react-native-chip-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -22,6 +23,7 @@ import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import LinearGradient from 'react-native-linear-gradient';
 import firebase from 'react-native-firebase';
 import * as Animatable from 'react-native-animatable';
+import {Coachmark, CoachmarkComposer} from 'react-native-coachmark';
 
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 
@@ -40,13 +42,40 @@ export default class Fetch extends Component {
     Voice.onSpeechResults = this.onSpeechResults.bind(this);
     Voice.onSpeechError = this.onSpeechError.bind(this);
     firebase.analytics().setCurrentScreen('Home');
+    this.coachmark1 = React.createRef();
   }
 
   handleViewRef = ref => (this.view = ref);
 
   static navigationOptions = {
     header: null,
+    micCoach: false,
   };
+
+  componentDidMount() {
+    const composer = new CoachmarkComposer([this.coachmark1]);
+    AsyncStorage.getItem('micCoach')
+      .then(value => {
+        console.log(value);
+        if (value == null) {
+          composer.show();
+          this.setState({micCoach: true});
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        composer.show();
+        this.setState({micCoach: true});
+      });
+  }
+
+  componentDidUpdate() {
+    if (this.state.micCoach) {
+      AsyncStorage.setItem('micCoach', JSON.stringify('true')).catch(err =>
+        console.log(err),
+      );
+    }
+  }
 
   render() {
     return (
@@ -266,7 +295,7 @@ export default class Fetch extends Component {
               marginHorizontal: WIDTH * 0.1,
               height: HEIGHT * 0.2,
             }}>
-            <Text h3 white center style={{marginVertical:25}}>
+            <Text h3 white center style={{marginVertical: 25}}>
               {this.state.typedText}
             </Text>
             <Animatable.View
@@ -293,16 +322,20 @@ export default class Fetch extends Component {
   }
   _renderMicButton() {
     return (
-      <TouchableOpacity
-        hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
-        onPressIn={this.setRingOn.bind(this)}
-        // onPressOut={this.stopListen.bind(this)}
-      >
-        <View
-          style={[styles.buttonStyle, Platform.OS === 'ios' && theme.shadow]}>
-          <Icon name={'microphone'} size={60} color={theme.colors.white} />
-        </View>
-      </TouchableOpacity>
+      <Coachmark
+        ref={this.coachmark1}
+        message="Tap here and speak to find verses! For example: 'I'm feeling tired and I need motivation' ">
+        <TouchableOpacity
+          hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
+          onPressIn={this.setRingOn.bind(this)}
+          // onPressOut={this.stopListen.bind(this)}
+        >
+          <View
+            style={[styles.buttonStyle, Platform.OS === 'ios' && theme.shadow]}>
+            <Icon name={'microphone'} size={60} color={theme.colors.white} />
+          </View>
+        </TouchableOpacity>
+      </Coachmark>
     );
   }
   _renderKeyboardButton() {

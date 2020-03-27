@@ -12,6 +12,8 @@ import {theme} from '../constants';
 import Share from 'react-native-share';
 import firebase from 'react-native-firebase';
 import ViewShot, {captureRef} from 'react-native-view-shot';
+import {Coachmark} from 'react-native-coachmark';
+
 const {width} = Dimensions.get('window');
 
 export default class Detail extends Component {
@@ -154,22 +156,23 @@ export default class Detail extends Component {
             color={theme.colors.white}
             style={{marginLeft: 10}}></Icon>
         </TouchableOpacity>
-
-        <TouchableOpacity>
-          <Icon
-            name="paper-plane"
-            size={40}
-            color={theme.colors.white}
-            style={{marginRight: 10}}
-            onPress={() =>
-              this.onShare(
-                verse.verse +
-                  ' ' +
-                  verse.bookname +
-                  '. I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
-              )
-            }></Icon>
-        </TouchableOpacity>
+        <Coachmark autoShow message="Click here to share this verse!">
+          <TouchableOpacity>
+            <Icon
+              name="paper-plane"
+              size={40}
+              color={theme.colors.white}
+              style={{marginRight: 10}}
+              onPress={() =>
+                this.onShare(
+                  verse.verse +
+                    ' ' +
+                    verse.bookname +
+                    '. I found this verse with the Serena app - download it here : http://onelink.to/yq89j8',
+                )
+              }></Icon>
+          </TouchableOpacity>
+        </Coachmark>
       </Block>
     );
   }

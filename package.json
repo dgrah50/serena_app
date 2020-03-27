@@ -14,6 +14,7 @@
     "postinstall": "npx jetify"
   },
   "dependencies": {
+    "@mindinventory/react-native-tab-bar-interaction": "github:mindinventory/react-native-tab-bar-interaction",
     "@react-native-community/datetimepicker": "^2.2.3",
     "axios": "^0.19.0",
     "axios-retry": "^3.1.2",
@@ -37,6 +38,7 @@
     "react-native-autogrow-textinput": "^5.3.0",
     "react-native-chip-view": "0.0.12",
     "react-native-circular-progress": "^1.3.0",
+    "react-native-coachmark": "0.0.4",
     "react-native-fbsdk": "^1.1.1",
     "react-native-firebase": "^5.5.6",
     "react-native-gesture-handler": "^1.4.1",
