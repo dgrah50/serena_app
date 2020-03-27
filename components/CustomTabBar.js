@@ -17,7 +17,7 @@ const CustomTabBar = props => {
     return getDeepestRoute(route.routes[route.index]);
   }
 
-  // let deepestRoute = getDeepestRoute(navigation.state);
+  let deepestRoute = getDeepestRoute(navigation.state);
   // console.log(deepestRoute)
   // if (navigation.state.routes.length > 1) {
   //   navigation.state.routes.map(route => {
@@ -36,7 +36,7 @@ const CustomTabBar = props => {
   // }
 
   props.style.backgroundColor =
-    props.navigation.state.index == 0 ? '#2474A8' : theme.colors.gray4;
+    deepestRoute == 'Home' ? '#2474A8' : theme.colors.gray4;
 
   return (
     <React.Fragment>
@@ -45,9 +45,9 @@ const CustomTabBar = props => {
         {...props}
         activeTintColor={theme.colors.black}
         inactiveTintColor={
-          props.navigation.state.index == 0
-            ? "rgba(255, 255, 255, 0.3)"
-            : "rgba(0,0,0, 0.3)"
+          deepestRoute == 'Home'
+            ? 'rgba(255, 255, 255, 0.3)'
+            : 'rgba(0,0,0, 0.3)'
         }
       />
     </React.Fragment>
