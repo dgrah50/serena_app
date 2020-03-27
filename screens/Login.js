@@ -114,7 +114,7 @@ class Onboarding extends Component {
       <Pagination
         dotsLength={3}
         activeDotIndex={this.state.screen}
-        dotColor={'rgba(255, 255, 255, 0.92)'}
+        dotColor={theme.colors.primary}
         dotStyle={styles.paginationDot}
         containerStyle={styles.paginationContainer}
         inactiveDotColor={theme.colors.black}

@@ -327,7 +327,6 @@ export default class Fetch extends Component {
         <TouchableOpacity
           hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}
           onPressIn={this.setRingOn.bind(this)}
-          // onPressOut={this.stopListen.bind(this)}
         >
           <View
             style={[styles.buttonStyle, Platform.OS === 'ios' && theme.shadow]}>
