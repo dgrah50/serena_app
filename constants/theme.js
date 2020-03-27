@@ -26,7 +26,7 @@ const colors = {
   gray3: '#F0F0F0',
   gray4: '#F7F8FA',
   blue: '#24a0ed',
-  bg: '#EFEFF4',
+  bg: '#ffffff',
 };
 
 const sizes = {

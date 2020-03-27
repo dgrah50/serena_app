@@ -9,7 +9,7 @@ import {
 import firebase from 'react-native-firebase';
 import {Block, Text} from '../components';
 import {theme} from '../constants';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import * as Animatable from 'react-native-animatable';
 AnimatedShimmer = Animatable.createAnimatableComponent(ShimmerPlaceHolder);
@@ -51,7 +51,7 @@ export default class Favourites extends Component {
                 this.props.navigation.goBack(null);
               }}>
               <Icon
-                name="chevron-left"
+                name="arrow-left"
                 size={25}
                 style={{paddingLeft: 10}}
                 color={theme.colors.black}

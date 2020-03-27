@@ -6,7 +6,7 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {Block, Text} from '../components';
 import {theme} from '../constants';
 import Share from 'react-native-share';

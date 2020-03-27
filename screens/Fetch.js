@@ -13,7 +13,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import {RNChipView} from 'react-native-chip-view';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import axios from 'axios';
 import qs from 'qs';
 import Voice from 'react-native-voice';
@@ -108,7 +108,7 @@ export default class Fetch extends Component {
                 zIndex: 1,
               }}
               onPress={() => this.props.navigation.navigate('Profile')}>
-              <Icon name="cog" size={25} color={theme.colors.white}></Icon>
+              <Icon name="settings" size={25} color={theme.colors.white}></Icon>
             </TouchableOpacity>
             <View
               style={{
@@ -230,10 +230,9 @@ export default class Fetch extends Component {
               style={{
                 justifyContent: 'flex-start',
                 alignItems: 'center',
-                // paddingTop: 5,
               }}>
               <Icon
-                name={'times-circle'}
+                name={'close'}
                 size={30}
                 color={'rgba(240, 240, 247, 0.66)'}
                 onPress={() => {
@@ -306,7 +305,7 @@ export default class Fetch extends Component {
                 // paddingTop: 5,
               }}>
               <Icon
-                name={this.state.typedText ? 'search' : 'times-circle'}
+                name={this.state.typedText ? 'magnifier' : 'close'}
                 size={30}
                 color={'rgba(240, 240, 247, 0.66)'}
                 onPress={() => {
@@ -356,7 +355,7 @@ export default class Fetch extends Component {
             alignItems: 'center',
           }}>
           <Icon
-            name={'search'}
+            name={'magnifier'}
             size={20}
             style={{marginLeft: 15, marginRight: 10}}
             color={theme.colors.white}

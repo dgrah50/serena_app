@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import {FluidNavigator} from 'react-navigation-fluid-transitions';
 import {theme} from '../constants';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import CustomTabBar from '../components/CustomTabBar';
 import HomeFeed from '../screens/HomeFeed';
 import Detail from '../screens/Detail';
@@ -14,7 +14,6 @@ import Favourites from '../screens/Favourites';
 import Podcasts from '../screens/Podcasts';
 import SubscribedPodcasts from '../screens/SubscribedPodcasts';
 import SinglePodcast from '../screens/SinglePodcast';
-
 
 const homeStack = createStackNavigator(
   {
@@ -141,7 +140,7 @@ discoverStack.navigationOptions = ({navigation}) => {
     tabBarVisible,
     tabBarLabel: 'Discover',
     tabBarIcon: ({tintColor}) => (
-      <Icon name="search" size={25} color={tintColor} />
+      <Icon name="magnifier" size={25} color={tintColor} />
     ),
   };
 };
@@ -161,7 +160,7 @@ podcastStack.navigationOptions = ({navigation}) => {
     tabBarVisible,
     tabBarLabel: 'Podcasts',
     tabBarIcon: ({tintColor}) => (
-      <Icon name="music" size={25} color={tintColor} />
+      <Icon name="feed" size={25} color={tintColor} />
     ),
   };
 };
@@ -189,9 +188,7 @@ const defaultStack = createBottomTabNavigator(
     tabBarComponent: props => <CustomTabBar {...props} />,
     tabBarOptions: {
       activeTintColor: theme.colors.white,
-      inactiveTintColor: theme.colors.gray1,
       style: {
-        backgroundColor: theme.colors.black,
         borderTopWidth: 0,
         bottom: 0,
       },

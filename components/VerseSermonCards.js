@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Share,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {Block, Text} from '../components';
 import {theme} from '../constants';
 import {Transition} from 'react-navigation-fluid-transitions';

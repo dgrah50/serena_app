@@ -336,7 +336,7 @@ PODS:
     - React
   - RNPermissions (2.0.9):
     - React
-  - RNReanimated (1.7.0):
+  - RNReanimated (1.7.1):
     - React
   - RNScreens (1.0.0-alpha.23):
     - React
@@ -603,8 +603,8 @@ SPEC CHECKSUMS:
   lottie-react-native: 2a1a82bb326ae51331a5520de0cf706733c6db69
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   OneSignal: a6df91542d1cf133b9dd19d89f2b533d8f2d3163
-  Permission-Microphone: 735c46c5a8e2ace954897680def376186bad1446
-  Permission-SpeechRecognition: b5b7c8ac21d01cd394142a3fd788e87b03513f8f
+  Permission-Microphone: c46ef776bd65d251d3bcb544bedaf7160c1afe06
+  Permission-SpeechRecognition: bd74f12392b41abd5362e9ebac4405cabfefd955
   Protobuf: 0e94afe3b47cb11876eb6aee296638711a24bf75
   React: 53c53c4d99097af47cf60594b8706b4e3321e722
   React-ART: 662252e1a2f87f7d4e56150403040b4cd725c0f9
@@ -615,14 +615,14 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 90ad2f9db09513fc763bc757fdc3c4ff8bde2a30
   React-jsinspector: e08662d1bf5b129a3d556eb9ea343a3f40353ae4
   react-native-fbsdk: b94a83971c496a35803f38b921aec6d637ba07b5
-  react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
-  react-native-image-resizer: 1ffe71ec5f2596c3a24d42548c03bfbfb06fe810
-  react-native-music-control: e0eb7b9b43004134cb9e54d5dafee14e6f20eeea
+  react-native-image-picker: 3637d63fef7e32a230141ab4660d3ceb773c824f
+  react-native-image-resizer: 9dfb844937574db849fd18a56d8e6c607b0a31d8
+  react-native-music-control: 74b1f7d03b781aa38557d706ca4650ff1c96095a
   react-native-onesignal: 5ee6834ff54b56fc8ea33877803e8fa92633c87b
   react-native-spinkit: da294fd828216ad211fe36a5c14c1e09f09e62db
-  react-native-track-player: bb3a3f8251cfe7f4cbc5746e5a67d0951a4a5e39
+  react-native-track-player: 6c2c2f163534bb6d6b5fea68959b3641f70718dd
   react-native-view-shot: 08c46c9e8e92f6681e8f2ffa55ac3d06e7e99070
-  react-native-voice: 9829ac5dc9300687c5f215bddf6c9645e82923fc
+  react-native-voice: 0253a5cde07d9c675463e36f7e668a76b0825de4
   React-RCTActionSheet: b0f1ea83f4bf75fb966eae9bfc47b78c8d3efd90
   React-RCTAnimation: 359ba1b5690b1e87cc173558a78e82d35919333e
   React-RCTBlob: 5e2b55f76e9a1c7ae52b826923502ddc3238df24
@@ -633,16 +633,16 @@ SPEC CHECKSUMS:
   React-RCTText: b074d89033583d4f2eb5faf7ea2db3a13c7553a2
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
-  ReactNativeAutogrowTextinput: 14bd6349ec4fed9231ca141ad3f1dbadf2f63e4c
+  ReactNativeAutogrowTextinput: edd7318a312c0d0ab34c959fa8a613cbda08261f
   RNDateTimePicker: 647f891a27a68b44d012fd7c6183844268ab0342
   RNFirebase: ac0de8b24c6f91ae9459575491ed6a77327619c6
   RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
-  RNPermissions: 2f74237e97b08beda01e914301e12524ddddf5b8
-  RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
+  RNPermissions: 6db7e0a4d94c9c02390d11020b1d3d187aaf77e5
+  RNReanimated: 4e102df74a9674fa943e05f97f3362b6e44d0b48
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
   RNShare: 8b171d4b43c1d886917fdd303bf7a4b87167b05c
-  RNSharedElement: d37c775d8952f7c07ff7aec97f552514e238b191
-  RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
+  RNSharedElement: 6c9167790f6e19850bc2612ec935b45b04fc209b
+  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
   RNSoundPlayer: bbe1f7b0ce43c2cf0fdf710890ace93693e88836
   RNSVG: 7364057921be1c8d234642bb2bd001a6c4a8f313
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4

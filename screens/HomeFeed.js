@@ -14,7 +14,7 @@ import {Block, Text} from '../components';
 import {theme, time} from '../constants';
 import {DOMParser} from 'xmldom';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
 import * as Animatable from 'react-native-animatable';
 AnimatedShimmer = Animatable.createAnimatableComponent(ShimmerPlaceHolder);
@@ -228,6 +228,7 @@ export default class HomeFeed extends React.PureComponent {
         onPress={() => this.props.navigation.navigate('Favourites')}>
         <Block
           space={'between'}
+          center
           middle
           row
           style={[
@@ -249,9 +250,9 @@ export default class HomeFeed extends React.PureComponent {
             color={'red'}
             style={{marginRight: 10}}
           />
-          <Text h3>Favourites</Text>
+          <Text center h3>Favourites</Text>
           <Icon
-            name="chevron-right"
+            name="arrow-right"
             size={20}
             color={theme.colors.black}
             style={{marginRight: 10}}

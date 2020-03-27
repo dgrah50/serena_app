@@ -13,7 +13,7 @@ import {DOMParser} from 'xmldom';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import * as Animatable from 'react-native-animatable';
 AnimatedShimmer = Animatable.createAnimatableComponent(ShimmerPlaceHolder);
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {
   VerseCard,
   _renderSermon,
@@ -85,7 +85,7 @@ export default class Results extends Component {
                 this.props.navigation.navigate('Home');
               }}>
               <Icon
-                name="chevron-left"
+                name="arrow-left"
                 size={25}
                 style={{paddingLeft: 10}}
                 color={theme.colors.black}
@@ -253,6 +253,7 @@ export default class Results extends Component {
         <Block
           space={'between'}
           middle
+          center
           row
           style={[
             {
@@ -275,7 +276,7 @@ export default class Results extends Component {
           />
           <Text h3>Favourites</Text>
           <Icon
-            name="chevron-right"
+            name="arrow-right"
             size={20}
             color={theme.colors.black}
             style={{marginRight: 10}}
