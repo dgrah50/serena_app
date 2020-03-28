@@ -1,17 +1,23 @@
 import React, {Component} from 'react';
-import {Dimensions, StyleSheet, AsyncStorage, Linking} from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  AsyncStorage,
+  Linking,
+  Alert,
+} from 'react-native';
 import {Text} from '../components';
 import {theme} from '../constants';
 import firebase from 'react-native-firebase';
 const {width} = Dimensions.get('window');
-
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {
   Content,
   Button,
   ListItem,
-  Icon,
   Body,
   Right,
+  Left,
   Switch,
 } from 'native-base';
 
@@ -63,6 +69,9 @@ export default class Profile extends Component {
       <>
         <Content>
           <ListItem icon>
+            <Left>
+              <Icon size={18} name="bell" />
+            </Left>
             <Body>
               <Text>Daily Notification</Text>
             </Body>
@@ -79,25 +88,50 @@ export default class Profile extends Component {
           </ListItem>
 
           <ListItem
+            icon
             onPress={() => {
               Linking.openURL('https://serena.app');
             }}>
+            <Left>
+              <Icon size={18} name="envelope-open" />
+            </Left>
             <Body>
               <Text>About</Text>
             </Body>
             <Right>
-              <Icon active name="arrow-forward" />
+              <Icon active name="arrow-right" />
             </Right>
           </ListItem>
+
           <ListItem
+            icon
             onPress={() => {
               firebase.auth().signOut();
             }}>
+            <Left>
+              <Icon size={18} name="logout" />
+            </Left>
             <Body>
               <Text>Sign Out</Text>
             </Body>
             <Right>
-              <Icon active name="arrow-forward" />
+              <Icon active name="arrow-right" />
+            </Right>
+          </ListItem>
+
+          <ListItem
+            icon
+            onPress={() => {
+              this.deleteAccount();
+            }}>
+            <Left>
+              <Icon size={18} name="trash" />
+            </Left>
+            <Body>
+              <Text>Delete Account</Text>
+            </Body>
+            <Right>
+              <Icon active name="arrow-right" />
             </Right>
           </ListItem>
         </Content>
@@ -127,6 +161,31 @@ export default class Profile extends Component {
       </Button>
     );
   };
+
+  // ****** HELPER FUNCTIONS SECTION
+
+  deleteAccount() {
+    Alert.alert(
+      'Are you sure?',
+      "We're sorry to see you go. Please note that this action is permanent and cannot be undone.",
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            let user = firebase.auth().currentUser;
+            user.delete().catch(function(err) {
+              console.log(err);
+            });
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  }
 }
 
 const styles = StyleSheet.create({
