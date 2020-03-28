@@ -27,7 +27,7 @@ const bigCaption = ['Discover', 'Speak', 'Share'];
 const caption = [
   'Serena recommends Bible verses, sermons & podcasts just for you',
   'Enable microphone access, and you can even speak aloud to Serena',
-  'Receive a daily Bible Verse and share with your friends to spread the word of God',
+  'Receive daily Bible verses and share scripture with friends & family',
 ];
 
 class Onboarding extends Component {
