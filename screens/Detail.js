@@ -8,6 +8,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
 import {theme} from '../constants';
 import Share from 'react-native-share';
@@ -184,12 +185,22 @@ export default class Detail extends Component {
           onPress={() =>
             this.toggleFavourites(verse.verse, verse.bookname, verse.osis)
           }>
-          <Icon
-            name="heart"
-            solid={this.state.alreadyLiked}
-            size={40}
-            color={theme.colors.white}
-            style={{marginLeft: 10}}></Icon>
+          {this.state.alreadyLiked ? (
+            <Icon2
+              name="heart"
+              solid={this.state.alreadyLiked}
+              size={40}
+              color={theme.colors.white}
+              style={{marginLeft: 10}}
+            />
+          ) : (
+            <Icon
+              name="heart"
+              size={40}
+              color={theme.colors.white}
+              style={{marginLeft: 10}}
+            />
+          )}
         </TouchableOpacity>
         <Coachmark
           ref={this.coachmark1}
@@ -214,6 +225,7 @@ export default class Detail extends Component {
     );
   }
   async toggleFavourites(verseText, bookText, osis) {
+    console.log('tr');
     osis = osis.toString();
     if (osis.length == 7) {
       osis = '0' + osis.toString();

@@ -9,6 +9,7 @@ import {
   Share,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import {Block, Text} from '../components';
 import {theme} from '../constants';
 import {Transition} from 'react-navigation-fluid-transitions';
@@ -126,20 +127,30 @@ export class VerseCard extends React.Component {
                   bottom: 10,
                 }}>
                 <Transition shared={'likebutton' + index}>
-                  <TouchableOpacity>
-                    <Icon
-                      name="heart"
-                      solid={this.state.alreadyLiked}
-                      size={20}
-                      color={theme.colors.white}
-                      style={{marginHorizontal: 10}}
-                      onPress={() =>
-                        this.toggleFavourites(
-                          verses[0].verse,
-                          verses[0].bookname,
-                          verses[0].osis,
-                        )
-                      }></Icon>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.toggleFavourites(
+                        verses[0].verse,
+                        verses[0].bookname,
+                        verses[0].osis,
+                      )
+                    }>
+                    {this.state.alreadyLiked ? (
+                      <Icon2
+                        name="heart"
+                        solid={this.state.alreadyLiked}
+                        size={20}
+                        color={theme.colors.white}
+                        style={{marginHorizontal: 10}}
+                      />
+                    ) : (
+                      <Icon
+                        name="heart"
+                        size={20}
+                        color={theme.colors.white}
+                        style={{marginHorizontal: 10}}
+                      />
+                    )}
                   </TouchableOpacity>
                 </Transition>
                 <Transition shared={'sharebutton' + index}>
@@ -333,8 +344,7 @@ export function _renderSermon(
               {isSermon ? 'Sermon' : 'Podcast'} | {formatDuration(duration)}
             </Text>
             <Block flex={false} row center middle style={styles.playButton}>
-              <Text white>PLAY </Text>
-              <Icon name="play" size={10} color={theme.colors.white} />
+              <Text white>PLAY</Text>
             </Block>
           </Block>
         </Block>
