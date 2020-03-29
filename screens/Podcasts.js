@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import firebase from 'react-native-firebase';
-import {Block, Text, Input} from '../components';
+import {Block, Text} from '../components';
 import {theme} from '../constants';
 const {width} = Dimensions.get('window');
 import {_renderPodcast} from '../components/VerseSermonCards';
@@ -16,18 +16,31 @@ import moment from 'moment';
 import * as Animatable from 'react-native-animatable';
 AnimatedBlock = Animatable.createAnimatableComponent(Block);
 
+import {
+  Header,
+  Left,
+  Icon,
+  Body,
+  Right,
+  Input,
+  Item,
+  Button,
+} from 'native-base';
+// import Icon from 'react-native-vector-icons/SimpleLineIcons';
+
 export default class Podcasts extends Component {
   static navigationOptions = ({navigation}) => {
     return {
-      title: 'Serena Creators',
-      headerTitleStyle: theme.fonts.title,
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Profile');
-          }}
-        />
-      ),
+      header: null,
+      // title: 'Serena Creators',
+      // headerTitleStyle: theme.fonts.title,
+      // headerRight: () => (
+      //   <TouchableOpacity
+      //     onPress={() => {
+      //       navigation.navigate('Profile');
+      //     }}
+      //   />
+      // ),
     };
   };
 
@@ -165,38 +178,86 @@ export default class Podcasts extends Component {
   }
 
   _renderHeader = () => {
-    return (
-      <Block
-        style={{
-          paddingHorizontal: '5%',
-          paddingVertical: 10,
-          backgroundColor: theme.colors.bg,
-        }}
-        flex={false}>
-        <Input
-          label={'Search'}
-          onFocus={() => this.setState({searching: true})}
-          value={this.state.inputValue}
-          onChangeText={inputValue =>
-            this.setState({inputValue}, () => {
-              this.searchPodcastHandler(inputValue);
-            })
-          }
-          rightLabel={
-            <TouchableOpacity
+    if (!this.state.searching) {
+      return (
+        <Header searchBar rounded>
+          <Left />
+          <Body style>
+            <Text title bold>
+              Podcasts
+            </Text>
+          </Body>
+          <Right>
+            <Button
+              transparent
               onPress={() => {
-                this.setState({inputValue: ''}, () => {
-                  this.searchPodcastHandler('podcast');
-                });
+                this.setState({searching: true});
               }}>
-              <Text style={{color: 'red'}}>Cancel</Text>
-            </TouchableOpacity>
-          }
-          onChangeTextHandler={this.searchPodcastHandler}
-        />
-      </Block>
-    );
+              <Text>Search</Text>
+            </Button>
+          </Right>
+        </Header>
+      );
+    } else {
+      return (
+        <Header searchBar rounded>
+          <Item>
+            <Icon name="ios-search" />
+            <Input
+              placeholder="Search Podcasts"
+              value={this.state.inputValue}
+              onChangeText={inputValue =>
+                this.setState({inputValue}, () => {
+                  this.searchPodcastHandler(inputValue);
+                })
+              }
+            />
+            <Icon name="ios-people" />
+          </Item>
+          <Button
+            transparent
+            onPress={() => {
+              this.setState({inputValue: '', searching: false}, () => {
+                this.searchPodcastHandler('podcast');
+              });
+            }}>
+            <Text>Cancel</Text>
+          </Button>
+        </Header>
+      );
+    }
   };
+
+  // <Block
+  //   style={{
+  //     paddingHorizontal: '5%',
+  //     paddingVertical: 10,
+  //     backgroundColor: theme.colors.bg,
+  //   }}
+  //   flex={false}>
+  //   <Input
+  //     label={'Search'}
+  //     onFocus={() => this.setState({searching: true})}
+  //     value={this.state.inputValue}
+  //     onChangeText={inputValue =>
+  //       this.setState({inputValue}, () => {
+  //         this.searchPodcastHandler(inputValue);
+  //       })
+  //     }
+  //     rightLabel={
+  //       <TouchableOpacity
+  //         onPress={() => {
+  //           this.setState({inputValue: ''}, () => {
+  //             this.searchPodcastHandler('podcast');
+  //           });
+  //         }}>
+  //         <Text style={{color: 'red'}}>Cancel</Text>
+  //       </TouchableOpacity>
+  //     }
+  //     onChangeTextHandler={this.searchPodcastHandler}
+  //   />
+  // </Block>
+
   //****** HELPER FUNCTIONS SECTION
   createiTunesLink(searchQuery, results = 25) {
     return (
